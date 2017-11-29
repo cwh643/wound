@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_patient_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="姓   名"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <EditText
+                    android:id="@+id/txt_patient_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/rec_title_size"/>
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_patient_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:elevation="1dp"
+                    android:text="性   别"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <RadioGroup
+                    android:id="@+id/radio_sex_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="1"
+                        android:textSize="@dimen/rec_title_size"
+                        android:paddingLeft="10dp"
+                        android:text="男" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="100dp"
+                        android:paddingLeft="10dp"
+                        android:tag="2"
+                        android:textSize="@dimen/rec_title_size"
+                        android:text="女" />
+                </RadioGroup>
+
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_patient_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="年   龄"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <EditText
+                    android:id="@+id/txt_patient_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/rec_title_size"/>
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_patient_bed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="床位号"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <EditText
+                    android:id="@+id/txt_patient_bed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textPersonName"
+                    android:textSize="@dimen/rec_title_size" />
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_inpatient_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="住院号"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="50dp">
+
+                    <EditText
+                        android:id="@+id/txt_inpatient_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:imeOptions="flagNoExtractUi"
+                        android:inputType="textPersonName"
+                        android:textSize="@dimen/rec_title_size" />
+                    <Button
+                        android:id="@+id/btn_scan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:drawableRight="@mipmap/scan"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@null"
+                        android:drawablePadding="10dp"
+                        android:textSize="@dimen/rec_title_size"
+                        android:tag="0"
+                        android:text="扫码" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_diagnosis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="入院诊断"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <EditText
+                    android:id="@+id/txt_diagnosis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textMultiLine"
+                    android:textSize="@dimen/rec_title_size"
+                    android:maxLines="10"
+                    android:minLines="1" />
+            </TableRow>
+
+            <TableRow android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/lab_doctor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="主治医师"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/rec_title_size" />
+
+                <EditText
+                    android:id="@+id/txt_doctor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="100dp"
+                    android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
+                    android:textSize="@dimen/rec_title_size"
+                    android:inputType="textPersonName" />
+            </TableRow>
+        </TableLayout>
+        <Button
+            android:id="@+id/btn_step_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:textSize="@dimen/rec_title_size"
+            android:background="@null"
+            android:text="下一步" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

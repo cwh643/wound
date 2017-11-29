@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/text_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:text="时间" />
+
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_height"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:gravity="center"
+        android:text="长度(cm)" />
+
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_width"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:textColor="#000000"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="宽度(cm)" />
+
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_area"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#000000"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="面积(cm2)" />
+
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_volume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="10dp"
+        android:textColor="#000000"
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:text="体积(cm3)" />
+
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_red"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:text="红色组织(%)" />
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_yellow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:text="黄色组织(%)" />
+    <View
+        android:layout_width="1.5dp"
+        android:layout_height="fill_parent"
+        android:background="#B4B3B3"/>
+
+    <TextView
+        android:id="@+id/text_black"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:paddingTop="10dp"
+        android:gravity="center"
+        android:text="黑色组织(%)" />
+
+</LinearLayout>

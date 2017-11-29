@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dnion.app.android.injuriesapp.MainActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ScrollView
+            android:layout_width="107dp"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/btn_record_group"
+            android:layout_width="107dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#A0A0A0">
+
+            <Button
+                android:id="@+id/btn_record1"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@color/white"
+                android:textColor="#B6B6B6"
+                android:text="伤口信息" />
+            <Button
+                android:id="@+id/btn_record9"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="伤口位置" />
+            <Button
+                android:id="@+id/btn_record2"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="伤口描述" />
+
+            <Button
+                android:id="@+id/btn_record3"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="伤口评估" />
+
+            <Button
+                android:id="@+id/btn_record4"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="渗液信息" />
+
+            <Button
+                android:id="@+id/btn_record5"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="影响愈合因素" />
+
+            <Button
+                android:id="@+id/btn_record6"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="辅助检查" />
+
+            <Button
+                android:id="@+id/btn_record7"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="骨髓炎" />
+
+            <Button
+                android:id="@+id/btn_record8"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:background="@null"
+                android:textColor="@color/white"
+                android:text="伤口换药" />
+
+        </LinearLayout>
+        </ScrollView>
+
+        <FrameLayout
+            android:id="@+id/record_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/nav_group"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="52dp">
+
+            <ImageButton
+                android:id="@+id/btn_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@mipmap/nav_up" />
+
+            <ImageButton
+                android:id="@+id/btn_down"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@mipmap/nav_down" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:divider="@color/white"
+        android:dividerHeight="1dp"
+        android:padding="20dp" />
+        -->
+</FrameLayout>

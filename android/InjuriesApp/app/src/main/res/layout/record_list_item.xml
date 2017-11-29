@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_type"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="#B7B7B7"
+        android:paddingBottom="2dp"
+        android:paddingLeft="13dp"
+        android:paddingTop="2dp"
+        android:textColor="#515151"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="13dp"
+            android:paddingTop="2dp" />
+
+        <Spinner
+            android:id="@+id/item_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/item_title"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

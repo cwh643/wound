@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/modify_pw_bg"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+
+    <LinearLayout
+        android:id="@+id/modify_pw_win"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:background="@mipmap/modify_pw_win">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:text="修改密码"
+            android:textSize="26sp"
+            android:textColor="@color/white"
+            />
+        <EditText
+            android:id="@+id/login_old_password"
+            android:layout_width="324dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/modify_pw_input"
+            android:drawableLeft="@mipmap/icon_lock"
+            android:paddingLeft="20dp"
+            android:drawablePadding="8dp"
+            android:hint="旧密码"
+            android:ems="10"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
+        <EditText
+            android:id="@+id/login_new_password"
+            android:layout_width="324dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/modify_pw_input"
+            android:drawableLeft="@mipmap/icon_lock"
+            android:paddingLeft="20dp"
+            android:drawablePadding="8dp"
+            android:hint="新密码"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
+        <EditText
+            android:id="@+id/login_confirm_password"
+            android:layout_width="324dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:background="@mipmap/modify_pw_input"
+            android:drawableLeft="@mipmap/icon_lock"
+            android:paddingLeft="20dp"
+            android:drawablePadding="8dp"
+            android:hint="确认新密码"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="162dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/login_pw"
+            android:background="@mipmap/modify_pw_ok"
+            android:text="确  认"
+            android:textSize="22sp"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

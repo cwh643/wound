@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@mipmap/timg2" />
+                    -->
+                <ImageView
+                    android:id="@+id/image_perview1"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"/>
+                <!--
+                <com.dnion.app.android.injuriesapp.utils.DrawView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </com.dnion.app.android.injuriesapp.utils.DrawView>
+                -->
+    </FrameLayout>
+</RelativeLayout>

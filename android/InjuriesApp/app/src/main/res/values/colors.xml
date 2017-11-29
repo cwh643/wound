@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="login_bg">#192029</color>
+    <color name="menu_bg">#1C1C1C</color>
+    <color name="login_title">#6EE3CF</color>
+    <color name="btn_title">#00BCBC</color>
+    <color name="measure_title">#808080</color>
+    <color name="login_pw">#B6B6B6</color>
+    <color name="colorGray">#33000000</color>
+    <color name="query_table_title_bg">#DCDCDC</color>
+    <color name="favorite_item_bar">#EFEFEF</color>
+</resources>

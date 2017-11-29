@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (c) 2012, The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView
+                android:id="@+id/camera_surface_view"
+                android:layout_width="1280px"
+                android:layout_height="960px" />
+
+            <ImageView
+                android:id="@+id/rgb_view"
+                android:layout_width="1280px"
+                android:layout_height="960px"/>
+            <ImageView
+                android:id="@+id/deep_camera_view"
+                android:layout_width="1280px"
+                android:layout_height="960px"
+                android:alpha="0.3"/>
+
+
+
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <!-- <Switch
+                android:id="@+id/image_swith"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="RGB"
+                android:textOn="DEPTH"
+                android:layout_marginLeft="40px"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="40px"/>-->
+
+            <ImageButton
+                android:id="@+id/camera_shot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:src="@mipmap/capture_deep"
+                android:text="@string/camera_shot" />
+
+
+            <TextView
+                android:id="@+id/rgb_param"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/menu_btn_select"
+                android:textColor="@color/btn_title"
+                android:textSize="@dimen/rec_title_size"
+                android:text= "@string/back"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="58dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

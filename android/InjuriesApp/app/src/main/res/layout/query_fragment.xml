@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="30dp"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/txt_pation_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="5dp"
+            android:ems="10"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textPersonName"
+            android:background="@mipmap/search_bg"
+            android:drawableRight="@mipmap/search_btn"
+            android:hint="患者姓名"
+            android:text="" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/txt_query_name"
+            android:layout_marginLeft="83dp"
+            android:layout_marginStart="83dp"
+            android:layout_toEndOf="@+id/txt_pation_name"
+            android:layout_toRightOf="@+id/txt_pation_name"
+            android:text="查询" />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/btn_photo_bg"
+            android:textColor="@color/btn_title"
+            android:textSize="@dimen/rec_title_size"
+            android:text="添加采集" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="30dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="医生（科室）"
+                android:padding="15dp"
+                android:background="@color/query_table_title_bg"
+                android:textSize="18sp" />
+            <ListView
+                android:id="@+id/doc_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/query_list_bg"
+                android:divider="@color/login_pw"
+                android:dividerHeight="1dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:padding="15dp"
+                android:text="患者（住院号）"
+                android:background="@color/query_table_title_bg"
+                android:textSize="18sp" />
+            <ListView
+                android:id="@+id/patient_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/query_list_bg"
+                android:divider="@color/login_pw"
+                android:dividerHeight="1dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:padding="15dp"
+                android:text="采集时间（手术）"
+                android:background="@color/query_table_title_bg"
+                android:textSize="18sp" />
+            <ListView
+                android:id="@+id/record_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/query_list_bg"
+                android:divider="@color/login_pw"
+                android:dividerHeight="1dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

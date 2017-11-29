@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_bg1"
+    android:orientation="vertical"
+    tools:context="com.dnion.app.android.injuriesapp.MainActivity"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+
+
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="550dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="textPassword"
+        android:textCursorDrawable="@null"
+        android:background="@null"
+        android:drawableLeft="@mipmap/btn_login_pw"
+        android:paddingLeft="12dp"
+        android:text="admin123321"
+        android:layout_marginBottom="40dp"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/login_name"
+        android:layout_width="550dp"
+        android:layout_height="40dp"
+        android:ems="10"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="textPersonName"
+        android:textCursorDrawable="@null"
+        android:background="@null"
+        android:drawableLeft="@mipmap/btn_login_user"
+        android:paddingLeft="5dp"
+        android:text="admin"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/login_password"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="81dp"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/linearLayout">
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/save_btn_bg"
+            android:text="登  录"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+        <LinearLayout
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/login_pw">
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_resetpw"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/save_btn_bg"
+            android:text="忘记密码"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_server"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修改服务器地址"
+        android:textColor="@color/white"
+        android:background="@null"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        />
+
+
+</RelativeLayout>

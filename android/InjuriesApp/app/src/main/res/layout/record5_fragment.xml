@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:stretchColumns="1">
+<!--
+                <TableRow
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_span="2"
+                        android:textColor="@color/white"
+                        android:text="影响伤口愈合的因素"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </TableRow>
+-->
+                <TableRow android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="@dimen/rec_title_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="@dimen/rec_title_size"
+                        android:text="全身因素" />
+                </TableRow>
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/effect_element_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="年龄"
+                            android:tag="01" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="营养不良"
+                            android:tag="02" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="糖尿病"
+                            android:tag="03" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="神经系统疾病"
+                            android:tag="04" />
+                    </LinearLayout>
+                </TableRow>
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/effect_element_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="免疫系统疾病"
+                            android:tag="05" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="凝血制剂不全"
+                            android:tag="06" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="药物"
+                            android:tag="07" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="激素"
+                            android:tag="08" />
+
+                    </LinearLayout>
+                </TableRow>
+
+                <TableRow android:padding="10dp" android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="@dimen/rec_title_width"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="@dimen/rec_title_size"
+                        android:text="局部因素" />
+                </TableRow>
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="10dp">
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="感染"
+                            android:tag="01" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="结痂"
+                            android:tag="02" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="异物"
+                            android:tag="03" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="水肿"
+                            android:tag="04" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="干燥"
+                            android:tag="05" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_local_6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="渗液过多"
+                            android:tag="06" />
+                    </LinearLayout>
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/btn_step_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/rec_title_size"
+                android:background="@null"
+                android:text="下一步" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

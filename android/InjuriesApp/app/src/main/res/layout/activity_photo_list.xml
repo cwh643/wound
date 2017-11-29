@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_pw"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <GridView
+            android:id="@+id/photo_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:numColumns="3"
+            android:horizontalSpacing = "20dp"
+            android:verticalSpacing="20dp"
+            android:padding="20dp"
+            />
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginRight="20dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btn_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:src="@mipmap/capture_normal"
+                    android:text="拍照" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="270dp"
+                    android:text="普通拍摄"
+                    android:textAlignment="center"
+                    android:textColor="@color/btn_title" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_weight="1">
+                <ImageButton
+                    android:id="@+id/btn_photo_ir"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:src="@mipmap/capture_red"
+                    android:text="拍照" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="210dp"
+                    android:text="红外线拍摄"
+                    android:textAlignment="center"
+                    android:textColor="@color/btn_title" />
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="89dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:stretchColumns="0">
+<!--
+                <TableRow
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_span="2"
+                        android:text="伤口及周围组织的血液供应情况"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+                </TableRow>
+-->
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="伤口热红外照片" />
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="35dp"
+                            android:background="@mipmap/btn_photo_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="查看图片" />
+                    </LinearLayout>
+
+                </TableRow>
+
+                <TableRow android:padding="10dp" android:layout_marginTop="20dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="多普勒超声结果" />
+                        <Button
+                            android:id="@+id/btn_dpl_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="35dp"
+                            android:background="@mipmap/btn_photo_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="查看图片" />
+                        <Button
+                            android:id="@+id/btn_dpl_camera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:background="@mipmap/btn_capture_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="拍照" />
+                    </LinearLayout>
+
+                </TableRow>
+
+                <TableRow android:padding="10dp" android:layout_marginTop="20dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="CTA结果" />
+                        <Button
+                            android:id="@+id/btn_cta_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="35dp"
+                            android:background="@mipmap/btn_photo_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="查看图片" />
+                        <Button
+                            android:id="@+id/btn_cta_camera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:background="@mipmap/btn_capture_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="拍照" />
+                    </LinearLayout>
+                </TableRow>
+                <!--
+<TableRow android:padding="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/wound_cta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:textSize="@dimen/rec_title_size"
+            android:hint="" />
+
+    </LinearLayout>
+
+</TableRow>
+-->
+                <TableRow android:padding="10dp" android:layout_marginTop="20dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="常规检查结果" />
+                        <Button
+                            android:id="@+id/btn_exam_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="35dp"
+                            android:background="@mipmap/btn_photo_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="查看图片" />
+                        <Button
+                            android:id="@+id/btn_exam_camera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:background="@mipmap/btn_capture_bg"
+                            android:textColor="@color/btn_title"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="拍照" />
+                    </LinearLayout>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/btn_step_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/rec_title_size"
+                android:background="@null"
+                android:text="下一步" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
