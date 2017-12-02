@@ -166,6 +166,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:src="@mipmap/measure_sd"
                 android:text="面积" />
 
@@ -175,6 +176,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:text="长度" />
 
             <Button
@@ -184,6 +186,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@mipmap/measure_ld"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:text="宽度" />
 
             <Button
@@ -193,6 +196,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@mipmap/measure_ld"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:text="深度" />
 
             <Button
@@ -202,13 +206,13 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:src="@mipmap/measure_wd"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:text="模型" />
 
             <ImageButton
                 android:id="@+id/btn_measure_bar"
                 android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_weight="0.11"
+                android:layout_height="32dp"
                 android:background="@null"
                 android:src="@mipmap/measure_menu_tab" />
         </LinearLayout>
