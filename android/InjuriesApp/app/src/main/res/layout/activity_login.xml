@@ -43,7 +43,13 @@
         android:layout_marginBottom="30dp"
         android:layout_above="@+id/login_password"
         android:layout_centerHorizontal="true" />
-
+    <View
+        android:layout_width="550dp"
+        android:layout_height="1dp"
+        android:layout_above="@id/login_password"
+        android:layout_alignStart="@id/login_password"
+        android:layout_marginBottom="15dp"
+        android:background="@color/colorGray"></View>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="81dp"
