@@ -12,9 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-        <ScrollView
-            android:layout_width="107dp"
-            android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/btn_record_group"
             android:layout_width="107dp"
@@ -26,6 +24,7 @@
                 android:id="@+id/btn_record1"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@color/white"
                 android:textColor="#B6B6B6"
                 android:text="伤口信息" />
@@ -33,6 +32,7 @@
                 android:id="@+id/btn_record9"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="伤口位置" />
@@ -40,6 +40,7 @@
                 android:id="@+id/btn_record2"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="伤口描述" />
@@ -48,6 +49,7 @@
                 android:id="@+id/btn_record3"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="伤口评估" />
@@ -56,6 +58,7 @@
                 android:id="@+id/btn_record4"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="渗液信息" />
@@ -64,6 +67,7 @@
                 android:id="@+id/btn_record5"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="影响愈合因素" />
@@ -72,6 +76,7 @@
                 android:id="@+id/btn_record6"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="辅助检查" />
@@ -80,6 +85,7 @@
                 android:id="@+id/btn_record7"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="骨髓炎" />
@@ -88,12 +94,13 @@
                 android:id="@+id/btn_record8"
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
                 android:text="伤口换药" />
 
         </LinearLayout>
-        </ScrollView>
+
 
         <FrameLayout
             android:id="@+id/record_container"
