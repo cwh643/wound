@@ -29,6 +29,9 @@ public class DeepCameraInfoDao {
         String data_json = FileUtils.readFile(path, MODEL_FILE_NAME);
         Gson gson = new Gson();
         DeepCameraInfo dci = gson.fromJson(data_json, DeepCameraInfo.class);
+        if (dci == null) {
+            dci = new DeepCameraInfo();
+        }
         dci.setNew(false);
         dci.setFilepath(path);
         // 加载rgb

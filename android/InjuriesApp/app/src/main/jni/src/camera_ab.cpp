@@ -148,7 +148,7 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
     for (int i = 0; i < height; i++) {
         const RGB888Pixel* pData = (const RGB888Pixel*)(srcBuf + i * strideInBytes);
         for (int j = 0; j < width; j++, ++pData) {
-            cv::Vec3b &rgb_vec = rgb->at<cv::Vec3b>(i, j);
+            cv::Vec3b &rgb_vec = rgb->at<cv::Vec3b>(i, width - j - 1);
             // LOGD("=== trans data %d,%d, %d,%d,%d", i,j,pData->r,pData->g,pData->b);
             // LOGD("=== dstdata %d,%d,%d", rgb_vec[0], rgb_vec[1],rgb_vec[2]);
             rgb_vec[0] = pData->r;
@@ -160,7 +160,6 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
     }
 
     return 0;
-
 }
 
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_AbNativeUtils_depth2mat(JNIEnv* env, jobject obj, jobject src, jlong depthMatAddr, jint strideInBytes) {
@@ -169,16 +168,26 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
     }
     short * srcBuf = (short *)env->GetDirectBufferAddress(src);
     cv::Mat* depth = (cv::Mat*)depthMatAddr;
-
+    
+    int x_diff = 0;
+    int y_diff = 0;
     int width = depth->cols;
     int height = depth->rows;
 
     LOGD("=== depth start trans %d,%d.%d", width, height, strideInBytes);
     for (int i = 0; i < height; i++) {
+        // int final_y = i + y_diff;
+        // if (final_y >= height || final_y < 0) {
+        //     continue;
+        // }
         short *pView = srcBuf + i * width;
         for (int j = 0; j < width; j++, pView++) {
             //LOGD("=== trans data %d,%d, %d,%d,%d", i,j,pData->r,pData->g,pData->b);
-            depth->at<short>(i, j) = *pView;
+            // int final_x = j + x_diff;
+            //  if (final_x >= width || final_x < 0) {
+            //      continue;
+            //  }
+            depth->at<short>(i, width - j - 1) = *pView;
             //LOGD("=== dstdata %d,%d,%d", rgb_vec[0], rgb_vec[1],rgb_vec[2]);
         }
     }

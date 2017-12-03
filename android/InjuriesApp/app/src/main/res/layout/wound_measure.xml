@@ -24,38 +24,39 @@
 
         <ImageView
             android:id="@+id/wound_rgb_image"
-            android:layout_width="1536px"
-            android:layout_height="1152px" />
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
+            />
 
         <ImageView
             android:id="@+id/area_image"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000"
             android:alpha="0.5"/>
 
         <ImageView
             android:id="@+id/length_image"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
 
         <ImageView
             android:id="@+id/width_image"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
         <ImageView
             android:id="@+id/deep_image"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
 
         <ImageView
             android:id="@+id/org_rgb_image"
             android:visibility="invisible"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
 
     </FrameLayout>

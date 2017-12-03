@@ -56,16 +56,15 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
     private boolean rgbStarted = false;
     private boolean depthStarted = false;
 
-    private boolean mExit = false;
-
     boolean usbPermissonGrant = false;
 
     public void init(Context context) {
         super.init(context);
-        param.deep_lx = 80;
-        param.deep_ly = 60;
-        param.deep_rx = 240;
-        param.deep_ry = 180;
+        float factor = mWidth / 320;
+        param.deep_lx = new Float(80 * factor).intValue();
+        param.deep_ly = new Float(60 * factor).intValue();
+        param.deep_rx = new Float(240 * factor).intValue();
+        param.deep_ry = new Float(180 * factor).intValue();
         mOpenNIHelper = new OpenNIHelper(context);
 
         OpenNI.setLogAndroidOutput(true);
@@ -88,7 +87,6 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             return;
         }
         if (!usbPermissonGrant) {
-
             List<DeviceInfo> devices = OpenNI.enumerateDevices();
             if (devices.isEmpty()) {
                 showAlertAndExit("未找到摄像头设备，请确认连接正常");

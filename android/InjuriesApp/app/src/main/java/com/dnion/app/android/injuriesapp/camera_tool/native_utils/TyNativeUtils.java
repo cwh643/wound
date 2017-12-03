@@ -39,5 +39,4 @@ public class TyNativeUtils {
 
     public native int FetchData(final long depthAddr, final long rgbAddr);
 
-
 }

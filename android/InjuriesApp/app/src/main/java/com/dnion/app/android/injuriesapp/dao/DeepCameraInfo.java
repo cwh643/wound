@@ -33,6 +33,7 @@ public class DeepCameraInfo {
     private float woundBlackRate;
     private double minDeep;
     private double maxDeep;
+    private double centerDeep;
     private int deep_lx;
     private int deep_ly;
     private int deep_rx;
@@ -294,5 +295,13 @@ public class DeepCameraInfo {
 
     public void setDepthMatHeight(int depthMatHeight) {
         this.depthMatHeight = depthMatHeight;
+    }
+
+    public double getCenterDeep() {
+        return centerDeep;
+    }
+
+    public void setCenterDeep(double centerDeep) {
+        this.centerDeep = centerDeep;
     }
 }

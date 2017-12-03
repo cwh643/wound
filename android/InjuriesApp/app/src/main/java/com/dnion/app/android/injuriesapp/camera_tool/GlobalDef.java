@@ -29,9 +29,10 @@ public class GlobalDef {
     public static final int RES_IR_RGB_HEIGHT = 120;
 
     public static final int CALC_MIN_DEEP = 300;
-    public static final int CALC_MAX_DEEP = 900;
-    public static final float MODEL_MIN_DEEP = -50;
-
+    public static final int CALC_MAX_DEEP = 700;
+    public static final float MODEL_BACK_MIN_DEEP = 10;
+    public static final float MODEL_FRONT_MIN_DEEP = 50;
+    public static final int MODEL_DEEP_CENTER_DIS = 4;
 
     public static final int AREA_COLOR = 0xFF1BB2B1;
     public static final int LENGTH_COLOR = Color.GREEN;

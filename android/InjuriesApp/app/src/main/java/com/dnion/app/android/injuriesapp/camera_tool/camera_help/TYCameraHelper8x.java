@@ -25,13 +25,11 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class TYCameraHelper8x extends AbstractCameraHelper {
-    String TAG = "obColor";
-
+    String TAG = "tyColor";
     boolean mInit_Ok = false;
     protected TyNativeUtils nativeUtils;
 
     public void init(Context context) {
-
         super.init(context);
         nativeUtils = new TyNativeUtils();
         param.deep_lx = nativeUtils.deep_lx;

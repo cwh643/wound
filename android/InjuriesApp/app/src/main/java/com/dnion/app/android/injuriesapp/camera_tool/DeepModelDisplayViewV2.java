@@ -177,9 +177,9 @@ public class DeepModelDisplayViewV2 extends GLSurfaceView implements GLSurfaceVi
                     if (deepMap.containsKey(pt)) {
                         PointInfo3D pinfo = deepMap.get(pt);
                         Float deep = new Float(min_deep - pinfo.z);
-                        if (deep < GlobalDef.MODEL_MIN_DEEP) {
-                            deep = GlobalDef.MODEL_MIN_DEEP;
-                        }
+                        //if (deep < GlobalDef.MODEL_MIN_DEEP) {
+                        //    deep = GlobalDef.MODEL_MIN_DEEP;
+                        //}
                         transVertex.add(deep);
                         transColor.add(pinfo.colorR);
                         transColor.add(pinfo.colorG);

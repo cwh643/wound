@@ -25,8 +25,8 @@
 
         <com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayViewV2
             android:id="@+id/deep_model_view"
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
             android:layout_weight="0.99" />
     </LinearLayout>
 
