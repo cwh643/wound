@@ -1,7 +1,7 @@
 package com.dnion.app.android.injuriesapp.camera_tool;
 
 /**
- * Created by yuanyuan06 on 2017/6/10.
+ * Created by yy on 2017/6/10.
  */
 public class ModelPointinfo {
     public int left_x;

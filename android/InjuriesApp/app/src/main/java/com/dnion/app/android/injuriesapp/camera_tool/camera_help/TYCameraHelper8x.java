@@ -21,7 +21,7 @@ import org.opencv.core.Mat;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by baidu on 17/10/14.
+ * Created by yy on 17/10/14.
  */
 
 public class TYCameraHelper8x extends AbstractCameraHelper {
@@ -31,19 +31,23 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
 
     public void init(Context context) {
         super.init(context);
+        float factor = mWidth / 640;
         nativeUtils = new TyNativeUtils();
-        param.deep_lx = nativeUtils.deep_lx;
-        param.deep_ly = nativeUtils.deep_ly;
-        param.deep_rx = nativeUtils.deep_rx;
-        param.deep_ry = nativeUtils.deep_ry;
+        nativeUtils.deep_lx = param.deep_lx;
+        nativeUtils.deep_rx = param.deep_rx;
+        nativeUtils.deep_ly = param.deep_ly;
+        nativeUtils.deep_ry = param.deep_ry;
         nativeUtils.deep_near = GlobalDef.CALC_MIN_DEEP;
         nativeUtils.deep_far = GlobalDef.CALC_MAX_DEEP;
-        nativeUtils.deep_center_dis = CENTER_DIS;
+        nativeUtils.deep_x_diff = transIntParam(0);
+        nativeUtils.deep_y_diff = transIntParam(0);
+        nativeUtils.deep_center_dis = transIntParam(GlobalDef.DEPTH_CENTER_DIS);
 
         //cameraSurfaceView = (CameraSurfaceView) rootView.findViewById(R.id.camera_surface_view);
         //cameraSurfaceView.init();
         //cameraSurfaceView.setPrewViewCallBack(mPreviewCallback);
     }
+
     @Override
     protected void initSize() {
         mWidth = GlobalDef.RES_COLOR_WIDTH_1280;
@@ -91,7 +95,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
 
         nativeUtils.FetchData(depthMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
-        minDeep = nativeUtils.deep_min_deep;
+        centerDeep = nativeUtils.deep_center_deep;
         Log.d(TAG, "fatch data....0");
         //Mat tmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
         //mRgb.convertTo(tmpMap, tmpMap.type());

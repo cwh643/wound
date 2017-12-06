@@ -28,7 +28,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Created by yuanyuan06 on 2017/5/4.
+ * Created by yy on 2017/5/4.
  */
 public class DeepModelDisplayViewV2 extends GLSurfaceView implements GLSurfaceView.Renderer {
     public static String TAG = "model";
@@ -152,9 +152,9 @@ public class DeepModelDisplayViewV2 extends GLSurfaceView implements GLSurfaceVi
             pinfo.y = vertexList.get(i + 1);
             pinfo.z = vertexList.get(i + 2);
             int colorIdx = i / 3 * 4;
-            pinfo.colorR = colorList.get(colorIdx);
-            pinfo.colorG = colorList.get(colorIdx + 1);
-            pinfo.colorB = colorList.get(colorIdx + 2);
+            pinfo.colorR = colorList.get(colorIdx) / 255;
+            pinfo.colorG = colorList.get(colorIdx + 1) / 255;
+            pinfo.colorB = colorList.get(colorIdx + 2) / 255;
             pinfo.colorA = colorList.get(colorIdx + 3);
             deepMap.put(pt, pinfo);
         }

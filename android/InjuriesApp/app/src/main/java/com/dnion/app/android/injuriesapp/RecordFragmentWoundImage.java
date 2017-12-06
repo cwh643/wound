@@ -60,7 +60,7 @@ import static android.R.attr.max;
 import static android.R.attr.top;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentWoundImage extends Fragment {

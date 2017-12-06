@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yuanyuan on 2017/6/24.
+ * Created by yy on 2017/6/24.
  */
 
 public class BitmapUtils {

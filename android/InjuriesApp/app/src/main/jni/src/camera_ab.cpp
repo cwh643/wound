@@ -166,9 +166,44 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
     if(src == nullptr){
         return -1;
     }
+    jfieldID  nameFieldId ;  
+    jclass cls = env->GetObjectClass(obj);  //获得Java层该对象实例的类引用，即HelloJNI类引用  
+    // lx
+    nameFieldId = env->GetFieldID(cls , "deep_lx" , "I"); //获得属性句柄 
+    jint jlx = env->GetIntField(obj , nameFieldId);
+    //LOGD("     get lx  %d", (int)lx);
+    // ly
+    nameFieldId = env->GetFieldID(cls , "deep_ly" , "I"); //获得属性句柄 
+    jint jly = env->GetIntField(obj , nameFieldId);
+    //LOGD("     get ly  %d", (int)ly);
+    // rx
+    nameFieldId = env->GetFieldID(cls , "deep_rx" , "I"); //获得属性句柄 
+    jint jrx = env->GetIntField(obj , nameFieldId);
+    //LOGD("     get rx  %d", (int)rx);
+    // ry
+    nameFieldId = env->GetFieldID(cls , "deep_ry" , "I"); //获得属性句柄 
+    jint jry = env->GetIntField(obj , nameFieldId);
+    //LOGD("     get ry  %d", (int)ry);
+    // near
+    nameFieldId = env->GetFieldID(cls , "deep_near" , "I"); //获得属性句柄 
+    jint near = env->GetIntField(obj , nameFieldId);
+    // far
+    nameFieldId = env->GetFieldID(cls , "deep_far" , "I"); //获得属性句柄 
+    jint far = env->GetIntField(obj , nameFieldId);
+    // deep_x_diff
+    nameFieldId = env->GetFieldID(cls , "deep_x_diff" , "I"); //获得属性句柄 
+    jint x_diff = env->GetIntField(obj , nameFieldId);
+    // deep_y_diff
+    nameFieldId = env->GetFieldID(cls , "deep_y_diff" , "I"); //获得属性句柄 
+    jint y_diff = env->GetIntField(obj , nameFieldId);
+
+    nameFieldId = env->GetFieldID(cls , "deep_center_dis" , "I"); //获得属性句柄 
+    jint center_dis = env->GetIntField(obj , nameFieldId);
+ 
     short * srcBuf = (short *)env->GetDirectBufferAddress(src);
     cv::Mat* depth = (cv::Mat*)depthMatAddr;
     
+<<<<<<< Updated upstream
     int x_diff = 0;
     int y_diff = 0;
     int width = depth->cols;
@@ -188,9 +223,60 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
             //      continue;
             //  }
             depth->at<short>(i, width - j - 1) = *pView;
+=======
+    int width = depth->cols;
+    int height = depth->rows;
+
+    int lx = jlx + x_diff;
+    int rx = jrx + x_diff;
+    int ly = jly + y_diff;
+    int ry = jry + y_diff;
+    int valid_width = rx - lx;
+    int valid_height = ry - ly;
+    LOGD("=== depth start trans %d,%d,%d,%d,%d", width, height, strideInBytes,lx,ly);
+    // LOGD("=== depth param  %d,%d,%d,%d", lx, rx, ly, ry);
+    for (int i = ly; i < ry; i++) {
+        short *pView = srcBuf + i * width + lx;
+        for (int j = lx; j < rx; j++, pView++) {
+            int fi = i - y_diff;
+            int fj = j - x_diff;
+            // LOGD("=== trans data %d,%d,%d,%d,%d", i,j,fi,fj, (int)*pView);
+            short value = *pView;
+            if (value < near || value > far) {
+                depth->at<short>(fi, width - fj - 1) = 0;
+                continue;
+            }
+            depth->at<short>(fi, width - fj - 1) = *pView;
+>>>>>>> Stashed changes
             //LOGD("=== dstdata %d,%d,%d", rgb_vec[0], rgb_vec[1],rgb_vec[2]);
         }
     }
+     
+    int center_lx = valid_width / 2 - center_dis + lx;
+    int center_rx = center_lx + 2 * center_dis;
+    int center_ly = valid_height / 2 - center_dis + ly;
+    int center_ry = center_ly + 2 * center_dis;
+    LOGD("=== calc center deep %d,%d,%d,%d", center_lx, center_ly, center_rx, center_ry);
+    int total_deep = 0;
+    int count = 0;
+    for (int i = center_lx; i < center_rx; i++) {
+        for (int j = center_ly; j < center_ry; j++) {
+            short &deep = depth->at<short>(j, i);
+            // LOGD("=== center data %d,%d,%d", i,j,deep);
+            if (deep != 0) {
+                total_deep += deep;
+                count++;
+            }
+        }
+    }
+    int center_deep = 0;
+    if (count != 0) {
+       center_deep = total_deep / count;
+    }
+
+    LOGD("     get center deep %d, %d, %d", center_deep, total_deep, count);
+    nameFieldId = env->GetFieldID(cls , "deep_center_deep" , "I"); //获得属性句>    柄
+    env->SetIntField(obj, nameFieldId, center_deep);
 
     return 0;
 

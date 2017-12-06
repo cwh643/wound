@@ -3,16 +3,11 @@ package com.dnion.app.android.injuriesapp;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,36 +27,29 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dnion.app.android.injuriesapp.camera_tool.CameraParam;
+import com.dnion.app.android.injuriesapp.camera_tool.FocusParam;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
-import com.dnion.app.android.injuriesapp.camera_tool.OpenGL2DView;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
-import com.dnion.app.android.injuriesapp.utils.BitmapUtils;
 import com.dnion.app.android.injuriesapp.utils.DateUtils;
-import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentDeepCamera extends Fragment {
@@ -90,7 +78,6 @@ public class RecordFragmentDeepCamera extends Fragment {
     private MainActivity mActivity;
     private Mat mDepth;
     private Mat mRgb;
-
     private AbstractCameraHelper cameraHelper;
 
     // final Bitmap bitmap = Bitmap.createBitmap(1280, 640, Bitmap.Config.RGB_565);
@@ -102,7 +89,6 @@ public class RecordFragmentDeepCamera extends Fragment {
     private ImageButton mShotButton;
     private TextView mParamView;
     private int mRun = 0;
-
     private ImageView mRgbView;
     private ImageView mDepthView;
     private ImageView mFocusView;
@@ -111,11 +97,11 @@ public class RecordFragmentDeepCamera extends Fragment {
     private ScaleGestureDetector scaleGestureDetector;
     Mat mDepthTmpMap;
 
-    Paint paint;
-    Canvas areaCanvas;
-
+    Paint focusBackpaint;
+    Canvas focusBackCanvas;
     Paint focusPaint;
     Canvas focusCanvas;
+    FocusParam focusParam;
 
     public static RecordFragmentDeepCamera createInstance() {
         RecordFragmentDeepCamera fragment = new RecordFragmentDeepCamera();
@@ -165,8 +151,8 @@ public class RecordFragmentDeepCamera extends Fragment {
         mDepthView.setOnTouchListener(onTouchListener);
 
 
-        paint = new Paint();
-        paint.setColor(Color.RED);
+        focusBackpaint = new Paint();
+        focusBackpaint.setColor(GlobalDef.FOCUS_BACK_COLOR);
 
         focusPaint = new Paint();
         focusPaint.setColor(GlobalDef.DEEP_COLOR);
@@ -190,9 +176,27 @@ public class RecordFragmentDeepCamera extends Fragment {
         mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
         mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
         mRgb = new Mat(mRgbBitmap.getHeight(), mRgbBitmap.getWidth(), CvType.CV_8UC3);
-        mFocusBm = Bitmap.createBitmap(mDepthBitmap.getWidth(), mDepthBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        initFocusParam();
 
-        areaCanvas = new Canvas(mDepthBitmap);
+    }
+
+    private void initFocusParam() {
+        CameraParam param = cameraHelper.getParam();
+        focusBackpaint = new Paint();
+        focusBackpaint.setColor(GlobalDef.FOCUS_BACK_COLOR);
+
+        focusPaint = new Paint();
+        focusPaint.setColor(GlobalDef.DEEP_COLOR);
+
+        focusParam = new FocusParam();
+        mFocusBm = Bitmap.createBitmap(mDepthBitmap.getWidth(), mDepthBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        focusParam.center_x = mFocusBm.getWidth() / 2;
+        focusParam.center_y = mFocusBm.getHeight() / 2;
+        focusParam.text_x = focusParam.center_x - param.transIntParam(focusParam.text_length);
+        focusParam.text_y = focusParam.center_y - param.transIntParam(focusParam.text_height);
+        focusParam.line_length = param.transIntParam(focusParam.line_length);
+        //focusPaint.setTextSize(param.transFloatParam(focusPaint.getTextSize()));
+        focusBackCanvas = new Canvas(mDepthBitmap);
         focusCanvas = new Canvas(mFocusBm);
     }
 
@@ -206,20 +210,26 @@ public class RecordFragmentDeepCamera extends Fragment {
         cameraHelper.onResume(mLoadCallback);
     }
 
-    private void focusBitmap(String text) {
-        int tc_diff = 20;
-        int t_x = mFocusBm.getWidth() / 2;
-        int t_y = mFocusBm.getHeight() / 2;
-        float text_x = t_x - 55;
-        float text_y = t_y - 5;
+    private boolean focusValidBack = false;
+
+    private void updataFocusBitmap(String text) {
+        CameraParam param = cameraHelper.getParam();
         focusPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         focusCanvas.drawPaint(focusPaint);
         focusPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        focusPaint.setStrokeWidth(1);
-        focusCanvas.drawText(text, text_x, text_y, paint);
-        focusPaint.setStrokeWidth(4);
-        focusCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, paint);
-        focusCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, paint);
+        if (deep_center_deep != 0) {
+            if (deep_center_deep < GlobalDef.CALC_MIN_DEEP + 50 || deep_center_deep > GlobalDef.CALC_MAX_DEEP - 50) {
+                focusBackCanvas.drawRect(param.deep_lx, param.deep_ly, param.deep_rx, param.deep_ry, focusBackpaint);
+                text = deep_center_deep < GlobalDef.CALC_MIN_DEEP + 50 ? "远一点" : "近一点";
+            }
+        }
+        focusPaint.setStrokeWidth(param.transIntParam(1));
+        focusCanvas.drawText(text, focusParam.text_x, focusParam.text_y, focusPaint);
+        focusPaint.setStrokeWidth(param.transIntParam(4));
+        focusCanvas.drawLine(focusParam.center_x - focusParam.line_length, focusParam.center_y,
+                focusParam.center_x + focusParam.line_length, focusParam.center_y, focusPaint);
+        focusCanvas.drawLine(focusParam.center_x, focusParam.center_y - focusParam.line_length,
+                focusParam.center_x, focusParam.center_y + focusParam.line_length, focusPaint);
         mFocusView.setImageBitmap(mFocusBm);
     }
 
@@ -503,7 +513,8 @@ public class RecordFragmentDeepCamera extends Fragment {
 
             String format = new DecimalFormat("#.00").format(deep_center_deep / 10);
             String msg = format + "厘米";
-            focusBitmap(msg);
+
+            updataFocusBitmap(msg);
             //ToastUtil.showShortToast(mActivity, "中心距离：" + format + "厘米");
             //synchronized (mBitmap) {
             //Log.d(TAG, "mIFrameCallback set depth image");
@@ -531,13 +542,9 @@ public class RecordFragmentDeepCamera extends Fragment {
                 mRgbView.post(mUpdateRgbTask);
                 mDepth.convertTo(mDepthTmpMap, mDepthTmpMap.type());
                 Utils.matToBitmap(mDepthTmpMap, mDepthBitmap);
-                deep_center_deep = cameraHelper.getMinDeep();
+
+                deep_center_deep = cameraHelper.getCenterDeep();
                 mDepthView.post(mUpdateDepthTask);
-                if (deep_center_deep < 450 || deep_center_deep > 650) {
-                    areaCanvas.drawRect(0, 0, mDepthBitmap.getWidth(), mDepthBitmap.getHeight(), paint);
-
-                }
-
             }
         }
 

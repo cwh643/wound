@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * Created by yuanyuan06 on 2015/12/13.
+ * Created by yy on 2015/12/13.
  */
 public class Opengl3DHelper {
     protected final String vertexShaderCode =

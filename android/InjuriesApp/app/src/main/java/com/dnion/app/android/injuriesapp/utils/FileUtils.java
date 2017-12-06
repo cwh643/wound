@@ -30,7 +30,7 @@ import java.io.InputStream;
 /**
  * Tools for handler picture
  *
- * @author yuanyuan
+ * @author yy
  */
 public final class FileUtils {
 

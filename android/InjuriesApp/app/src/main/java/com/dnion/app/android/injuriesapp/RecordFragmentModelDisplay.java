@@ -23,7 +23,7 @@ import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import org.opencv.core.Mat;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentModelDisplay extends Fragment {

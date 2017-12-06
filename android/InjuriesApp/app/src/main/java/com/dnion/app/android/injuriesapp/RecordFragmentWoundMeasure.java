@@ -1,41 +1,26 @@
 package com.dnion.app.android.injuriesapp;
 
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Shader;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.PathShape;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.ColorUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayView;
@@ -43,37 +28,21 @@ import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
 import com.dnion.app.android.injuriesapp.camera_tool.PointInfo3D;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
-import com.dnion.app.android.injuriesapp.dao.RecordImage;
-import com.dnion.app.android.injuriesapp.ui.CustomerButton;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
 import com.dnion.app.android.injuriesapp.utils.BitmapUtils;
-import com.dnion.app.android.injuriesapp.utils.DateUtils;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.flipInterval;
-import static android.R.attr.fragment;
-import static android.R.attr.max;
-import static android.R.attr.top;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentWoundMeasure extends Fragment {
@@ -785,9 +754,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     vertexList.add((float) depth_i);
                     vertexList.add((float) depth_j);
                     vertexList.add((float) mi.last_deep);
-                    colorList.add((float) red / 255);
-                    colorList.add((float) green / 255);
-                    colorList.add((float) blue / 255);
+
+                    colorList.add((float) red);
+                    colorList.add((float) green);
+                    colorList.add((float) blue);
                     colorList.add((float) Color.alpha(1));
                 }
             }

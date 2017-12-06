@@ -17,7 +17,7 @@ import java.io.ByteArrayOutputStream;
 
 
 /**
- * Created by yuanyuan06 on 2015/12/4.
+ * Created by yy on 2015/12/4.
  */
 public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     static String TAG = "CAMERA";

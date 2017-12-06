@@ -50,7 +50,7 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentHotCamera extends Fragment {
