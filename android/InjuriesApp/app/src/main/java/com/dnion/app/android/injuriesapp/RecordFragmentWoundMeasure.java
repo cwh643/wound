@@ -1271,8 +1271,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     , mActivity.getString(R.string.message_wait_model)
                     , new AlertDialogUtil.AlertCallback() {
                         @Override
-                        public void exec() {
-                            super.exec();
+                        public void post() {
+                            super.post();
                             RecordFragmentModelDisplay fragment = RecordFragmentModelDisplay.createInstance();
                             mActivity.getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.detail_container, fragment)

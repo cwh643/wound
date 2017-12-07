@@ -124,9 +124,8 @@
 
             <ImageButton
                 android:id="@+id/btn_measure_edit_bar"
-                android:layout_width="22dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.07"
                 android:background="@null"
                 android:src="@mipmap/measure_menu_tab_r" />
 
@@ -135,7 +134,9 @@
                 android:id="@+id/measure_btn_org_rgb"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"></com.dnion.app.android.injuriesapp.ui.MeasureButton>
+                android:layout_weight="1">
+
+            </com.dnion.app.android.injuriesapp.ui.MeasureButton>
 
             <com.dnion.app.android.injuriesapp.ui.MeasureButton
                 android:id="@+id/measure_btn_rgb"

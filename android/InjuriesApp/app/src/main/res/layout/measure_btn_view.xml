@@ -23,4 +23,11 @@
         android:text="确 认"
         android:textAlignment="center"
         android:textSize="18sp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorGray"
+        android:layout_alignParentRight="true"
+        />
 </RelativeLayout>
