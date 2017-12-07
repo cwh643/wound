@@ -110,9 +110,9 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             for(int i = ly; i < ry; i++)
             {
                 for(int j = lx; j < rx; j++) {
-                    short value = depth.at<short>(i, j);
+                    short &value = depth.at<short>(i, j);
                     
-                    // LOGD("     get value  %d, %d", (int)value, min);
+                    LOGD("     get value %d, %d, %d, %d", j, i, value, min);
                     if (i >= center_ly && i < center_ry
                         && j >= center_lx && j < center_rx) {
                         min += value;
@@ -128,8 +128,8 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
                 }
             }
                                   
-            LOGD("     get min  %d", min);
-            nameFieldId = env->GetFieldID(cls , "deep_min_deep" , "I"); //获得属性句柄 
+            LOGD("     get center deep  %d", min);
+            nameFieldId = env->GetFieldID(cls , "deep_center_deep" , "I"); //获得属性句柄 
             env->SetIntField(obj, nameFieldId, min/min_count); 
         }
         

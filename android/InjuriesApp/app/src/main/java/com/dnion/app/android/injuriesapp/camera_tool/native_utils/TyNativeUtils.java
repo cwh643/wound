@@ -20,6 +20,7 @@ public class TyNativeUtils {
     public int deep_far = 700;
     public int deep_min_deep = 0;
     public int deep_max_deep = 0;
+    public int deep_center_deep = 0;
     public int deep_x_diff = 130;
     public int deep_y_diff = 60;
     public int deep_center_dis = 3;

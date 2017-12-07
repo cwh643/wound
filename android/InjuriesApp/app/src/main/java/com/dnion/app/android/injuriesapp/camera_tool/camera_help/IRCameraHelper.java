@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
-import com.dnion.app.android.injuriesapp.camera_tool.OpenGL2DView;
-import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 
 
 import net.launchdigital.irsdk.IrSdk;
@@ -25,7 +23,7 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
- * Created by baidu on 17/10/14.
+ * Created by yy on 17/10/14.
  */
 
 public class IRCameraHelper extends AbstractCameraHelper {
@@ -39,7 +37,6 @@ public class IRCameraHelper extends AbstractCameraHelper {
     private List<VideoMode> mVideoModes;
     private VideoFrameRef mLastFrame;
     private ByteBuffer mByteBuf;
-    private OpenGL2DView mIRView;
     private Mat mRgbMat;
     private Mat mDepthMat;
     /**

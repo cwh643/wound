@@ -3,7 +3,7 @@ package com.dnion.app.android.injuriesapp.camera_tool;
 import android.graphics.Color;
 
 /**
- * Created by zlh on 2015/8/2.
+ * Created by yy on 2015/8/2.
  */
 public class GlobalDef {
 
@@ -34,10 +34,13 @@ public class GlobalDef {
     public static final float MODEL_FRONT_MIN_DEEP = 50;
     public static final int MODEL_DEEP_CENTER_DIS = 4;
 
+    public static final int DEPTH_CENTER_DIS = 3;
+
     public static final int AREA_COLOR = 0xFF1BB2B1;
     public static final int LENGTH_COLOR = Color.GREEN;
     public static final int WIDTH_COLOR = Color.BLUE;
     public static final int DEEP_COLOR = Color.RED;
+    public static final int FOCUS_BACK_COLOR = Color.YELLOW;
 
     public static final int SUCC = 0;
     public static final int NOT_READY = -1;

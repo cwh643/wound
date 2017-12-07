@@ -20,7 +20,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Created by yuanyuan06 on 2017/5/4.
+ * Created by yy on 2017/5/4.
  */
 public class DeepModelDisplayView extends GLSurfaceView implements GLSurfaceView.Renderer {
 

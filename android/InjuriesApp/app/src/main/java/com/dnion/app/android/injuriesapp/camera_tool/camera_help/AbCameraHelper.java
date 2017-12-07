@@ -7,14 +7,11 @@ import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
-import android.util.Pair;
 
 import com.dnion.app.android.injuriesapp.camera_tool.native_utils.AbNativeUtils;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
-import com.dnion.app.android.injuriesapp.camera_tool.OpenGL2DView;
 
 import org.opencv.android.Utils;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.openni.Device;
 import org.openni.DeviceInfo;
@@ -27,18 +24,15 @@ import org.openni.VideoMode;
 import org.openni.VideoStream;
 import org.openni.android.OpenNIHelper;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by baidu on 17/10/14.
+ * Created by yy on 17/10/14.
  */
 
 public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper.DeviceOpenListener {
@@ -53,20 +47,26 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
     private Callback mLoadCallback;
     List<VideoStream> rgbStreams = new ArrayList<VideoStream>();
     List<VideoStream> depthStreams = new ArrayList<VideoStream>();
+    private AbNativeUtils nativeUtils;
     private boolean rgbStarted = false;
     private boolean depthStarted = false;
-
     boolean usbPermissonGrant = false;
+
 
     public void init(Context context) {
         super.init(context);
-        float factor = mWidth / 320;
-        param.deep_lx = new Float(80 * factor).intValue();
-        param.deep_ly = new Float(60 * factor).intValue();
-        param.deep_rx = new Float(240 * factor).intValue();
-        param.deep_ry = new Float(180 * factor).intValue();
-        mOpenNIHelper = new OpenNIHelper(context);
 
+        nativeUtils = new AbNativeUtils();
+        nativeUtils.deep_lx = param.deep_lx;
+        nativeUtils.deep_rx = param.deep_rx;
+        nativeUtils.deep_ly = param.deep_ly;
+        nativeUtils.deep_ry = param.deep_ry;
+        nativeUtils.deep_near = GlobalDef.CALC_MIN_DEEP;
+        nativeUtils.deep_far = GlobalDef.CALC_MAX_DEEP;
+        nativeUtils.deep_x_diff = transIntParam(0);
+        nativeUtils.deep_y_diff = transIntParam(0);
+        nativeUtils.deep_center_dis = GlobalDef.DEPTH_CENTER_DIS;
+        mOpenNIHelper = new OpenNIHelper(context);
         OpenNI.setLogAndroidOutput(true);
         OpenNI.setLogMinSeverity(0);
         OpenNI.initialize();
@@ -173,26 +173,13 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             return GlobalDef.TIME_OUT;
         }
         VideoFrameRef rgbFrame = mRgbStream.readFrame();
-        AbNativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
+        nativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
 
         VideoFrameRef depthFrame = mDepthStream.readFrame();
-        AbNativeUtils.depth2mat(depthFrame.getData(), depthMat.getNativeObjAddr(), depthFrame.getStrideInBytes());
+        nativeUtils.depth2mat(depthFrame.getData(), depthMat.getNativeObjAddr(), depthFrame.getStrideInBytes());
         //计算中心点距离
-        int centerX = depthMat.cols() / 2 - CENTER_DIS;
-        int centerY = depthMat.rows() / 2 - CENTER_DIS;
-        double total_deep = 0;
-        int count = 0;
-        for (int i = 0; i < 2 * CENTER_DIS; i++) {
-            for (int j = 0; j < 2 * CENTER_DIS; j++) {
-                double deep = depthMat.get(centerY + j, centerX + i)[0];
-                if (deep != 0) {
-                    total_deep += deep;
-                    count++;
-                }
-            }
-        }
-        minDeep = total_deep / count;
+        centerDeep = nativeUtils.deep_center_deep;
         return GlobalDef.SUCC;
     }
 
@@ -217,11 +204,11 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             }
             VideoFrameRef depthFrame = mDepthStream.readFrame();
             mats[i] = new Mat(depthMat.rows(), depthMat.cols(), depthMat.type());
-            AbNativeUtils.depth2mat(depthFrame.getData(), mats[i].getNativeObjAddr(), depthFrame.getStrideInBytes());
+            nativeUtils.depth2mat(depthFrame.getData(), mats[i].getNativeObjAddr(), depthFrame.getStrideInBytes());
         }
 
         VideoFrameRef rgbFrame = mRgbStream.readFrame();
-        AbNativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
+        nativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
 
         // 补全点击
@@ -268,7 +255,7 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             return;
         }
         VideoFrameRef depthFrame = mDepthStream.readFrame();
-        AbNativeUtils.depth2mat(depthFrame.getData(), depthMat.getNativeObjAddr(), depthFrame.getStrideInBytes());
+        nativeUtils.depth2mat(depthFrame.getData(), depthMat.getNativeObjAddr(), depthFrame.getStrideInBytes());
         mDepthStream.stop();
         mRgbStream.start();
         try {
@@ -278,7 +265,7 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             return;
         }
         VideoFrameRef rgbFrame = mRgbStream.readFrame();
-        AbNativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
+        nativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
         mRgbStream.stop();
     }

@@ -1,7 +1,5 @@
 package com.dnion.app.android.injuriesapp;
 
-import android.graphics.Color;
-import android.icu.text.AlphabeticIndex;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;

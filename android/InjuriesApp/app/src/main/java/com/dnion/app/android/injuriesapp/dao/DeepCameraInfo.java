@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yuanyuan on 17/7/16.
+ * Created by yy on 17/7/16.
  */
 
 public class DeepCameraInfo {

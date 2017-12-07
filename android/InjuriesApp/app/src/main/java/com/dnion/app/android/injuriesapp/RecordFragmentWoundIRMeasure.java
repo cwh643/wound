@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yuanyuan on 2017/6/18.
+ * Created by yy on 2017/6/18.
  */
 
 public class RecordFragmentWoundIRMeasure extends Fragment {

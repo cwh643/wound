@@ -47,9 +47,8 @@
                 android:id="@+id/focus_view"
                 android:layout_width="@dimen/camera_image_width"
                 android:layout_height="@dimen/camera_image_heigth"
-                android:alpha="0.2"/>
 
-
+                />
 
         </FrameLayout>
 

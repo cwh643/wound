@@ -10,7 +10,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 /**
- * Created by baidu on 17/10/14.
+ * Created by yy on 17/10/14.
  */
 
 public abstract class AbstractCameraHelper {
@@ -26,7 +26,7 @@ public abstract class AbstractCameraHelper {
     protected boolean rgbStarted = false;
     protected boolean depthStarted = false;
     protected boolean mExit = false;
-    protected double minDeep;
+    protected double centerDeep;
 
     protected int mWidth = GlobalDef.RES_COLOR_WIDTH_640;
     protected int mHeight = GlobalDef.RES_COLOR_HEIGHT_480;
@@ -36,11 +36,20 @@ public abstract class AbstractCameraHelper {
         mContext = context;
         initSize();
         mRgbMat = new Mat(mHeight, mWidth, CvType.CV_8UC3);
+        param.camera_size_factor = new Float(mWidth) / 640;
+        param.deep_lx = new Float(160 * param.camera_size_factor).intValue();
+        param.deep_ly = new Float(120 * param.camera_size_factor).intValue();
+        param.deep_rx = new Float(480 * param.camera_size_factor).intValue();
+        param.deep_ry = new Float(360 * param.camera_size_factor).intValue();
     }
 
     protected void initSize() {
         mWidth = GlobalDef.RES_COLOR_WIDTH_640;
         mHeight = GlobalDef.RES_COLOR_HEIGHT_480;
+    }
+
+    protected int transIntParam(int p_value) {
+        return param.transIntParam(p_value);
     }
 
     public Bitmap getRgbBitmap() {
@@ -94,11 +103,12 @@ public abstract class AbstractCameraHelper {
         this.param = param;
     }
 
-    public double getMinDeep() {
-        return minDeep;
+    public double getCenterDeep() {
+        return centerDeep;
     }
 
-    public void setMinDeep(double minDeep) {
-        this.minDeep = minDeep;
+    public void setCenterDeep(double centerDeep) {
+        this.centerDeep = centerDeep;
     }
+
 }
