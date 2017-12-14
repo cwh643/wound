@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class CommonUtil {
 
-    public static final float SELECT_TEXT_SIZE = 23;
+    public static final float SELECT_TEXT_SIZE = 25;
 
     public static final String LOGIN_USER = "login_user_name";
     public static final String LOGIN_TYPE = "login_user_type";

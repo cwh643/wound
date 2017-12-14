@@ -138,5 +138,6 @@
         android:background="@mipmap/btn_save_bg"
         android:text="保存"
         android:textColor="@color/white"
+        android:textSize="@dimen/rec_menu_title_size"
         android:visibility="gone"/>
 </FrameLayout>

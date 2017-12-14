@@ -103,7 +103,7 @@
                 <TableRow android:padding="10dp">
                     <TextView
                         android:id="@+id/wound_dressing_desc"
-                        android:layout_width="match_parent"
+                        android:layout_width="980dp"
                         android:layout_height="300dp"
                         android:textSize="@dimen/rec_title_size"
                         android:maxLines="15"
