@@ -142,8 +142,8 @@ public class BaseActivity extends AppCompatActivity {
         Button btn_photo = (Button)findViewById(R.id.btn_photo);
         btn_photo.setBackgroundResource(R.mipmap.menu_btn_bg);
 
-        Button btn_my_favorites = (Button)findViewById(R.id.btn_my_favorites);
-        btn_my_favorites.setBackgroundResource(R.mipmap.menu_btn_bg);
+        //Button btn_my_favorites = (Button)findViewById(R.id.btn_my_favorites);
+        //btn_my_favorites.setBackgroundResource(R.mipmap.menu_btn_bg);
 
         final View v = findViewById(id);
         v.setBackgroundResource(R.mipmap.menu_btn_select);

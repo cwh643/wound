@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:text="修改密码"
+            android:text="@string/modify_pw_title"
             android:textSize="26sp"
             android:textColor="@color/white"
             />
@@ -35,7 +35,7 @@
             android:drawableLeft="@mipmap/icon_lock"
             android:paddingLeft="20dp"
             android:drawablePadding="8dp"
-            android:hint="旧密码"
+            android:hint="@string/modify_pw_old"
             android:ems="10"
             android:imeOptions="flagNoExtractUi"
             android:inputType="textPassword"
@@ -50,7 +50,7 @@
             android:drawableLeft="@mipmap/icon_lock"
             android:paddingLeft="20dp"
             android:drawablePadding="8dp"
-            android:hint="新密码"
+            android:hint="@string/modify_pw_new"
             android:layout_gravity="center_horizontal"
             android:ems="10"
             android:imeOptions="flagNoExtractUi"
@@ -66,7 +66,7 @@
             android:drawableLeft="@mipmap/icon_lock"
             android:paddingLeft="20dp"
             android:drawablePadding="8dp"
-            android:hint="确认新密码"
+            android:hint="@string/modify_pw_confirm"
             android:layout_gravity="center_horizontal"
             android:ems="10"
             android:imeOptions="flagNoExtractUi"
@@ -81,7 +81,7 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/login_pw"
             android:background="@mipmap/modify_pw_ok"
-            android:text="确  认"
+            android:text="@string/modify_pw_save"
             android:textSize="22sp"/>
     </LinearLayout>
 

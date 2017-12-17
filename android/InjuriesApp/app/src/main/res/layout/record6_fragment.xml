@@ -43,12 +43,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
+
                         <TextView
-                            android:layout_width="170dp"
+                            android:layout_width="190dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="伤口热红外照片" />
+                            android:text="伤口热红外照片"
+                            android:textSize="@dimen/rec_title_size" />
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -67,12 +68,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
+
                         <TextView
-                            android:layout_width="170dp"
+                            android:layout_width="190dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="多普勒超声结果" />
+                            android:text="多普勒超声结果"
+                            android:textSize="@dimen/rec_title_size" />
                         <Button
                             android:id="@+id/btn_dpl_image"
                             android:layout_width="wrap_content"
@@ -102,12 +104,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
+
                         <TextView
-                            android:layout_width="170dp"
+                            android:layout_width="190dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="CTA结果" />
+                            android:text="CTA结果"
+                            android:textSize="@dimen/rec_title_size" />
                         <Button
                             android:id="@+id/btn_cta_image"
                             android:layout_width="wrap_content"
@@ -154,12 +157,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
+
                         <TextView
-                            android:layout_width="170dp"
+                            android:layout_width="190dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="常规检查结果" />
+                            android:text="常规检查结果"
+                            android:textSize="@dimen/rec_title_size" />
                         <Button
                             android:id="@+id/btn_exam_image"
                             android:layout_width="wrap_content"

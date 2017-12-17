@@ -81,7 +81,7 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
-
+/*
         Button btn_server = (Button)findViewById(R.id.btn_server);
         btn_server.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
-
+*/
         //String loginName = SharedPreferenceUtil.getSharedPreferenceValue(LoginActivity.this, CommonUtil.LOGIN_USER);
         //if(loginName != null && loginName.length() > 0) {
             //Intent intent = new Intent();

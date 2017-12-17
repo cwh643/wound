@@ -48,7 +48,7 @@ public class TopMenuFragment extends Fragment {
     private void configView(View rootView) {
         //新建
         CustomerButton btn_new = (CustomerButton)rootView.findViewById(R.id.btn_new);
-        btn_new.setText("新建");
+        btn_new.setText(mActivity.getString(R.string.top_menu_new));
         btn_new.setImage(R.mipmap.home_new);
         btn_new.setSelectImage(R.mipmap.home_new_s);
         btn_new.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class TopMenuFragment extends Fragment {
 
         //查询
         CustomerButton btn_query = (CustomerButton)rootView.findViewById(R.id.btn_query);
-        btn_query.setText("查询");
+        btn_query.setText(mActivity.getString(R.string.top_menu_query));
         btn_query.setImage(R.mipmap.home_search);
         btn_query.setSelectImage(R.mipmap.home_search_s);
         btn_query.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class TopMenuFragment extends Fragment {
 
         //注册
         CustomerButton btn_regist = (CustomerButton)rootView.findViewById(R.id.btn_regist);
-        btn_regist.setText("设置");
+        btn_regist.setText(mActivity.getString(R.string.top_menu_setting));
         btn_regist.setImage(R.mipmap.home_setting);
         btn_regist.setSelectImage(R.mipmap.home_setting_s);
         btn_regist.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +114,7 @@ public class TopMenuFragment extends Fragment {
 
         //修改密码
         CustomerButton btn_modify_pw = (CustomerButton)rootView.findViewById(R.id.btn_modify_pw);
-        btn_modify_pw.setText("修改密码");
+        btn_modify_pw.setText(mActivity.getString(R.string.top_menu_modify_pw));
         btn_modify_pw.setImage(R.mipmap.home_modify_pw);
         btn_modify_pw.setSelectImage(R.mipmap.home_modify_pw_s);
         btn_modify_pw.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +129,7 @@ public class TopMenuFragment extends Fragment {
 
         //收藏夹
         CustomerButton btn_favorites = (CustomerButton)rootView.findViewById(R.id.btn_favorites);
-        btn_favorites.setText("收藏夹");
+        btn_favorites.setText(mActivity.getString(R.string.top_menu_favorites));
         btn_favorites.setImage(R.mipmap.home_favorites);
         btn_favorites.setSelectImage(R.mipmap.home_favorites_s);
         btn_favorites.setOnClickListener(new View.OnClickListener() {

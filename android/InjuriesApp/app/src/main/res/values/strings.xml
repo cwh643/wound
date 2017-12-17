@@ -14,6 +14,43 @@
 
     <string name="login_name">用户名</string>
     <string name="login_password">密码</string>
+    <string name="login_submit">登  录</string>
+    <string name="login_resetpw">忘记密码</string>
+
+    <string name="top_bar_home">主页</string>
+    <string name="top_bar_quit">退出</string>
+
+    <string name="top_menu_new">新建</string>
+    <string name="top_menu_query">查询</string>
+    <string name="top_menu_setting">设置</string>
+    <string name="top_menu_modify_pw">修改密码</string>
+    <string name="top_menu_favorites">收藏夹</string>
+
+    <string name="setting_device_id">设备ID（必须唯一）</string>
+    <string name="setting_server_url">服务器URL</string>
+
+    <string name="modify_pw_title">修改密码</string>
+    <string name="modify_pw_old">旧密码</string>
+    <string name="modify_pw_new">新密码</string>
+    <string name="modify_pw_confirm">确认新密码</string>
+    <string name="modify_pw_save">确  认</string>
+
+    <string name="top_menu_base_info">基本信息</string>
+    <string name="top_menu_photo">照片</string>
+    <string name="top_menu_archives">档案</string>
+    <string name="top_menu_histroy">历史数据</string>
+    <string name="top_menu_upload">上传</string>
+    <string name="top_menu_save">保存</string>
+
+    <string name="sub_menu_item1">伤口信息</string>
+    <string name="sub_menu_item9">伤口位置</string>
+    <string name="sub_menu_item2">伤口描述</string>
+    <string name="sub_menu_item3">伤口评估</string>
+    <string name="sub_menu_item4">渗液信息</string>
+    <string name="sub_menu_item5">影响愈合因素</string>
+    <string name="sub_menu_item6">辅助检查</string>
+    <string name="sub_menu_item7">骨髓炎</string>
+    <string name="sub_menu_item8">伤口换药</string>
 
     <string name="camera_open">打开</string>
     <string name="camera_stop">停止</string>

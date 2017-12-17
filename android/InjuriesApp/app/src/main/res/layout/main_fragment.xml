@@ -13,59 +13,66 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/sub_menu_bar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:paddingLeft="20dp"
+            android:layout_height="50dp"
+            android:background="#c9c9cb"
             android:orientation="horizontal"
-            android:background="#c9c9cb">
+            android:paddingLeft="20dp">
 
             <Button
                 android:id="@+id/btn_base_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:background="@mipmap/menu_btn_select"
                 android:drawableLeft="@mipmap/icon_baseinfo"
-                android:text="基本信息"
-                android:textColor="@color/white" />
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/top_menu_base_info"
+                android:textColor="@color/white"
+                android:textSize="@dimen/rec_menu_title_size" />
 
             <Button
                 android:id="@+id/btn_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:layout_toRightOf="@id/btn_base_info"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_photo"
-                android:text="照片"
-                android:textColor="@color/white" />
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/top_menu_photo"
+                android:textColor="@color/white"
+                android:textSize="@dimen/rec_menu_title_size" />
 
             <Button
                 android:id="@+id/btn_archives"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
                 android:layout_toRightOf="@id/btn_photo"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_archives"
-                android:text="档案"
-                android:textColor="@color/white" />
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/top_menu_archives"
+                android:textColor="@color/white"
+                android:textSize="@dimen/rec_menu_title_size" />
+
             <Button
                 android:id="@+id/btn_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btn_archives"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_favorites"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_toRightOf="@id/btn_archives"
-                android:text="历史数据"
-                android:textColor="@color/white" />
+                android:text="@string/top_menu_histroy"
+                android:textColor="@color/white"
+                android:textSize="@dimen/rec_menu_title_size" />
+            <!--
             <Button
                 android:id="@+id/btn_my_favorites"
                 android:layout_width="wrap_content"
@@ -78,40 +85,42 @@
                 android:layout_toRightOf="@id/btn_archives"
                 android:text="收藏夹"
                 android:textColor="@color/white" />
-
+            -->
             <Button
                 android:id="@+id/btn_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btn_history"
+                android:background="@drawable/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_favorites"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:background="@drawable/menu_btn_bg"
-                android:layout_toRightOf="@id/btn_history"
-                android:text="上传"
+                android:text="@string/top_menu_upload"
                 android:textColor="@color/white"
-                />
+                android:textSize="@dimen/rec_menu_title_size" />
 
             <ImageButton
                 android:id="@+id/btn_favorites"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
                 android:background="@null"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:tag="0"
-                android:layout_alignParentRight="true"
                 android:src="@mipmap/btn_favorites"
+                android:tag="0"
                 android:textColor="@color/white" />
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/detail_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
         </LinearLayout>
+        <!--
         <LinearLayout
             android:id="@+id/save_layout"
             android:layout_width="match_parent"
@@ -127,6 +136,7 @@
                 android:text="保存"
                 android:textColor="@color/black" />
         </LinearLayout>
+        -->
     </LinearLayout>
     <Button
         android:id="@+id/btn_save_bi"
@@ -136,7 +146,7 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
         android:background="@mipmap/btn_save_bg"
-        android:text="保存"
+        android:text="@string/top_menu_save"
         android:textColor="@color/white"
         android:textSize="@dimen/rec_menu_title_size"
         android:visibility="gone"/>

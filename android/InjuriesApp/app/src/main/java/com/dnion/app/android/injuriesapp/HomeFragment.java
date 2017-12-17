@@ -49,13 +49,13 @@ public class HomeFragment extends Fragment {
 
     private Button btn_photo;
 
-    private Button btn_my_favorites;
+    //private Button btn_my_favorites;
 
     private Button btn_save;
 
     private Button btn_history;
 
-    private ViewGroup save_layout;
+    //private ViewGroup save_layout;
 
     private ImageButton btn_favorites;
 
@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void configView(final View rootView) {
-        save_layout = (ViewGroup) rootView.findViewById(R.id.save_layout);
+        //save_layout = (ViewGroup) rootView.findViewById(R.id.save_layout);
         //detail_container = findViewById(R.id.detail_container);
         btn_save_bi = (Button)rootView.findViewById(R.id.btn_save_bi);
         final String selectInpatientNo = getArguments().getString(SELECT_INPATIENT_NO);
@@ -237,7 +237,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
+/*
         btn_my_favorites = (Button)rootView.findViewById(R.id.btn_my_favorites);
         btn_my_favorites.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,7 +255,7 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
-
+*/
         //出院
         Button btn_upload = (Button)rootView.findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(new View.OnClickListener() {
@@ -327,7 +327,7 @@ public class HomeFragment extends Fragment {
         btn_base_info.setBackgroundResource(R.mipmap.menu_btn_bg);
         btn_archives.setBackgroundResource(R.mipmap.menu_btn_bg);
         btn_photo.setBackgroundResource(R.mipmap.menu_btn_bg);
-        btn_my_favorites.setBackgroundResource(R.mipmap.menu_btn_bg);
+        //btn_my_favorites.setBackgroundResource(R.mipmap.menu_btn_bg);
         btn_history.setBackgroundResource(R.mipmap.menu_btn_bg);
         v.setBackgroundResource(R.mipmap.menu_btn_select);
     }

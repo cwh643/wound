@@ -27,7 +27,7 @@
                 android:layout_weight="1"
                 android:background="@color/white"
                 android:textColor="#B6B6B6"
-                android:text="伤口信息"
+                android:text="@string/sub_menu_item1"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -36,7 +36,7 @@
                 android:layout_height="52dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:text="伤口位置"
+                android:text="@string/sub_menu_item9"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
             <Button
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="伤口描述"
+                android:text="@string/sub_menu_item2"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -56,7 +56,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="伤口评估"
+                android:text="@string/sub_menu_item3"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="渗液信息"
+                android:text="@string/sub_menu_item4"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -75,7 +75,7 @@
                 android:layout_height="52dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:text="影响愈合因素"
+                android:text="@string/sub_menu_item5"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
@@ -86,7 +86,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="辅助检查"
+                android:text="@string/sub_menu_item6"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -96,7 +96,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="骨髓炎"
+                android:text="@string/sub_menu_item7"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
             <Button
@@ -106,7 +106,7 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:textColor="@color/white"
-                android:text="伤口换药"
+                android:text="@string/sub_menu_item8"
                 android:textSize="@dimen/rec_menu_title_size"/>
 
         </LinearLayout>

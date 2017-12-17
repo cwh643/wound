@@ -43,7 +43,7 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/top_btn_bg"
         android:drawableLeft="@mipmap/quit"
-        android:text="退出"
+        android:text="@string/top_bar_quit"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
@@ -58,7 +58,7 @@
         android:layout_toStartOf="@+id/btn_quit"
         android:background="@drawable/top_btn_bg"
         android:drawableLeft="@mipmap/home"
-        android:text="主页"
+        android:text="@string/top_bar_home"
         android:textColor="@color/white"
         android:textSize="20sp" />
 

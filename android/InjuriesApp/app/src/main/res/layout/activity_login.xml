@@ -62,7 +62,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/save_btn_bg"
-            android:text="登  录"
+            android:text="@string/login_submit"
             android:textColor="@color/black"
             android:textSize="22sp" />
         <LinearLayout
@@ -77,12 +77,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/save_btn_bg"
-            android:text="忘记密码"
+            android:text="@string/login_resetpw"
             android:textColor="@color/black"
             android:textSize="22sp" />
     </LinearLayout>
 
-
+<!--
     <Button
         android:visibility="gone"
         android:id="@+id/btn_server"
@@ -94,6 +94,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         />
-
+-->
 
 </RelativeLayout>
