@@ -28,6 +28,8 @@ struct CallbackData {
     int             index;
     TY_DEV_HANDLE   hDevice;
     DepthRender*    render;
+    cv::Mat         colorM;
+    cv::Mat         colorD;
 };
 
 static int n;
@@ -112,59 +114,73 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
                 for(int j = lx; j < rx; j++) {
                     short &value = depth.at<short>(i, j);
                     
-                    LOGD("     get value %d, %d, %d, %d", j, i, value, min);
-                    if (i >= center_ly && i < center_ry
-                        && j >= center_lx && j < center_rx) {
-                        min += value;
-                        min_count++;
-                    }
+                    // LOGD("     get value %d, %d, %d, %d", j, i, value, min);
+                    
                     int fi = i - y_diff;
                     int fj = j - x_diff;
                     if (value < near || value > far) {
                         dt->at<short>(fi, fj) = 0;
                         continue;
                     }
+                    if (fi >= center_ly && fi < center_ry
+                        && fj >= center_lx && fj < center_rx) {
+                        min += value;
+                        min_count++;
+                    }
                     dt->at<short>(fi, fj) = value;
                 }
             }
-                                  
-            LOGD("     get center deep  %d", min);
             nameFieldId = env->GetFieldID(cls , "deep_center_deep" , "I"); //获得属性句柄 
-            env->SetIntField(obj, nameFieldId, min/min_count); 
+            if (min_count == 0) {
+                min_count = 1;
+            }
+            int center_deep = min/min_count;
+            LOGD("     get center deep  %d", center_deep);
+            env->SetIntField(obj, nameFieldId, center_deep);
         }
         
         // get & show RGB
         if(frame.image[i].componentID == TY_COMPONENT_RGB_CAM){
-            LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
+            // LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
             LOGD("     RGB image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+            // cv::Mat &color =  *((cv::Mat*)rgbMat);
+            cv::Mat color;
             pColor = (cv::Mat*)rgbMat;
             // get BGR
             if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU){
                 LOGD("RGB YVYU");
                 cv::Mat yuv(pColor->rows, pColor->cols
                         , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YVYU);
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YVYU);
             }
             else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YUYV){
                 LOGD("RGB YUYV");
                 cv::Mat yuv(pColor->rows, pColor->cols
                         , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YUYV);
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YUYV);
             } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
                 LOGD("RGB RGB");
                 cv::Mat rgb(pColor->rows, pColor->cols
                         , CV_8UC3, frame.image[i].buffer);
-                cv::cvtColor(rgb, *pColor, cv::COLOR_RGB2BGR);
+                cv::cvtColor(rgb, color, cv::COLOR_RGB2BGR);
             } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_MONO){
                 LOGD("RGB MONO");
                 cv::Mat gray(pColor->rows, pColor->cols
                         , CV_8U, frame.image[i].buffer);
-                cv::cvtColor(gray, *pColor, cv::COLOR_GRAY2BGR);
+                cv::cvtColor(gray, color, cv::COLOR_GRAY2BGR);
             }
             int nl = pColor->rows;  
             int nc = pColor->cols;  
             int nn = pColor->channels();  
             LOGD("     RGB mat create %d, %d, %d, %d", *(int *)frame.image[i].buffer, nl, nc, nn);
+            if(!pData->colorM.empty()){
+                cv::undistort(color, *pColor, pData->colorM, pData->colorD, pData->colorM);
+                // cv::fisheye::undistortImage(color, color, pData->colorM, pData->colorD, pData->colorM, color.size());
+            }
+            LOGD("     RGB mat undistortImage");
+            // cv::Mat resizedColor;
+            // cv::resize(color, resizedColor, depth.size(), 0, 0, CV_INTER_LINEAR);
+            // cv::imshow("color", resizedColor);
         }
         // get & show left ir image
         if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
@@ -390,7 +406,7 @@ int frameHandler(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbM
     ASSERT_OK( TYEnqueueBuffer(pData->hDevice, frame.userBuffer, frame.bufferSize) );
 }
 
-int OpenDevice() {
+int OpenDevice(jint width, jint heigth) {
 	   LOGD("=== Init lib");
 	    ASSERT_OK( TYInitLib() );
 	    TY_VERSION_INFO* pVer = (TY_VERSION_INFO*)buffer;
@@ -427,10 +443,20 @@ int OpenDevice() {
 	    LOGD("=== Configure feature, set resolution to 640x480.");
 	    LOGD("Note: DM460 resolution feature is in component TY_COMPONENT_DEVICE,");
 	    LOGD("      other device may lays in some other components.");
-	    int err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_640x480);
+
+        TY_IMAGE_MODE_LIST image_size = TY_IMAGE_MODE_640x480;
+        if (width == 1280) {
+            image_size = TY_IMAGE_MODE_1280x960;
+        }
+	    int err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
+		LOGD("err = %d", err);
+	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+	    err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
 		LOGD("err = %d", err);
 	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
 
+        // LOGD("=== Enable rgb undistort");
+        // TYSetBool(hDevice, TY_COMPONENT_RGB_CAM, TY_BOOL_UNDISTORTION, true);
 	    LOGD("=== Prepare image buffer");
 	    int32_t frameSize;
 	    ASSERT_OK( TYGetFrameBufferSize(hDevice, &frameSize) );
@@ -455,7 +481,40 @@ int OpenDevice() {
 	    cb_data.index = 0;
 	    cb_data.hDevice = hDevice;
 	    cb_data.render = &render;
-	    // ASSERT_OK( TYRegisterCallback(hDevice, frameHandler, &cb_data) );
+
+        LOGD("=== Read color rectify matrix");
+        {
+            TY_CAMERA_DISTORTION color_dist;
+            TY_CAMERA_INTRINSIC color_intri;
+            TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
+            ret |= TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_INTRINSIC, &color_intri, sizeof(color_intri));
+            if (ret == TY_STATUS_OK)
+            {
+                LOGD("=== Read color rectify matrix succ");
+                cb_data.colorM.create(3, 3, CV_32FC1);
+                cb_data.colorD.create(5, 1, CV_32FC1);
+                memcpy(cb_data.colorM.data, color_intri.data, sizeof(color_intri.data));
+                memcpy(cb_data.colorD.data, color_dist.data, sizeof(float)*cb_data.colorD.rows);
+            }
+            else
+            {//let's try  to load from file...
+                LOGD("=== Read color rectify matrix failed, use default");
+                memset(cb_data.colorD.data, 0, 12 * sizeof(float));
+                memset(cb_data.colorM.data, 0, 9 * sizeof(float));
+                cb_data.colorM.data[0] = 1000.f;
+                cb_data.colorM.data[4] = 1000.f;
+                cb_data.colorM.data[2] = 600.f;
+                cb_data.colorM.data[5] = 450.f;
+                // cv::FileStorage fs("color_intri.xml", cv::FileStorage::READ);
+                // if (fs.isOpened())
+                // {
+                //     fs["M"] >> cb_data.colorM;
+                //     fs["D"] >> cb_data.colorD;
+                //     cb_data.colorD = cb_data.colorD.colRange(0, 8);
+                // }
+            }
+        }
+        // ASSERT_OK( TYRegisterCallback(hDevice, frameHandler, &cb_data) );
 
 	    LOGD("=== Disable trigger mode");
 	    ASSERT_OK( TYSetBool(hDevice, TY_COMPONENT_DEVICE, TY_BOOL_TRIGGER_MODE, false) );
@@ -482,16 +541,16 @@ int CloseDevice() {
 }
 
 extern "C" {
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
 {
-    return OpenDevice();
+    return OpenDevice(width, heigth);
 }
 
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)

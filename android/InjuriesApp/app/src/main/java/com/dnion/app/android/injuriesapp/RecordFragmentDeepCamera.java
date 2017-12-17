@@ -59,7 +59,7 @@ public class RecordFragmentDeepCamera extends Fragment {
     public static final int CAMERA_DEFAULT_WIDTH = 960;
     public static final int CAMERA_DEFAULT_HEIGHT = 540;
     public static final int DEFAULT_TIME_OUT = 100000;
-    private int camera_src = 2; // 0:图漾4x，1:图漾8x，2:奥比
+    private int camera_src = 1; // 0:图漾4x，1:图漾8x，2:奥比
     private int camera_x = 332;
     private int camera_y = 141;
     private int camera_width = 572;
@@ -96,7 +96,6 @@ public class RecordFragmentDeepCamera extends Fragment {
     private GestureDetector scollGestureDetector;
     private ScaleGestureDetector scaleGestureDetector;
     Mat mDepthTmpMap;
-
     Paint focusBackpaint;
     Canvas focusBackCanvas;
     Paint focusPaint;
@@ -391,7 +390,7 @@ public class RecordFragmentDeepCamera extends Fragment {
         deepCameraInfo.setDeep_ly(deep_ly);
         deepCameraInfo.setDeep_rx(deep_rx);
         deepCameraInfo.setDeep_ry(deep_ry);
-        deepCameraInfo.setDeep_scale_factor(deep_scale_factor);
+        deepCameraInfo.setCamera_size_factor(cameraHelper.getParam().camera_size_factor);
         deepCameraInfo.setDeep_near(deep_near);
         deepCameraInfo.setDeep_far(deep_far);
     }

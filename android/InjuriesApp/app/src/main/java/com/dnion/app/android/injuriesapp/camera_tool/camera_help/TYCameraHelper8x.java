@@ -31,7 +31,6 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
 
     public void init(Context context) {
         super.init(context);
-        float factor = mWidth / 640;
         nativeUtils = new TyNativeUtils();
         nativeUtils.deep_lx = param.deep_lx;
         nativeUtils.deep_rx = param.deep_rx;
@@ -39,10 +38,11 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         nativeUtils.deep_ry = param.deep_ry;
         nativeUtils.deep_near = GlobalDef.CALC_MIN_DEEP;
         nativeUtils.deep_far = GlobalDef.CALC_MAX_DEEP;
-        nativeUtils.deep_x_diff = transIntParam(0);
-        nativeUtils.deep_y_diff = transIntParam(0);
+        nativeUtils.deep_x_diff = transIntParam(-20);
+        nativeUtils.deep_y_diff = transIntParam(45);
+        //nativeUtils.deep_x_diff = transIntParam(0);
+        //nativeUtils.deep_y_diff = transIntParam(0);
         nativeUtils.deep_center_dis = transIntParam(GlobalDef.DEPTH_CENTER_DIS);
-
         //cameraSurfaceView = (CameraSurfaceView) rootView.findViewById(R.id.camera_surface_view);
         //cameraSurfaceView.init();
         //cameraSurfaceView.setPrewViewCallBack(mPreviewCallback);
@@ -72,7 +72,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
                 case LoaderCallbackInterface.SUCCESS: {
                     Log.i(TAG, "OpenCV loaded successfully");
                     // Load native library after(!) OpenCV initialization
-                    int err = nativeUtils.OpenDevice();
+                    int err = nativeUtils.OpenDevice(mWidth, mHeight);
                     mLoadCallback.onInited(err);
                     if (err == 0) {
                         mInit_Ok = true;

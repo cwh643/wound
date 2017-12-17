@@ -8,10 +8,6 @@ import java.nio.ByteBuffer;
 
 public class TyNativeUtils {
     // 相对于640 * 480 的偏移
-    //public int deep_lx = 0;
-    //public int deep_ly = 0;
-    //public int deep_rx = 640;
-    //public int deep_ry = 480;
     public int deep_lx = 120;
     public int deep_ly = 90;
     public int deep_rx = 360;
@@ -36,7 +32,7 @@ public class TyNativeUtils {
 
     public native int StartDevice();
 
-    public native int OpenDevice();
+    public native int OpenDevice(final int width, final int heigth);
 
     public native int FetchData(final long depthAddr, final long rgbAddr);
 

@@ -30,18 +30,20 @@
 
             <com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView
                 android:id="@+id/camera_surface_view"
-                android:layout_width="1280px"
-                android:layout_height="960px" />
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
 
             <ImageView
                 android:id="@+id/rgb_view"
-                android:layout_width="1280px"
-                android:layout_height="960px"/>
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
             <ImageView
                 android:id="@+id/deep_camera_view"
-                android:layout_width="1280px"
-                android:layout_height="960px"
-                android:alpha="0.3"/>
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
 
 
 
