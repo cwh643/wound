@@ -32,7 +32,7 @@ public class GlobalDef {
     public static final int CALC_MAX_DEEP = 700;
     public static final float MODEL_BACK_MIN_DEEP = 10;
     public static final float MODEL_FRONT_MIN_DEEP = 50;
-    public static final int MODEL_DEEP_CENTER_DIS = 4;
+    public static final int MODEL_DEEP_CENTER_DIS = 3;
 
     public static final int DEPTH_CENTER_DIS = 3;
 

@@ -38,7 +38,7 @@ public class DeepCameraInfo {
     private int deep_ly;
     private int deep_rx;
     private int deep_ry;
-    private float deep_scale_factor;
+    private float camera_size_factor;
     private int deep_near;
     private int deep_far;
     private List<Float> vertexList = new ArrayList<>();
@@ -217,13 +217,7 @@ public class DeepCameraInfo {
         this.deep_ry = deep_ry;
     }
 
-    public float getDeep_scale_factor() {
-        return deep_scale_factor;
-    }
 
-    public void setDeep_scale_factor(float deep_scale_factor) {
-        this.deep_scale_factor = deep_scale_factor;
-    }
 
     public int getDeep_near() {
         return deep_near;
@@ -303,5 +297,13 @@ public class DeepCameraInfo {
 
     public void setCenterDeep(double centerDeep) {
         this.centerDeep = centerDeep;
+    }
+
+    public float getCamera_size_factor() {
+        return camera_size_factor;
+    }
+
+    public void setCamera_size_factor(float camera_size_factor) {
+        this.camera_size_factor = camera_size_factor;
     }
 }

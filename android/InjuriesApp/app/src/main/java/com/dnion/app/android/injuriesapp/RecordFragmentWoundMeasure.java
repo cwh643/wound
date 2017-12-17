@@ -39,6 +39,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -636,6 +638,49 @@ public class RecordFragmentWoundMeasure extends Fragment {
         // 取周围的点， 如果和周围最近点的距离超过阈值，则抛弃
         int dis = GlobalDef.MODEL_DEEP_CENTER_DIS;
         double minDeep = Double.MAX_VALUE;
+        double maxDeep = 0;
+        List<Double> deep_list = new ArrayList<>();
+        int lx = x - dis;
+        int rx = x + dis + 2;
+        int ly = y - dis;
+        int ry = y + dis + 2;
+        for (int i = lx; i < rx; i++) {
+            if (i < 0 || i >= depth.cols()) {
+                continue;
+            }
+            for (int j = ly; j < ry; j++) {
+                if (j < 0 || j >= depth.rows()) {
+                    continue;
+                }
+                double deep = getDeep(depth.get(j, i));
+                if (deep == 0) {
+                    continue;
+                }
+                deep_list.add(deep);
+                minDeep = Math.min(minDeep, deep);
+                maxDeep = Math.max(maxDeep, deep);
+            }
+        }
+        double deep = getDeep(depth.get(y, x));
+        if (deep == 0) {
+            return deep;
+        }
+        if (deep_list.size() >= 2) {
+            // 排序后取中位数
+            Collections.sort(deep_list);
+            int middle_pos = deep_list.size() / 2;
+            double middle_deep = (deep_list.get(middle_pos) + deep_list.get(middle_pos + 1)) / 2;
+            if (Math.abs(deep - middle_deep) > GlobalDef.MODEL_BACK_MIN_DEEP) {
+                return 0;
+            }
+        }
+        return deep;
+    }
+
+    private double filterPointBk(Mat depth, int x, int y) {
+        // 取周围的点， 如果和周围最近点的距离超过阈值，则抛弃
+        int dis = GlobalDef.MODEL_DEEP_CENTER_DIS;
+        double minDeep = Double.MAX_VALUE;
         for (int i = 0; i < dis; i++) {
             int c_x = x - dis / 2 + i;
             if (c_x < 0 || c_x >= depth.cols()) {
@@ -661,6 +706,21 @@ public class RecordFragmentWoundMeasure extends Fragment {
             return 0;
         }
         return deep;
+    }
+
+    private void clacColorRate(int color, ModelPointinfo mi) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        if (red > 0x60 && green < 0x50 && blue < 0x50) {
+            mi.redNum++;
+        } else if (red > 0x33 && green < 0x33 && blue < 0x33) {
+            mi.blackNum++;
+        } else if (red > 0x50 && green > 0x50 && blue < 0x40 && red - green < 0x5a && green - red < 0x10) {
+            mi.yellowNum++;
+        }
+        mi.pixSize++;
+
     }
 
     private void clacArea() {
@@ -741,14 +801,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     int red = Color.red(color);
                     int green = Color.green(color);
                     int blue = Color.blue(color);
-                    if (red > 0x60 && green < 0x50 && blue < 0x50) {
-                        mi.redNum++;
-                    } else if (red > 0x33 && green < 0x33 && blue < 0x33) {
-                        mi.blackNum++;
-                    } else if (red > 0x50 && green > 0x50 && blue < 0x40 && red - green < 0x5a && green - red < 0x10) {
-                        mi.yellowNum++;
-                    }
-                    mi.pixSize++;
+                    clacColorRate(color, mi);
 
                     // 计算模型的点集
                     vertexList.add((float) depth_i);
@@ -770,12 +823,13 @@ public class RecordFragmentWoundMeasure extends Fragment {
         int test = 1;
         Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
         deepCameraInfo.setModelCenter(center_p);
+        float camera_size_factor = deepCameraInfo.getCamera_size_factor();
         for (int i = vertexList.size() - 1; i >= 0; i -= 3) {
             float deep = vertexList.get(i);
             int x = new Float(vertexList.get(i - 2)).intValue() - lx;
             int y = new Float(vertexList.get(i - 1)).intValue() - ly;
             int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
-            double area_per = avgDeep * AREA_PER_PIX;
+            double area_per = avgDeep * AREA_PER_PIX / camera_size_factor / camera_size_factor;
             area += area_per;
             double volum_per = (deep - avgDeep) / 10 * area_per;
             volume += volum_per;
@@ -783,7 +837,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                 test = 1;
             }
         }
-        volume = volume < 0 ? -volume : volume;
+        volume = volume < 0 ? - volume : volume;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
         String format_area = new DecimalFormat("#.00").format(area);
         String format_volume = new DecimalFormat("#.00").format(volume);
@@ -799,157 +853,6 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCameraInfo.setWoundBlackRate(new Float(format_black));
         deepCameraInfo.setWoundDeep(new Float(format_deep));
     }
-
-
-    private void clacAreaBk() {
-        List<Float> vertexList = deepCameraInfo.getVertexList();
-        List<Float> colorList = deepCameraInfo.getColorList();
-        Mat mDepth = deepCameraInfo.getDepthMat();
-        Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
-        vertexList.clear();
-        colorList.clear();
-        int calcWidth = deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx();
-        int calcHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
-        Bitmap tmpBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
-                mAreaMeasureBitmap.getHeight(), calcWidth, calcHeight);
-        int width = tmpBitmap.getWidth();
-        int height = tmpBitmap.getHeight();
-        // 缩放比例
-        float rgbFactor = (float) rgbBitmap.getWidth() / mDepth.cols();
-        // 存放每个轴上面最大和最小值
-        double[][] lengthMap = new double[width][2];
-        double[][] widthMap = new double[height][2];
-        int lx = deepCameraInfo.getDeep_lx();
-        int ly = deepCameraInfo.getDeep_ly();
-        double area = 0;
-        double volume = 0;
-        min_deep = Double.MAX_VALUE;
-        max_deep = 0;
-        ModelPointinfo mi = new ModelPointinfo();
-
-        mi.left_x = Integer.MAX_VALUE;
-        mi.top_y = Integer.MAX_VALUE;
-        mi.right_x = 0;
-        mi.bottom_y = 0;
-        mi.last_deep = 0;
-        // 红、黄、黑比例
-        mi.redNum = 0;
-        mi.yellowNum = 0;
-        mi.blackNum = 0;
-        mi.pixSize = 1;
-
-        for (int i = width - 1; i >= 0; i--) {
-            mi.last_deep = 0;
-            for (int j = height - 1; j > -0; j--) {
-                if (tmpBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
-                    int depth_j = j + ly;
-                    int depth_i = i + lx;
-                    double[] deep_arr = mDepth.get(depth_j, depth_i);
-                    double deep = 0;
-                    // 为了补点，如果空，取上一个点的距离
-                    if (deep_arr == null) {
-                        //if (mi.last_deep == 0 || mi.last_deep < GlobalDef.CALC_MIN_DEEP || mi.last_deep > GlobalDef.CALC_MAX_DEEP) {
-                        continue;
-                        //}
-                        //deep = mi.last_deep;
-                    } else {
-                        deep = deep_arr[0];
-                    }
-                    if (deep < GlobalDef.CALC_MIN_DEEP || deep > GlobalDef.CALC_MAX_DEEP) {
-                        continue;
-                    }
-
-                    mi.last_deep = deep;
-                    // 获取xy上最大的点和最小的点
-                    if (lengthMap[i][0] == 0) {
-                        lengthMap[i][0] = mi.last_deep;
-                        lengthMap[i][1] = mi.last_deep;
-                    } else {
-                        lengthMap[i][0] = Math.min(mi.last_deep, lengthMap[i][0]);
-                        lengthMap[i][1] = Math.max(mi.last_deep, lengthMap[i][1]);
-                    }
-                    if (widthMap[j][0] == 0) {
-                        widthMap[j][0] = mi.last_deep;
-                        widthMap[j][1] = mi.last_deep;
-                    } else {
-                        widthMap[j][0] = Math.min(mi.last_deep, widthMap[j][0]);
-                        widthMap[j][1] = Math.max(mi.last_deep, widthMap[j][1]);
-                    }
-                    // 找到最近的点
-                    min_deep = Math.min(mi.last_deep, min_deep);
-                    max_deep = Math.max(mi.last_deep, max_deep);
-                    mi.left_x = Math.min(depth_i, mi.left_x);
-                    mi.right_x = Math.max(depth_i, mi.right_x);
-                    mi.top_y = Math.min(depth_j, mi.top_y);
-                    mi.bottom_y = Math.max(depth_j, mi.bottom_y);
-
-                    int rgb_i = new Float(rgbFactor * depth_i).intValue();
-                    int rgb_j = new Float(rgbFactor * depth_j).intValue();
-
-                    int color = rgbBitmap.getPixel(rgb_i, rgb_j);
-                    // testBm.setPixel(depth_i, depth_j, color);
-                    int red = Color.red(color);
-                    int green = Color.green(color);
-                    int blue = Color.blue(color);
-                    if (red > 0x60 && green < 0x50 && blue < 0x50) {
-                        mi.redNum++;
-                    } else if (red > 0x33 && green < 0x33 && blue < 0x33) {
-                        mi.blackNum++;
-                    } else if (red > 0x50 && green > 0x50 && blue < 0x40 && red - green < 0x5a && green - red < 0x10) {
-                        mi.yellowNum++;
-                    }
-                    mi.pixSize++;
-
-                    // 计算模型的点集
-                    vertexList.add((float) depth_i);
-                    vertexList.add((float) depth_j);
-                    vertexList.add((float) mi.last_deep);
-                    colorList.add((float) red / 255);
-                    colorList.add((float) green / 255);
-                    colorList.add((float) blue / 255);
-                    colorList.add((float) Color.alpha(1));
-                }
-            }
-        }
-        //mAreaMeasureView.setImageBitmap(testBm);
-        deepCameraInfo.setMinDeep(min_deep);
-        deepCameraInfo.setMaxDeep(max_deep);
-
-
-        //  中间点
-        int test = 1;
-        Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
-        deepCameraInfo.setModelCenter(center_p);
-        for (int i = vertexList.size() - 1; i >= 0; i -= 3) {
-            float deep = vertexList.get(i);
-            int x = new Float(vertexList.get(i - 2)).intValue() - lx;
-            int y = new Float(vertexList.get(i - 1)).intValue() - ly;
-            int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
-            double area_per = avgDeep * AREA_PER_PIX;
-            area += area_per;
-            double volum_per = (deep - avgDeep) / 10 * area_per;
-            volume += volum_per;
-            if (volum_per > 0) {
-                test = 1;
-            }
-        }
-        volume = volume < 0 ? -volume : volume;
-        //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
-        String format_area = new DecimalFormat("#.00").format(area);
-        String format_volume = new DecimalFormat("#.00").format(volume);
-        String format_red = new DecimalFormat("#.00").format((float) mi.redNum / mi.pixSize * 100);
-        String format_yellow = new DecimalFormat("#.00").format((float) mi.yellowNum / mi.pixSize * 100);
-        String format_black = new DecimalFormat("#.00").format((float) mi.blackNum / mi.pixSize * 100);
-        double woundDeep = (deepCameraInfo.getMaxDeep() - deepCameraInfo.getMinDeep()) / 10;
-        String format_deep = new DecimalFormat("#.00").format(woundDeep);
-        deepCameraInfo.setWoundArea(new Float(format_area));
-        deepCameraInfo.setWoundVolume(new Float(format_volume));
-        deepCameraInfo.setWoundRedRate(new Float(format_red));
-        deepCameraInfo.setWoundYellowRate(new Float(format_yellow));
-        deepCameraInfo.setWoundBlackRate(new Float(format_black));
-        deepCameraInfo.setWoundDeep(new Float(format_deep));
-    }
-
 
     private void downLength(MotionEvent e) {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
