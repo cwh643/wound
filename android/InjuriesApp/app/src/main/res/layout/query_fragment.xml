@@ -26,7 +26,7 @@
             android:inputType="textPersonName"
             android:background="@mipmap/search_bg"
             android:drawableRight="@mipmap/search_btn"
-            android:hint="患者姓名"
+            android:hint="@string/query_patient_name"
             android:text="" />
 
         <Button
@@ -39,7 +39,7 @@
             android:layout_marginStart="83dp"
             android:layout_toEndOf="@+id/txt_pation_name"
             android:layout_toRightOf="@+id/txt_pation_name"
-            android:text="查询" />
+            android:text="@string/query_query" />
 
         <Button
             android:id="@+id/btn_add"
@@ -49,7 +49,7 @@
             android:background="@mipmap/btn_photo_bg"
             android:textColor="@color/btn_title"
             android:textSize="@dimen/rec_title_size"
-            android:text="添加采集" />
+            android:text="@string/query_add" />
     </RelativeLayout>
 
     <LinearLayout
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:text="医生（科室）"
+                android:text="@string/query_doc"
                 android:padding="15dp"
                 android:background="@color/query_table_title_bg"
                 android:textSize="20sp" />
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:padding="15dp"
-                android:text="患者（住院号）"
+                android:text="@string/query_patient"
                 android:background="@color/query_table_title_bg"
                 android:textSize="20sp" />
             <ListView
@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:padding="15dp"
-                android:text="采集时间（手术）"
+                android:text="@string/query_record_time"
                 android:background="@color/query_table_title_bg"
                 android:textSize="20sp" />
             <ListView

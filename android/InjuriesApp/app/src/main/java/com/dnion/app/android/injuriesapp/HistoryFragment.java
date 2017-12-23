@@ -131,7 +131,7 @@ public class HistoryFragment extends Fragment {
         //设置描述信息
         mBarChart.getDescription().setText("");
         //设置没有数据时显示的文本
-        mBarChart.setNoDataText("没有数据");
+        mBarChart.setNoDataText(mActivity.getText(R.string.no_data).toString());
         //mBarChart.setOnChartValueSelectedListener(this);
         mBarChart.getDescription().setEnabled(false);
 //        mChart.setDrawBorders(true);
@@ -184,11 +184,11 @@ public class HistoryFragment extends Fragment {
             yBlack.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorBlack())));
         }
         // create 4 DataSets
-        BarDataSet setRed = new BarDataSet(yRed, "红色组织");
+        BarDataSet setRed = new BarDataSet(yRed, mActivity.getText(R.string.measure_red).toString());
         setRed.setColor(Color.RED);
-        BarDataSet setYellow = new BarDataSet(yYellow, "黄色组织");
+        BarDataSet setYellow = new BarDataSet(yYellow, mActivity.getText(R.string.measure_yellow).toString());
         setYellow.setColor(Color.YELLOW);
-        BarDataSet setBlack = new BarDataSet(yBlack, "黑色组织");
+        BarDataSet setBlack = new BarDataSet(yBlack, mActivity.getText(R.string.measure_black).toString());
         setBlack.setColor(Color.BLACK);
 
         BarData barData = new BarData(setRed, setYellow, setBlack);
@@ -221,7 +221,7 @@ public class HistoryFragment extends Fragment {
         mLineChart.getDescription().setText("");
         //mLineChart.getDescription().setPosition(100, 20);
         //设置没有数据时显示的文本
-        mLineChart.setNoDataText("没有数据");
+        mLineChart.setNoDataText(mActivity.getText(R.string.no_data).toString());
 
         mLineChart.setTouchEnabled(false); // 设置是否可以触摸
         mLineChart.setDragEnabled(false);// 是否可以拖拽
@@ -279,9 +279,9 @@ public class HistoryFragment extends Fragment {
             heightValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundHeight())));
         }
 
-        LineDataSet widthDataSet = new LineDataSet(widthValues, "宽度");
+        LineDataSet widthDataSet = new LineDataSet(widthValues, mActivity.getText(R.string.measure_width).toString());
         widthDataSet.setColor(Color.BLUE);
-        LineDataSet heightDataSet = new LineDataSet(heightValues, "长度");
+        LineDataSet heightDataSet = new LineDataSet(heightValues, mActivity.getText(R.string.measure_length).toString());
         heightDataSet.setColor(Color.GREEN);
         //线的集合（可单条或多条线）
         List<ILineDataSet> dataSets = new ArrayList<>();
@@ -304,7 +304,7 @@ public class HistoryFragment extends Fragment {
         //设置描述信息
         mLineChart.setDescription(description);
         //设置没有数据时显示的文本
-        mLineChart.setNoDataText("没有数据喔~~");
+        mLineChart.setNoDataText(mActivity.getText(R.string.measure_width).toString());
         //设置是否绘制chart边框的线
         mLineChart.setDrawBorders(true);
         //设置chart边框线颜色

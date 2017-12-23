@@ -85,7 +85,7 @@
             android:id="@+id/measure"
             android:layout_width="@dimen/camera_btn_width"
             android:layout_height="wrap_content"
-            android:text="@string/measure_erea" />
+            android:text="@string/measure_area" />
         <Button
             android:id="@+id/camera_shot"
             android:layout_width="@dimen/camera_btn_width"

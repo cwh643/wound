@@ -1,0 +1,167 @@
+<resources>
+    <string name="app_name">创伤管理</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <string name="message_title_tip">提示</string>
+    <string name="message_wait">正在加载,请稍等...</string>
+    <string name="message_wait_save">正在保存,请稍等...</string>
+    <string name="message_wait_shot">正在拍照,勿动...</string>
+    <string name="message_wait_model">正在建模,请稍等...</string>
+    <string name="message_response_error">加载失败</string>
+    <string name="message_device_error">设备异常，请检查连接</string>
+
+    <string name="login_name">User Name</string>
+    <string name="login_password">Password</string>
+    <string name="login_submit">Log In</string>
+    <string name="login_resetpw">Forget the Password</string>
+
+    <string name="top_bar_home">Homepage</string>
+    <string name="top_bar_quit">Quit</string>
+
+    <string name="top_menu_new">New Folder</string>
+    <string name="top_menu_query">Inquiry</string>
+    <string name="top_menu_setting">Settings</string>
+    <string name="top_menu_modify_pw">Change Password</string>
+    <string name="top_menu_favorites">Favorites</string>
+
+    <string name="setting_device_id">Device ID(Must be the only)</string>
+    <string name="setting_server_url">Servers URL</string>
+
+    <string name="modify_pw_title">Change Password</string>
+    <string name="modify_pw_old">Old Password</string>
+    <string name="modify_pw_new">New Password</string>
+    <string name="modify_pw_confirm">Confirm New Password</string>
+    <string name="modify_pw_save">Confirm</string>
+
+    <string name="top_menu_base_info">Essential Information</string>
+    <string name="top_menu_photo">Photograph</string>
+    <string name="top_menu_archives">Record</string>
+    <string name="top_menu_histroy">Historical Data</string>
+    <string name="top_menu_upload">Uploading</string>
+    <string name="top_menu_save">Save</string>
+
+    <string name="sub_menu_item1">Wound Information</string>
+    <string name="sub_menu_item9">Wound Location</string>
+    <string name="sub_menu_item2">Wound Description</string>
+    <string name="sub_menu_item3">Wound Assessment</string>
+    <string name="sub_menu_item4">Seepage Information</string>
+    <string name="sub_menu_item5">Healing Influence Factors</string>
+    <string name="sub_menu_item6">Auxiliary Examination</string>
+    <string name="sub_menu_item7">Osteomyelitis</string>
+    <string name="sub_menu_item8">Wound Dressing</string>
+
+    <string name="query_patient_name">Patient\'s Name</string>
+    <string name="query_query">Query</string>
+    <string name="query_add">Add</string>
+    <string name="query_doc">Doctor（Administrative Office）</string>
+    <string name="query_patient">Patient（Admission Numbe）</string>
+    <string name="query_record_time">Acquisition Time（Operation）</string>
+
+    <string name="base_info_name">Name</string>
+    <string name="base_info_gender">Gender</string>
+    <string name="base_info_male">Male</string>
+    <string name="base_info_female">Female</string>
+    <string name="base_info_age">Age</string>
+    <string name="base_info_bed_id">Bed ID</string>
+    <string name="base_info_admission">Admission Numbe</string>
+    <string name="base_info_qr_code">scan a QR code</string>
+    <string name="base_info_diagnosis">Admitting Diagnosis</string>
+    <string name="base_info_doctor">Doctor-in-Charge</string>
+
+    <string name="record_complaint">Complaint</string>
+    <string name="record_record">Record</string>
+    <string name="record_play">Play</string>
+    <string name="record_wound_type">The Wound Type</string>
+    <string name="record_wound_size">Size of the Wound</string>
+    <string name="record_wound_length">Length</string>
+    <string name="record_wound_width">Width</string>
+    <string name="record_wound_depth">Depth</string>
+    <string name="record_wound_area">Area</string>
+    <string name="record_wound_volume">Volume</string>
+    <string name="record_wound_time">Formation Time</string>
+    <string name="record_wound_take">Take Steps</string>
+    <string name="record_wound_property">Wound Property</string>
+    <string name="record_wound_acute">Acute Wound</string>
+    <string name="record_wound_chronic">Chronic Wound</string>
+    <string name="record_wound_grade">Pain Grade</string>
+    <string name="record_wound_exudation">Wound Exudation</string>
+    <string name="record_wound_little">A Little</string>
+    <string name="record_wound_middle">Moderate Quantity</string>
+    <string name="record_wound_large">A Large Quantity</string>
+    <string name="record_wound_color">Color of the percolation</string>
+    <string name="record_wound_limpidity">Limpidity</string>
+    <string name="record_wound_blood">Blood Samples</string>
+    <string name="record_wound_yellow">Yellow Pus</string>
+    <string name="record_wound_green">Green and Yellow Pus</string>
+    <string name="record_wound_brownness">Brownness</string>
+    <string name="record_wound_smell">Seepage Smell</string>
+    <string name="record_wound_tasteless">Tasteless</string>
+    <string name="record_wound_smelly">Smelly</string>
+    <string name="record_wound_frowziness">Frowziness</string>
+    <string name="record_wound_dressing">Dressing Description</string>
+    <string name="record_wound_dressing_name">The Name of the Dressing</string>
+    <string name="record_wound_dressing_spec">Dressing Specifications</string>
+    <string name="record_wound_dressing_desc">Dressing Description</string>
+    <string name="record_wound_factors">Systemic Factors</string>
+    <string name="record_wound_factors_age">Age</string>
+    <string name="record_wound_factors_malnutrition">Malnutrition</string>
+    <string name="record_wound_factors_diabetes">Diabetes </string>
+    <string name="record_wound_factors_nervous">Nervous System Disease</string>
+    <string name="record_wound_factors_immune">Immune System Disease</string>
+    <string name="record_wound_factors_coagulant">Coagulant Preparation Is Not Complete</string>
+    <string name="record_wound_factors_drug">Drug</string>
+    <string name="record_wound_factors_hormone">Hormone</string>
+    <string name="record_wound_local">Local Factor</string>
+    <string name="record_wound_local_infection"> Infection</string>
+    <string name="record_wound_local_incrustation">Incrustation</string>
+    <string name="record_wound_local_matter">Foreign Matter</string>
+    <string name="record_wound_local_edema">Edema</string>
+    <string name="record_wound_local_dry">Dry</string>
+    <string name="record_wound_local_excessive">Excessive Drainage</string>
+    <string name="record_wound_ir_photo">Thermal Infrared Photo of Wound</string>
+    <string name="record_wound_doppler">Doppler Ultrasound Results</string>
+    <string name="record_wound_cta">CTA Result</string>
+    <string name="record_wound_inspection">Routine Inspection Results</string>
+    <string name="record_wound_mr">MRI of Wound and Surrounding Tissue</string>
+    <string name="record_wound_petct">PETCT of  Wound and Surrounding Tissue</string>
+    <string name="record_wound_clear_level">The Cleanliness of the Wound</string>
+    <string name="record_wound_clear">Cleaning Wound</string>
+    <string name="record_wound_cont">Contaminated Wound</string>
+    <string name="record_wound_infected">Infected Wound</string>
+    <string name="record_wound_bacteria">The Type of Bacteria Infected</string>
+    <string name="record_wound_base_color">The Base Color of the Wound</string>
+    <string name="record_wound_skin">The Skin Around the Wound</string>
+
+    <string name="camera_open">Open</string>
+    <string name="camera_stop">Stop</string>
+    <string name="camera_model">3D</string>
+    <string name="camera_reset_pos">Reset</string>
+    <string name="measure">Metrical</string>
+    <string name="measure_data">Metrical Data</string>
+    <string name="measure_area">Area</string>
+    <string name="measure_volume">Volume</string>
+    <string name="measure_length">Length</string>
+    <string name="measure_width">Width</string>
+    <string name="measure_deep">Depth</string>
+    <string name="measure_model">Model</string>
+    <string name="camera_shot">Take Photo</string>
+    <string name="measure_red">Red Tissue</string>
+    <string name="measure_black">Black Tissue</string>
+    <string name="measure_yellow">Yellow Tissue</string>
+    <string name="measure_area_unit">Area(cm2)</string>
+    <string name="measure_volume_unit">Volume(cm3)</string>
+    <string name="measure_length_unit">Length(cm)</string>
+    <string name="measure_width_unit">Width(cm)</string>
+    <string name="measure_deep_unit">Depth(cm)</string>
+    <string name="measure_red_unit">Red Tissue(%)</string>
+    <string name="measure_black_unit">Black Tissue(%)</string>
+    <string name="measure_yellow_unit">Yellow Tissue(%)</string>
+
+    <string name="check_photo">Check Photo</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="back">Back</string>
+    <string name="no_data">No Data</string>
+    <string name="record_time">Time</string>
+</resources>

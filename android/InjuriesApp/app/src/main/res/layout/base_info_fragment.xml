@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="姓   名"
+                    android:text="@string/base_info_name"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:elevation="1dp"
-                    android:text="性   别"
+                    android:text="@string/base_info_gender"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -70,7 +70,7 @@
                         android:tag="1"
                         android:textSize="@dimen/rec_title_size"
                         android:paddingLeft="10dp"
-                        android:text="男" />
+                        android:text="@string/base_info_male" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                         android:paddingLeft="10dp"
                         android:tag="2"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="女" />
+                        android:text="@string/base_info_female" />
                 </RadioGroup>
 
             </TableRow>
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="年   龄"
+                    android:text="@string/base_info_age"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="床位号"
+                    android:text="@string/base_info_bed_id"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -137,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="住院号"
+                    android:text="@string/base_info_admission"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
                 <LinearLayout
@@ -165,7 +165,7 @@
                         android:drawablePadding="10dp"
                         android:textSize="@dimen/rec_title_size"
                         android:tag="0"
-                        android:text="扫码" />
+                        android:text="@string/base_info_qr_code" />
                 </LinearLayout>
             </TableRow>
 
@@ -176,7 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="入院诊断"
+                    android:text="@string/base_info_diagnosis"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -201,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="主治医师"
+                    android:text="@string/base_info_doctor"
                     android:textAlignment="textEnd"
                     android:textSize="@dimen/rec_title_size" />
 
@@ -217,6 +217,7 @@
                     android:inputType="textPersonName" />
             </TableRow>
         </TableLayout>
+
         <Button
             android:id="@+id/btn_step_next"
             android:layout_width="wrap_content"
@@ -226,6 +227,7 @@
             android:textSize="@dimen/rec_title_size"
             android:background="@null"
             android:text="下一步" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

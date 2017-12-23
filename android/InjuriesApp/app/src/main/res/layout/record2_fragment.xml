@@ -23,24 +23,6 @@
                 android:layout_weight="1"
                 android:stretchColumns="1">
 
-                <!--
-                <TableRow
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/white"
-                        android:layout_span="2"
-                        android:text="伤口的描述"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </TableRow>
-                -->
-
                 <TableRow android:padding="10dp">
 
                     <TextView
@@ -48,7 +30,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="伤口的清洁程度" />
+                        android:text="@string/record_wound_clear_level" />
 
                 </TableRow>
                 <TableRow android:padding="10dp">
@@ -68,7 +50,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="清洁伤口"
+                            android:text="@string/record_wound_clear"
                             android:tag="1" />
 
                         <RadioButton
@@ -76,7 +58,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="污染伤口"
+                            android:text="@string/record_wound_cont"
                             android:tag="2" />
 
                         <RadioButton
@@ -84,7 +66,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="感染伤口"
+                            android:text="@string/record_wound_infected"
                             android:tag="3" />
 
                     </RadioGroup>
@@ -93,7 +75,7 @@
                             android:id="@+id/wound_germs"
                             android:layout_width="400dp"
                             android:layout_height="wrap_content"
-                            android:hint="感染的细菌种类"
+                            android:hint="@string/record_wound_bacteria"
                             android:imeOptions="flagNoExtractUi"
                             android:textSize="@dimen/rec_title_size" />
                     </LinearLayout>
@@ -106,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="伤口的基底颜色" />
+                        android:text="@string/record_wound_base_color" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <LinearLayout
@@ -120,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
                             android:textColor="@color/black"
-                            android:text="红色组织(%)" />
+                            android:text="@string/measure_red_unit" />
 
                         <EditText
                             android:id="@+id/wound_color_red"
@@ -137,7 +119,7 @@
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
                             android:textColor="@color/black"
-                            android:text="黄色组织(%)" />
+                            android:text="@string/measure_yellow_unit" />
 
                         <EditText
                             android:id="@+id/wound_color_yellow"
@@ -154,7 +136,7 @@
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
                             android:textColor="@color/black"
-                            android:text="黑色组织(%)" />
+                            android:text="@string/measure_black_unit" />
 
                         <EditText
                             android:id="@+id/wound_color_black"
@@ -175,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="伤口周围皮肤情况" />
+                        android:text="@string/record_wound_skin" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <LinearLayout
@@ -193,104 +175,10 @@
                             android:paddingLeft="-50dp"
                             android:dropDownVerticalOffset="0dp"/>
                     </LinearLayout>
-                    <!--
-                    <RadioGroup
-                        android:id="@+id/group_wound_skin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="苍白"
-                            android:tag="1" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="红斑"
-                            android:tag="2" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="浸渍"
-                            android:tag="3" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="色素沉着"
-                            android:tag="4" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="水肿"
-                            android:tag="5" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="坏死"
-                            android:tag="6" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="完好无损"
-                            android:tag="7" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="青灰色"
-                            android:tag="8" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="干燥起皮"
-                            android:tag="9" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="硬化结茧"
-                            android:tag="10" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="角化过度"
-                            android:tag="11" />
-
-                    </RadioGroup>
-                    -->
 
                 </TableRow>
             </TableLayout>
-
+<!--
             <Button
                 android:id="@+id/btn_step_next"
                 android:layout_width="wrap_content"
@@ -299,7 +187,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/rec_title_size"
                 android:background="@null"
-                android:text="下一步" />
+                android:text="下一步" />-->
         </LinearLayout>
 </ScrollView>
 </LinearLayout>

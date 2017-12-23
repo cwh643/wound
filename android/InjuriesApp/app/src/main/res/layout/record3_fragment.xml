@@ -23,29 +23,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stretchColumns="1">
-                <!--
-                <TableRow
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_span="2"
-                        android:text="伤口评估"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </TableRow>
--->
                 <TableRow android:padding="10dp">
 
                     <TextView
                         android:layout_width="@dimen/rec_title_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="伤口属性"
+                        android:text="@string/record_wound_property"
                         android:textSize="@dimen/rec_title_size" />
                 </TableRow>
 
@@ -62,7 +47,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="1"
-                            android:text="急性伤口"
+                            android:text="@string/record_wound_acute"
                             android:textSize="@dimen/rec_title_size" />
 
                         <RadioButton
@@ -70,7 +55,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:tag="2"
-                            android:text="慢性伤口"
+                            android:text="@string/record_wound_chronic"
                             android:textSize="@dimen/rec_title_size" />
 
                     </RadioGroup>
@@ -85,7 +70,7 @@
                         android:layout_width="@dimen/rec_title_width"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="伤口疼痛等级:"
+                        android:text="@string/record_wound_grade"
                         android:textSize="@dimen/rec_title_size" />
                 </TableRow>
 
@@ -210,59 +195,7 @@
                     </LinearLayout>
                 </TableRow>
             </TableLayout>
-            <!--
-            <TableRow android:padding="10dp" android:layout_marginTop="20dp">
-
-                    <TextView
-                        android:layout_width="@dimen/rec_title_width"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="@dimen/rec_title_size"
-                        android:text="伤口有无感染" />
-            </TableRow>
-
-                <TableRow android:padding="10dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <RadioGroup
-                            android:id="@+id/group_wound_infected"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:orientation="vertical">
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/rec_title_size"
-                                android:text="无"
-                                android:tag="1" />
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/rec_title_size"
-                                android:text="有"
-                                android:tag="2" />
-
-                        </RadioGroup>
-
-                        <EditText
-                            android:id="@+id/wound_germs"
-                            android:layout_width="400dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="25dp"
-                            android:layout_marginLeft="20dp"
-                            android:hint="感染的细菌种类,药物试验"
-                            android:imeOptions="flagNoExtractUi"
-                            android:textSize="@dimen/rec_title_size" />
-                    </LinearLayout>
-                </TableRow>
-            </TableLayout>
--->
+<!--
             <Button
                 android:id="@+id/btn_step_next"
                 android:layout_width="wrap_content"
@@ -272,6 +205,7 @@
                 android:text="下一步"
                 android:textSize="@dimen/rec_title_size"
                 android:visibility="gone" />
+                -->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

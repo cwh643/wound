@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="敷料材料描述" />
+                        android:text="@string/record_wound_dressing" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <LinearLayout
@@ -73,7 +73,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="敷料名称："
+                            android:text="@string/record_wound_dressing_name"
                             android:textSize="@dimen/rec_title_size" />
 
                         <EditText
@@ -87,7 +87,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="敷料规格："
+                            android:text="@string/record_wound_dressing_spec"
                             android:textSize="@dimen/rec_title_size" />
 
                         <EditText
@@ -107,11 +107,11 @@
                         android:layout_height="300dp"
                         android:textSize="@dimen/rec_title_size"
                         android:maxLines="15"
-                        android:hint="敷料简介"
+                        android:hint="@string/record_wound_dressing_desc"
                         />
                 </TableRow>
             </TableLayout>
-
+<!--
             <Button
                 android:id="@+id/btn_step_next"
                 android:layout_width="wrap_content"
@@ -119,7 +119,7 @@
                 android:visibility="gone"
                 android:layout_gravity="center_horizontal"
                 android:background="@null"
-                android:text="保存" />
+                android:text="@string/save" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

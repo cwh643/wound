@@ -290,6 +290,7 @@ public class RecordFragment1 extends Fragment {
         });
 
         //下一步
+        /*
         Button btn_step_next = (Button)rootView.findViewById(R.id.btn_step_next);
         btn_step_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +303,7 @@ public class RecordFragment1 extends Fragment {
                         .commit();
             }
         });
+        */
 
 
         Button btn_player_mic = (Button)rootView.findViewById(R.id.btn_player_mic);

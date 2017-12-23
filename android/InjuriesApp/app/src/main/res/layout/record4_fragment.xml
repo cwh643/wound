@@ -21,22 +21,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stretchColumns="1">
-<!--
-                <TableRow
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_span="2"
-                        android:text="渗液信息"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </TableRow>
--->
                 <TableRow android:padding="10dp">
 
                     <TextView
@@ -44,7 +28,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="伤口的渗液量" />
+                        android:text="@string/record_wound_exudation" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <RadioGroup
@@ -58,7 +42,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="少量"
+                            android:text="@string/record_wound_little"
                             android:tag="1" />
 
                         <RadioButton
@@ -66,7 +50,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="中量"
+                            android:text="@string/record_wound_middle"
                             android:tag="2" />
 
                         <RadioButton
@@ -74,7 +58,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="大量"
+                            android:text="@string/record_wound_large"
                             android:tag="3" />
 
                     </RadioGroup>
@@ -87,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="渗液的颜色" />
+                        android:text="@string/record_wound_color" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <RadioGroup
@@ -101,7 +85,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="清澈"
+                            android:text="@string/record_wound_limpidity"
                             android:tag="1" />
 
                         <RadioButton
@@ -109,7 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="血水样"
+                            android:text="@string/record_wound_blood"
                             android:tag="2" />
 
                         <RadioButton
@@ -117,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="黄脓"
+                            android:text="@string/record_wound_yellow"
                             android:tag="3" />
 
                         <RadioButton
@@ -125,7 +109,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="绿黄脓"
+                            android:text="@string/record_wound_green"
                             android:tag="4" />
 
                         <RadioButton
@@ -133,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="褐色"
+                            android:text="@string/record_wound_brownness"
                             android:tag="5" />
 
                     </RadioGroup>
@@ -146,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="渗液的气味" />
+                        android:text="@string/record_wound_smell" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <RadioGroup
@@ -160,7 +144,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="无味"
+                            android:text="@string/record_wound_tasteless"
                             android:tag="1" />
 
                         <RadioButton
@@ -168,7 +152,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="有异味"
+                            android:text="@string/record_wound_smelly"
                             android:tag="2" />
 
                         <RadioButton
@@ -176,14 +160,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="有臭味"
+                            android:text="@string/record_wound_frowziness"
                             android:tag="3" />
 
                     </RadioGroup>
                 </TableRow>
 
             </TableLayout>
-
+<!--
             <Button
                 android:id="@+id/btn_step_next"
                 android:layout_width="wrap_content"
@@ -192,7 +176,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/rec_title_size"
                 android:background="@null"
-                android:text="下一步" />
+                android:text="下一步" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

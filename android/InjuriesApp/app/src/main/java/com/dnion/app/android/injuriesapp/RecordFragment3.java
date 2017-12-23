@@ -118,7 +118,7 @@ public class RecordFragment3 extends Fragment {
         */
 
         //下一步
-        Button btn_step_next = (Button)rootView.findViewById(R.id.btn_step_next);
+        /*Button btn_step_next = (Button)rootView.findViewById(R.id.btn_step_next);
         btn_step_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +128,7 @@ public class RecordFragment3 extends Fragment {
                         .replace(R.id.detail_container, fragment)
                         .commit();
             }
-        });
+        });*/
     }
 
 }

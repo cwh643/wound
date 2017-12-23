@@ -15,7 +15,7 @@
         android:textColor="#000000"
         android:textSize="15sp"
         android:singleLine="true"
-        android:text="时间" />
+        android:text="@string/record_time" />
 
     <View
         android:layout_width="1.5dp"
@@ -33,7 +33,7 @@
         android:textSize="15sp"
         android:singleLine="true"
         android:gravity="center"
-        android:text="长度(cm)" />
+        android:text="@string/measure_length_unit" />
 
     <View
         android:layout_width="1.5dp"
@@ -51,7 +51,7 @@
         android:singleLine="true"
         android:textSize="15sp"
         android:gravity="center"
-        android:text="宽度(cm)" />
+        android:text="@string/measure_width_unit" />
 
     <View
         android:layout_width="1.5dp"
@@ -69,7 +69,7 @@
         android:singleLine="true"
         android:textSize="15sp"
         android:gravity="center"
-        android:text="面积(cm2)" />
+        android:text="@string/measure_area_unit" />
 
     <View
         android:layout_width="1.5dp"
@@ -87,7 +87,7 @@
         android:singleLine="true"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:text="体积(cm3)" />
+        android:text="@string/measure_volume_unit" />
 
     <View
         android:layout_width="1.5dp"
@@ -105,7 +105,7 @@
         android:textColor="#000000"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:text="红色组织(%)" />
+        android:text="@string/measure_red_unit" />
     <View
         android:layout_width="1.5dp"
         android:layout_height="fill_parent"
@@ -122,7 +122,7 @@
         android:textColor="#000000"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:text="黄色组织(%)" />
+        android:text="@string/measure_yellow_unit" />
     <View
         android:layout_width="1.5dp"
         android:layout_height="fill_parent"
@@ -139,6 +139,6 @@
         android:textColor="#000000"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:text="黑色组织(%)" />
+        android:text="@string/measure_black_unit" />
 
 </LinearLayout>

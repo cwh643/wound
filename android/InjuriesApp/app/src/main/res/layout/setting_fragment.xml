@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:imeOptions="flagNoExtractUi"
                             android:textSize="@dimen/rec_title_size"
-                            android:hint="例如：http://127.0.0.1/wound" />
+                            android:hint="http://127.0.0.1/wound" />
                     </LinearLayout>
                 </TableRow>
             </TableLayout>
@@ -83,7 +83,7 @@
                 android:background="@mipmap/btn_photo_bg"
                 android:textColor="@color/btn_title"
                 android:textSize="@dimen/rec_title_size"
-                android:text="保存" />
+                android:text="@string/save" />
 
         </LinearLayout>
     </ScrollView>

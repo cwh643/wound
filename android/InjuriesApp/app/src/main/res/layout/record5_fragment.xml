@@ -21,23 +21,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:stretchColumns="1">
-<!--
-                <TableRow
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_span="2"
-                        android:textColor="@color/white"
-                        android:text="影响伤口愈合的因素"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-                </TableRow>
--->
                 <TableRow android:padding="10dp">
 
                     <TextView
@@ -45,7 +29,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="全身因素" />
+                        android:text="@string/record_wound_factors" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <LinearLayout
@@ -59,7 +43,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="年龄"
+                            android:text="@string/record_wound_factors_age"
                             android:tag="01" />
 
                         <CheckBox
@@ -68,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="营养不良"
+                            android:text="@string/record_wound_factors_malnutrition"
                             android:tag="02" />
 
                         <CheckBox
@@ -77,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="糖尿病"
+                            android:text="@string/record_wound_factors_diabetes"
                             android:tag="03" />
 
                         <CheckBox
@@ -86,7 +70,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="神经系统疾病"
+                            android:text="@string/record_wound_factors_nervous"
                             android:tag="04" />
                     </LinearLayout>
                 </TableRow>
@@ -102,7 +86,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="免疫系统疾病"
+                            android:text="@string/record_wound_factors_immune"
                             android:tag="05" />
 
                         <CheckBox
@@ -111,7 +95,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="凝血制剂不全"
+                            android:text="@string/record_wound_factors_coagulant"
                             android:tag="06" />
 
                         <CheckBox
@@ -120,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="药物"
+                            android:text="@string/record_wound_factors_drug"
                             android:tag="07" />
 
                         <CheckBox
@@ -129,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="激素"
+                            android:text="@string/record_wound_factors_hormone"
                             android:tag="08" />
 
                     </LinearLayout>
@@ -142,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:textSize="@dimen/rec_title_size"
-                        android:text="局部因素" />
+                        android:text="@string/record_wound_local" />
                 </TableRow>
                 <TableRow android:padding="10dp">
                     <LinearLayout
@@ -156,7 +140,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="感染"
+                            android:text="@string/record_wound_local_infection"
                             android:tag="01" />
 
                         <CheckBox
@@ -165,7 +149,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="结痂"
+                            android:text="@string/record_wound_local_incrustation"
                             android:tag="02" />
 
                         <CheckBox
@@ -174,7 +158,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="异物"
+                            android:text="@string/record_wound_local_matter"
                             android:tag="03" />
 
                         <CheckBox
@@ -183,7 +167,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="水肿"
+                            android:text="@string/record_wound_local_edema"
                             android:tag="04" />
 
                         <CheckBox
@@ -192,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="干燥"
+                            android:text="@string/record_wound_local_dry"
                             android:tag="05" />
 
                         <CheckBox
@@ -201,12 +185,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="25dp"
                             android:textSize="@dimen/rec_title_size"
-                            android:text="渗液过多"
+                            android:text="@string/record_wound_local_excessive"
                             android:tag="06" />
                     </LinearLayout>
                 </TableRow>
             </TableLayout>
-
+<!--
             <Button
                 android:id="@+id/btn_step_next"
                 android:layout_width="wrap_content"
@@ -215,7 +199,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/rec_title_size"
                 android:background="@null"
-                android:text="下一步" />
+                android:text="下一步" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

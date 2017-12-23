@@ -145,7 +145,7 @@ public class BaseInfoFragment extends Fragment {
                 patientInfo.setSex(Integer.parseInt("" + item.getTag()));
             }
         });
-
+/*
         Button btn_step_next = (Button) rootView.findViewById(R.id.btn_step_next);
         btn_step_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +154,7 @@ public class BaseInfoFragment extends Fragment {
                 savePatientInfo();
             }
         });
+        */
     }
 
     public boolean savePatientInfo() {
