@@ -23,6 +23,7 @@ import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -165,6 +166,15 @@ public class CommonUtil {
         String uuid = UUID.randomUUID().toString(); //获取UUID并转化为String对象
         uuid = uuid.replace("-", "");          //因为UUID本身为32位只是生成时多了“-”，所以将它们去点就可
         return uuid;
+    }
+
+    public static boolean isEn(Context context) {
+        Locale locale = context.getResources().getConfiguration().locale;
+        String language = locale.getLanguage();
+        if (language.endsWith("en"))
+            return true;
+        else
+            return false;
     }
 
     private static void copyFile(File inFile, String outPath, String pathOld) throws Exception {

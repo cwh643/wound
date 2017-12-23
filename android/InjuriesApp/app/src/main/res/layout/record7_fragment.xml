@@ -46,16 +46,19 @@
                             android:textColor="@color/btn_title"
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/check_photo" />
+
                         <Button
                             android:id="@+id/btn_mr"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/btn_mr_image"
                             android:layout_marginLeft="20dp"
+                            android:layout_toRightOf="@id/btn_mr_image"
                             android:background="@mipmap/btn_capture_bg"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="@string/take_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/take_photo" />
+                            android:textSize="@dimen/rec_title_size" />
 
                     </RelativeLayout>
                 </TableRow>
@@ -84,16 +87,19 @@
                             android:textColor="@color/btn_title"
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/check_photo" />
+
                         <Button
                             android:id="@+id/btn_petct"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/btn_petct_image"
                             android:layout_marginLeft="20dp"
+                            android:layout_toRightOf="@id/btn_petct_image"
                             android:background="@mipmap/btn_capture_bg"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:text="@string/take_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/take_photo" />
+                            android:textSize="@dimen/rec_title_size" />
 
 
                     </RelativeLayout>

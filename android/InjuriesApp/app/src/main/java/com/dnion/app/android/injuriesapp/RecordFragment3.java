@@ -68,7 +68,8 @@ public class RecordFragment3 extends Fragment {
         });
         //疼痛等级
         final TextView wound_ache_title = (TextView)rootView.findViewById(R.id.wound_ache_title);
-        wound_ache_title.setText("伤口疼痛等级:" + (patientInfo.getWoundAche() == null ? "" : patientInfo.getWoundAche()));
+        final String woundGrade = getString(R.string.record_wound_grade);
+        wound_ache_title.setText(woundGrade + ":" + (patientInfo.getWoundAche() == null ? "" : patientInfo.getWoundAche()));
         SeekBar wound_ache = (SeekBar)rootView.findViewById(R.id.wound_ache);
         if (patientInfo.getWoundAche() != null) {
             wound_ache.setProgress(patientInfo.getWoundAche());
@@ -77,7 +78,7 @@ public class RecordFragment3 extends Fragment {
         wound_ache.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                wound_ache_title.setText("伤口疼痛等级:" + progress);
+                wound_ache_title.setText(woundGrade + ":"+ progress);
                 patientInfo.setWoundAche(progress);
             }
 

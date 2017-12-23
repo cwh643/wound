@@ -169,7 +169,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void quit() {
-        AlertDialogUtil.showConfirmDialog(BaseActivity.this, "提示", "确定退出系统？", new DialogInterface.OnClickListener() {
+        AlertDialogUtil.showConfirmDialog(BaseActivity.this, R.string.message_title_tip, R.string.message_quit_system, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferenceUtil.setSharedPreferenceValue(BaseActivity.this, CommonUtil.LOGIN_USER, "");

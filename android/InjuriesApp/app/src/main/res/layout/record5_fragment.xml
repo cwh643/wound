@@ -72,6 +72,15 @@
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/record_wound_factors_nervous"
                             android:tag="04" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="@string/record_wound_factors_drug"
+                            android:tag="07" />
                     </LinearLayout>
                 </TableRow>
                 <TableRow android:padding="10dp">
@@ -99,15 +108,6 @@
                             android:tag="06" />
 
                         <CheckBox
-                            android:id="@+id/effect_element_7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/record_wound_factors_drug"
-                            android:tag="07" />
-
-                        <CheckBox
                             android:id="@+id/effect_element_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -118,6 +118,7 @@
 
                     </LinearLayout>
                 </TableRow>
+
 
                 <TableRow android:padding="10dp" android:layout_marginTop="20dp">
 
@@ -174,7 +175,7 @@
                             android:id="@+id/effect_element_local_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
+                            android:layout_marginLeft="20dp"
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/record_wound_local_dry"
                             android:tag="05" />
@@ -183,7 +184,7 @@
                             android:id="@+id/effect_element_local_6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
+                            android:layout_marginLeft="20dp"
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/record_wound_local_excessive"
                             android:tag="06" />

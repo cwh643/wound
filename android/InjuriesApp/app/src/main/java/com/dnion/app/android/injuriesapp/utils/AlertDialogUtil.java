@@ -56,6 +56,12 @@ public class AlertDialogUtil {
         return mAlertDialog;
     }
 
+    public static AlertDialog showConfirmDialog(Context context, Integer TitleID, Integer Message, DialogInterface.OnClickListener listener) {
+        mAlertDialog = new AlertDialog.Builder(context).setTitle(TitleID).setMessage(Message)
+                .setPositiveButton(R.string.confirm, listener).setNegativeButton(R.string.cancel, null).show();
+        return mAlertDialog;
+    }
+
     public static AlertDialog showInputDialog(Context context, EditText editText, DialogInterface.OnClickListener listener) {
         mAlertDialog = new AlertDialog.Builder(context).setTitle("请输入").setView(editText)
                 .setPositiveButton(R.string.confirm, listener).setNegativeButton(R.string.cancel, null).show();

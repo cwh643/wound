@@ -32,6 +32,8 @@ public class RecordFragment2 extends Fragment {
 
     private MainActivity mActivity;
 
+    private TypeArrayAdapter typeAdapter;
+
     public static RecordFragment2 createInstance() {
         RecordFragment2 fragment = new RecordFragment2();
 
@@ -130,7 +132,13 @@ public class RecordFragment2 extends Fragment {
         });
         */
         Spinner group_wound_skin = (Spinner)rootView.findViewById(R.id.group_wound_skin);
-        final TypeArrayAdapter typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundSkinDict);
+
+        if (CommonUtil.isEn(mActivity)) {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundSkinEnDict);
+        } else {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundSkinDict);
+        }
+
         group_wound_skin.setAdapter(typeAdapter);
         CommonUtil.setSpinnerItemSelectedByValue(group_wound_skin, patientInfo.getWoundDescribeSkin());
         group_wound_skin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

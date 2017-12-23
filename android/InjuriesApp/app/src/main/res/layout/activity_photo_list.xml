@@ -37,15 +37,16 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:src="@mipmap/capture_normal"
-                    android:text="拍照" />
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="270dp"
-                    android:text="普通拍摄"
+                    android:layout_marginTop="220dp"
+                    android:text="@string/take_normal_photo"
                     android:textAlignment="center"
-                    android:textColor="@color/btn_title" />
+                    android:textColor="@color/btn_title"
+                    android:textSize="@dimen/rec_menu_title_size"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -58,14 +59,15 @@
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:src="@mipmap/capture_red"
-                    android:text="拍照" />
+                    />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="210dp"
-                    android:text="红外线拍摄"
+                    android:layout_marginTop="220dp"
+                    android:text="@string/take_ir_photo"
                     android:textAlignment="center"
-                    android:textColor="@color/btn_title" />
+                    android:textColor="@color/btn_title"
+                    android:textSize="@dimen/rec_menu_title_size"/>
             </RelativeLayout>
 
 

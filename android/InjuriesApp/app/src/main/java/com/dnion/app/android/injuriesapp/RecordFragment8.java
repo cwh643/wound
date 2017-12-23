@@ -27,9 +27,11 @@ public class RecordFragment8 extends Fragment {
 
     public static final String TAG = "record_fragment8";
 
-    private RecordAdapter adapter;
+    //private RecordAdapter adapter;
 
     private MainActivity mActivity;
+
+    private TypeArrayAdapter typeAdapter;
 
     public static RecordFragment8 createInstance() {
         RecordFragment8 fragment = new RecordFragment8();
@@ -61,7 +63,12 @@ public class RecordFragment8 extends Fragment {
 
         final TextView wound_dressing_desc = (TextView)rootView.findViewById(R.id.wound_dressing_desc);
         Spinner wound_dressing_type = (Spinner)rootView.findViewById(R.id.wound_dressing_type);
-        final TypeArrayAdapter typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundDressingType);
+        if (CommonUtil.isEn(mActivity)) {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundDressingTypeEn);
+        } else {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundDressingType);
+        }
+
         wound_dressing_type.setAdapter(typeAdapter);
         CommonUtil.setSpinnerItemSelectedByValue(wound_dressing_type, patientInfo.getWoundDressingType());
         wound_dressing_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -74,8 +81,11 @@ public class RecordFragment8 extends Fragment {
                 if (pair != null) {
                     //ToastUtil.showLongToast(mActivity, "" + pair.second);
                     patientInfo.setWoundDressingType((Integer)pair.first);
-                    wound_dressing_desc.setText(ArchivesData.woundDressingDisc.get((Integer)pair.first));
-                    return;
+                    if (CommonUtil.isEn(mActivity)) {
+                        wound_dressing_desc.setText(ArchivesData.woundDressingEnDisc.get((Integer)pair.first));
+                    } else {
+                        wound_dressing_desc.setText(ArchivesData.woundDressingDisc.get((Integer)pair.first));
+                    }
                 }
             }
 

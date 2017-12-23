@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">创伤管理</string>
-    <string name="confirm">Confirm</string>
+    <string name="app_name">Wound Manage</string>
+    <string name="confirm">OK</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="close">Close</string>
 
-    <string name="message_title_tip">提示</string>
+    <string name="message_title_tip">Tips</string>
     <string name="message_wait">正在加载,请稍等...</string>
     <string name="message_wait_save">正在保存,请稍等...</string>
     <string name="message_wait_shot">正在拍照,勿动...</string>
     <string name="message_wait_model">正在建模,请稍等...</string>
     <string name="message_response_error">加载失败</string>
     <string name="message_device_error">设备异常，请检查连接</string>
+    <string name="message_quit_system">确定退出系统？</string>
 
     <string name="login_name">User Name</string>
     <string name="login_password">Password</string>
@@ -59,6 +61,7 @@
     <string name="query_patient">Patient（Admission Numbe）</string>
     <string name="query_record_time">Acquisition Time（Operation）</string>
 
+    <string name="record_play_list">录音列表</string>
     <string name="base_info_name">Name</string>
     <string name="base_info_gender">Gender</string>
     <string name="base_info_male">Male</string>
@@ -130,7 +133,7 @@
     <string name="record_wound_clear">Cleaning Wound</string>
     <string name="record_wound_cont">Contaminated Wound</string>
     <string name="record_wound_infected">Infected Wound</string>
-    <string name="record_wound_bacteria">The Type of Bacteria Infected</string>
+    <string name="record_wound_bacteria">The Type of Bacteria</string>
     <string name="record_wound_base_color">The Base Color of the Wound</string>
     <string name="record_wound_skin">The Skin Around the Wound</string>
 
@@ -139,6 +142,8 @@
     <string name="camera_model">3D</string>
     <string name="camera_reset_pos">Reset</string>
     <string name="measure">Metrical</string>
+    <string name="measure_back">底片</string>
+    <string name="measure_color">彩色</string>
     <string name="measure_data">Metrical Data</string>
     <string name="measure_area">Area</string>
     <string name="measure_volume">Volume</string>
@@ -146,6 +151,7 @@
     <string name="measure_width">Width</string>
     <string name="measure_deep">Depth</string>
     <string name="measure_model">Model</string>
+    <string name="measure_pattern">Pattern</string>
     <string name="camera_shot">Take Photo</string>
     <string name="measure_red">Red Tissue</string>
     <string name="measure_black">Black Tissue</string>
@@ -160,7 +166,9 @@
     <string name="measure_yellow_unit">Yellow Tissue(%)</string>
 
     <string name="check_photo">Check Photo</string>
-    <string name="take_photo">Take Photo</string>
+    <string name="take_photo">Capture</string>
+    <string name="take_normal_photo">Capture Normal</string>
+    <string name="take_ir_photo">Capture IR</string>
     <string name="back">Back</string>
     <string name="no_data">No Data</string>
     <string name="record_time">Time</string>

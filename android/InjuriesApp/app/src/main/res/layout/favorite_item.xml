@@ -33,7 +33,7 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:textSize="18sp"
-                android:text="患者姓名（病况）"/>
+                android:text=""/>
         </LinearLayout>
     </RelativeLayout>
 

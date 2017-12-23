@@ -86,6 +86,11 @@ public class RecordFragment1 extends Fragment {
     private AlertDialog dialog;
 
     private View rootView;
+
+    private TypeArrayAdapter typeAdapter;
+
+    private TypeArrayAdapter measuresAdapter;
+
     public static RecordFragment1 createInstance() {
         RecordFragment1 fragment = new RecordFragment1();
 
@@ -134,7 +139,11 @@ public class RecordFragment1 extends Fragment {
 
         //伤口类型
         Spinner wound_type = (Spinner)rootView.findViewById(R.id.wound_type);
-        final TypeArrayAdapter typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.typeDict);
+        if (CommonUtil.isEn(mActivity)) {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.typeEnDict);
+        } else {
+            typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.typeDict);
+        }
         wound_type.setAdapter(typeAdapter);
         CommonUtil.setSpinnerItemSelectedByValue(wound_type, patientInfo.getWoundType());
         wound_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -166,8 +175,8 @@ public class RecordFragment1 extends Fragment {
         View view =LayoutInflater.from(mActivity).inflate(R.layout.player_dialog, null);
         play_list = (LinearLayout)view.findViewById(R.id.play_list);
         builder.setView(view);
-        builder.setTitle("录音列表");
-        builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.record_play_list);
+        builder.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -266,7 +275,13 @@ public class RecordFragment1 extends Fragment {
 
         //目前采取的措施
         Spinner wound_measures = (Spinner)rootView.findViewById(R.id.wound_measures);
-        final TypeArrayAdapter measuresAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.measuresDict);
+
+        if (CommonUtil.isEn(mActivity)) {
+            measuresAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.measuresEnDict);
+        } else {
+            measuresAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.measuresDict);
+        }
+
         wound_measures.setAdapter(measuresAdapter);
         CommonUtil.setSpinnerItemSelectedByValue(wound_measures, patientInfo.getWoundMeasures());
         wound_measures.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

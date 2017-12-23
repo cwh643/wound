@@ -209,6 +209,31 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void initMenuBar(View rootView) {
         mActivity.hiddenTopBar();
         mActivity.hiddenSubMenuBar();
+        //返回
+        Button btn_save_mbi = (Button) rootView.findViewById(R.id.btn_save_mbi);
+        btn_save_mbi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
+                if (inpatientNo == null || inpatientNo.length() == 0) {
+                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    return;
+                }
+                mActivity.showTopBar();
+                mActivity.showSubMenuBar();
+                //save_layout.setVisibility(View.GONE);
+                mActivity.selectMenuButton(R.id.btn_photo);
+                Fragment fragment;
+                if (deepCameraInfo.isNew()) {
+                    fragment = RecordFragmentDeepCamera.createInstance();
+                } else {
+                    fragment = PhotoListFragment.createInstance();
+                }
+                mActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.detail_container, fragment)
+                        .commit();
+            }
+        });
         //基本信息
         ImageButton btn_base_info_w = (ImageButton) rootView.findViewById(R.id.btn_base_info_w);
         btn_base_info_w.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +299,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
 
         MeasureButton measure_btn_rgb = (MeasureButton) rootView.findViewById(R.id.measure_btn_rgb);
-        measure_btn_rgb.setText("彩 色");
+        measure_btn_rgb.setText(getString(R.string.measure_color));
         measure_btn_rgb.setImage(R.mipmap.measure_ok);
         measure_btn_rgb.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_rgb.setOnClickListener(new View.OnClickListener() {
@@ -286,7 +311,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_org_rgb = (MeasureButton) rootView.findViewById(R.id.measure_btn_org_rgb);
-        measure_btn_org_rgb.setText("底 片");
+        measure_btn_org_rgb.setText(getString(R.string.measure_back));
         measure_btn_org_rgb.setImage(R.mipmap.measure_ok);
         measure_btn_org_rgb.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_org_rgb.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +323,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_depth = (MeasureButton) rootView.findViewById(R.id.measure_btn_depth);
-        measure_btn_depth.setText("深 度");
+        measure_btn_depth.setText(getString(R.string.measure_deep));
         measure_btn_depth.setImage(R.mipmap.measure_delete);
         measure_btn_depth.setSelectImage(R.mipmap.measure_delete_s);
         measure_btn_depth.setOnClickListener(new View.OnClickListener() {
@@ -310,7 +335,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_modify = (MeasureButton) rootView.findViewById(R.id.measure_btn_mode);
-        measure_btn_modify.setText("模 式");
+        measure_btn_modify.setText(getString(R.string.measure_pattern));
         measure_btn_modify.setImage(R.mipmap.measure_modify);
         measure_btn_modify.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_modify.setOnClickListener(new View.OnClickListener() {
@@ -321,13 +346,13 @@ public class RecordFragmentWoundMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_save = (MeasureButton) rootView.findViewById(R.id.measure_btn_save);
-        measure_btn_save.setText("保 存");
+        measure_btn_save.setText(getString(R.string.save));
         measure_btn_save.setImage(R.mipmap.measure_modify);
         measure_btn_save.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_save.setOnClickListener(mSaveDataListener);
 
         MeasureButton measure_btn_edit = (MeasureButton) rootView.findViewById(R.id.measure_btn_edit);
-        measure_btn_edit.setText("测 量");
+        measure_btn_edit.setText(getString(R.string.measure));
         measure_btn_edit.setImage(R.mipmap.measure_edit);
         measure_btn_edit.setSelectImage(R.mipmap.measure_edit_s);
         measure_btn_edit.setOnClickListener(new View.OnClickListener() {
