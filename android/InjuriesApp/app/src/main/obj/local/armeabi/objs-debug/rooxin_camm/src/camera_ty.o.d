@@ -1,5 +1,5 @@
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/obj/local/armeabi/objs-debug/rooxin_camm/src/camera_ty.o: \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/camera_ty.cpp \
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/obj/local/armeabi/objs-debug/rooxin_camm/src/camera_ty.o: \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/camera_ty.cpp \
  opencv_sdk/native/jni/include/opencv2/core/core.hpp \
  opencv_sdk/native/jni/include/opencv2/core/types_c.h \
  opencv_sdk/native/jni/include/opencv2/core/version.hpp \
@@ -16,13 +16,13 @@
  opencv_sdk/native/jni/include/opencv2/flann/miniflann.hpp \
  opencv_sdk/native/jni/include/opencv2/flann/defines.h \
  opencv_sdk/native/jni/include/opencv2/flann/config.h \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h \
  /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert \
  /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport_impl.hpp \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport_impl.hpp \
  /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h \
  opencv_sdk/native/jni/include/opencv2/opencv.hpp \
  opencv_sdk/native/jni/include/opencv2/imgproc/imgproc_c.h \
  opencv_sdk/native/jni/include/opencv2/photo/photo.hpp \
@@ -43,10 +43,10 @@
  /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/valarray \
  opencv_sdk/native/jni/include/opencv2/contrib/openfabmap.hpp \
  /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/set \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/common.hpp \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/DepthRender.hpp \
- /Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/PointCloudViewer.hpp
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/common.hpp \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/DepthRender.hpp \
+ /Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/PointCloudViewer.hpp
 
 opencv_sdk/native/jni/include/opencv2/core/core.hpp:
 
@@ -80,19 +80,19 @@ opencv_sdk/native/jni/include/opencv2/flann/defines.h:
 
 opencv_sdk/native/jni/include/opencv2/flann/config.h:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h:
 
 /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/cassert:
 
 /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/fstream:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport_impl.hpp:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport_impl.hpp:
 
 /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/cstring:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/percipio_camport.h:
 
 opencv_sdk/native/jni/include/opencv2/opencv.hpp:
 
@@ -134,10 +134,10 @@ opencv_sdk/native/jni/include/opencv2/contrib/openfabmap.hpp:
 
 /Users/yy/work/android-ndk-r14b/sources/cxx-stl/gnu-libstdc++/4.9/include/set:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/common.hpp:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/common.hpp:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/TY_API.h:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/DepthRender.hpp:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/DepthRender.hpp:
 
-/Users/yy/code/wis/project/wound/android/InjuriesApp/app/src/main/jni/src/include/PointCloudViewer.hpp:
+/Users/yy/code/wis/project/branch/newpad/wound/android/InjuriesApp/app/src/main/jni/src/include/PointCloudViewer.hpp:

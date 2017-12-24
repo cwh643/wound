@@ -40,6 +40,8 @@ public class CommonUtil {
     public static final String LOGIN_ID = "login_id";
     public static final String REMOTE_URL = "remote_url";
     public static final String DEVICE_ID = "device_id";
+    public static final String CAMERA_MODE = "camera_mode";
+    public static final String CAMERA_SIZE = "camera_size";
 
     //public static final String APP_URL = "http://139.196.171.110:8080/wound-web/api/";
     public static final String APP_URL = "http://192.168.1.8:8080/wound-web";

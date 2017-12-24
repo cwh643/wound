@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 import com.dnion.app.android.injuriesapp.ui.CustomerButton;
@@ -31,7 +33,9 @@ public class SettingFragment extends Fragment {
 
     private EditText txt_server_url;
 
-    private ConfigDao configDao;
+    private RadioGroup select_camera_mode;
+
+    private RadioGroup select_camera_size;
 
     public static SettingFragment createInstance() {
         SettingFragment fragment = new SettingFragment();
@@ -45,8 +49,7 @@ public class SettingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = (MainActivity)SettingFragment.this.getActivity();
-        configDao = new ConfigDao(mActivity);
+        mActivity = (MainActivity) SettingFragment.this.getActivity();
     }
 
     @Override
@@ -58,44 +61,79 @@ public class SettingFragment extends Fragment {
 
     private void configView(View rootView) {
         //设备ID
-        txt_device_id = (EditText)rootView.findViewById(R.id.txt_device_id);
+        txt_device_id = (EditText) rootView.findViewById(R.id.txt_device_id);
         txt_device_id.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        String deviceId = configDao.queryValue(CommonUtil.DEVICE_ID);
+        String deviceId = mActivity.queryConfig(CommonUtil.DEVICE_ID);
         if (deviceId == null || deviceId.length() == 0) {
             String uid = CommonUtil.getDeviceId();
-            configDao.saveValue(CommonUtil.DEVICE_ID, uid);
+            mActivity.saveConfig(CommonUtil.DEVICE_ID, uid);
             txt_device_id.setText(uid);
         } else {
             txt_device_id.setText(deviceId);
         }
 
         //服务器URL
-        txt_server_url = (EditText)rootView.findViewById(R.id.txt_server_url);
+        txt_server_url = (EditText) rootView.findViewById(R.id.txt_server_url);
         txt_server_url.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
-        String url = configDao.queryValue(CommonUtil.REMOTE_URL);
+        String url = mActivity.queryConfig(CommonUtil.REMOTE_URL);
         if (url == null || url.length() == 0) {
-            configDao.saveValue(CommonUtil.REMOTE_URL, CommonUtil.APP_URL);
+            mActivity.saveConfig(CommonUtil.REMOTE_URL, CommonUtil.APP_URL);
             //SharedPreferenceUtil.setSharedPreferenceValue(mActivity, CommonUtil.REMOTE_URL, CommonUtil.APP_URL);
             txt_server_url.setText(CommonUtil.APP_URL);
         } else {
             txt_server_url.setText(url);
         }
 
+        // 深度摄像头厂家
+        select_camera_mode = (RadioGroup) rootView.findViewById(R.id.select_camera_mode);
+        String str_select_came_mode = mActivity.queryConfig(CommonUtil.CAMERA_MODE);
+        for (int i = 0; i < select_camera_mode.getChildCount(); i++) {
+            RadioButton rb = (RadioButton)select_camera_mode.getChildAt(i);
+            if (rb.getText().toString().equals(str_select_came_mode)) {
+                rb.setChecked(true);
+                break;
+            }
+        }
+
+        // 深度摄像头图像尺寸
+        select_camera_size = (RadioGroup) rootView.findViewById(R.id.select_camera_size);
+        String str_select_came_size = mActivity.queryConfig(CommonUtil.CAMERA_SIZE);
+        for (int i = 0; i < select_camera_size.getChildCount(); i++) {
+            RadioButton rb = (RadioButton)select_camera_size.getChildAt(i);
+            if (rb.getText().toString().equals(str_select_came_size)) {
+                rb.setChecked(true);
+                break;
+            }
+        }
+
         //保存
-        Button btn_save = (Button)rootView.findViewById(R.id.btn_save);
+        Button btn_save = (Button) rootView.findViewById(R.id.btn_save);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String deviceId = txt_device_id.getText().toString();
                 if (deviceId != null && deviceId.trim().length() > 0) {
-                    configDao.saveValue(CommonUtil.DEVICE_ID, deviceId);
+                    mActivity.saveConfig(CommonUtil.DEVICE_ID, deviceId);
                 }
 
                 String url = txt_server_url.getText().toString();
                 if (url != null && url.trim().length() > 0) {
-                    configDao.saveValue(CommonUtil.REMOTE_URL, url);
+                    mActivity.saveConfig(CommonUtil.REMOTE_URL, url);
                 }
 
+                String camera_mode = ((RadioButton) mActivity.
+                        findViewById(select_camera_mode.getCheckedRadioButtonId())).getText().toString();
+                if (camera_mode != null && camera_mode.trim().length() > 0) {
+                    mActivity.saveConfig(CommonUtil.CAMERA_MODE, camera_mode);
+                }
+
+                String camera_size = ((RadioButton) mActivity.
+                        findViewById(select_camera_size.getCheckedRadioButtonId())).getText().toString();
+                if (camera_size != null && camera_size.trim().length() > 0) {
+                    mActivity.saveConfig(CommonUtil.CAMERA_SIZE, camera_size);
+                }
+
+                RecordFragmentDeepCamera.init_camera_param(camera_mode, camera_size);
                 ToastUtil.showLongToast(mActivity, "修改成功");
             }
         });

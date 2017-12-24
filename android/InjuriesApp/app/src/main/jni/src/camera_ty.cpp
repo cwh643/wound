@@ -427,13 +427,21 @@ int OpenDevice(jint width, jint heigth) {
 
 	    LOGD("=== Open device 0");
 	    ASSERT_OK(TYOpenDevice(pBaseInfo[0].id, &hDevice));
-
+        
+        TY_IMAGE_MODE_LIST image_size = TY_IMAGE_MODE_640x480;
+        if (width == 1280) {
+            image_size = TY_IMAGE_MODE_1280x960;
+        }
+        int err;
 	    int32_t allComps;
 	    ASSERT_OK( TYGetComponentIDs(hDevice, &allComps) );
 	    if(allComps & TY_COMPONENT_RGB_CAM){
 	        LOGD("=== Has RGB camera, open RGB cam");
 	        ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
-	    }
+            err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
+            LOGD("err = %d", err);
+            ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+        }
 
 	    LOGD("=== Configure components, open depth cam");
 	    // int32_t componentIDs = TY_COMPONENT_DEPTH_CAM | TY_COMPONENT_IR_CAM_LEFT;
@@ -444,13 +452,6 @@ int OpenDevice(jint width, jint heigth) {
 	    LOGD("Note: DM460 resolution feature is in component TY_COMPONENT_DEVICE,");
 	    LOGD("      other device may lays in some other components.");
 
-        TY_IMAGE_MODE_LIST image_size = TY_IMAGE_MODE_640x480;
-        if (width == 1280) {
-            image_size = TY_IMAGE_MODE_1280x960;
-        }
-	    int err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
-		LOGD("err = %d", err);
-	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
 	    err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
 		LOGD("err = %d", err);
 	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
@@ -481,9 +482,9 @@ int OpenDevice(jint width, jint heigth) {
 	    cb_data.index = 0;
 	    cb_data.hDevice = hDevice;
 	    cb_data.render = &render;
-
-        LOGD("=== Read color rectify matrix");
-        {
+        
+        if(allComps & TY_COMPONENT_RGB_CAM) {
+            LOGD("=== Read color rectify matrix");
             TY_CAMERA_DISTORTION color_dist;
             TY_CAMERA_INTRINSIC color_intri;
             TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));

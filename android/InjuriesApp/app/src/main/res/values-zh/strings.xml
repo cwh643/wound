@@ -31,6 +31,8 @@
 
     <string name="setting_device_id">设备ID（必须唯一）</string>
     <string name="setting_server_url">服务器URL</string>
+    <string name="setting_camera_mode">摄像头模式</string>
+    <string name="setting_camera_size">摄像头尺寸</string>
 
     <string name="modify_pw_title">修改密码</string>
     <string name="modify_pw_old">旧密码</string>

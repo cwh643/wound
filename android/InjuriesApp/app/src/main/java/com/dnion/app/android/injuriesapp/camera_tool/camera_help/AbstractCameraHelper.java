@@ -43,6 +43,19 @@ public abstract class AbstractCameraHelper {
         param.deep_ry = new Float(360 * param.camera_size_factor).intValue();
     }
 
+    public void init(Context context, String size) {
+        mContext = context;
+        initSize();
+        mRgbMat = new Mat(mHeight, mWidth, CvType.CV_8UC3);
+        param.camera_size_factor = new Float(mWidth) / 640;
+        param.deep_lx = new Float(160 * param.camera_size_factor).intValue();
+        param.deep_ly = new Float(120 * param.camera_size_factor).intValue();
+        param.deep_rx = new Float(480 * param.camera_size_factor).intValue();
+        param.deep_ry = new Float(360 * param.camera_size_factor).intValue();
+    }
+
+
+
     protected void initSize() {
         mWidth = GlobalDef.RES_COLOR_WIDTH_640;
         mHeight = GlobalDef.RES_COLOR_HEIGHT_480;

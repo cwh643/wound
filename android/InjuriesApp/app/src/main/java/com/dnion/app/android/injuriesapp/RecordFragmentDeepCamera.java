@@ -37,6 +37,7 @@ import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
+import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.DateUtils;
 
 import org.opencv.android.Utils;
@@ -59,7 +60,8 @@ public class RecordFragmentDeepCamera extends Fragment {
     public static final int CAMERA_DEFAULT_WIDTH = 960;
     public static final int CAMERA_DEFAULT_HEIGHT = 540;
     public static final int DEFAULT_TIME_OUT = 100000;
-    private int camera_src = 1; // 0:图漾4x，1:图漾8x，2:奥比
+    public static int camera_src = 2; // 0:图漾4x，1:图漾8x，2:奥比
+    public static String camera_size = "640x480"; // 0:图漾4x，1:图漾8x，2:奥比
     private int camera_x = 332;
     private int camera_y = 141;
     private int camera_width = 572;
@@ -102,6 +104,23 @@ public class RecordFragmentDeepCamera extends Fragment {
     Canvas focusCanvas;
     FocusParam focusParam;
 
+    public static void init_camera_param(String src, String size) {
+        switch (src) {
+            case "ty4x":
+                camera_src = 0;
+                break;
+            case "ty8x":
+                camera_src = 1;
+                break;
+            case "ab":
+                camera_src = 2;
+                break;
+            default:
+                camera_src = 2;
+        }
+        camera_size = size;
+    }
+
     public static RecordFragmentDeepCamera createInstance() {
         RecordFragmentDeepCamera fragment = new RecordFragmentDeepCamera();
         Bundle bundle = new Bundle();
@@ -129,6 +148,10 @@ public class RecordFragmentDeepCamera extends Fragment {
 
     private void configView(View rootView) {
         mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        String camera_mode = mActivity.queryConfig(CommonUtil.CAMERA_MODE);
+        String camera_size = mActivity.queryConfig(CommonUtil.CAMERA_SIZE);
+        init_camera_param(camera_mode, camera_size);
+
         mRgbView = (ImageView) rootView.findViewById(R.id.rgb_view);
         //mAbRgbView = (OpenGL2DView) rootView.findViewById(R.id.ab_rgb_view);
         mDepthView = (ImageView) rootView.findViewById(R.id.deep_camera_view);

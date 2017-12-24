@@ -483,7 +483,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         Mat mDepth = deepCameraInfo.getDepthMat();
         // 在此加入中值滤波器，
         mFilterDepth = new Mat(mDepth.rows(), mDepth.cols(), mDepth.type());
-        Imgproc.medianBlur(mDepth, mFilterDepth, 3);
+        Imgproc.medianBlur(mDepth, mFilterDepth, GlobalDef.MODEL_DEEP_CENTER_DIS);
+        //mFilterDepth = mDepth;
         Bitmap rgb = deepCameraInfo.getRgbBitmap();
         int lx = deepCameraInfo.getDeep_lx();
         int ly = deepCameraInfo.getDeep_ly();

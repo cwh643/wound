@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfoDao;
 import com.dnion.app.android.injuriesapp.dao.PatientDao;
@@ -48,6 +49,8 @@ public class MainActivity extends BaseActivity {
 
     private PatientDao patientDao;
 
+    private ConfigDao configDao;
+
     private RecordImageDao recordImageDao;
 
     private DeepCameraInfoDao deepCameraInfoDao;
@@ -65,6 +68,7 @@ public class MainActivity extends BaseActivity {
         patientDao = new PatientDao(this);
         recordImageDao = new RecordImageDao(this);
         deepCameraInfoDao = new DeepCameraInfoDao();
+        configDao = new ConfigDao(this);
 
         settingDocTitle();
         addTopButtonEvent();
@@ -133,8 +137,13 @@ public class MainActivity extends BaseActivity {
     };
 
 
+    public String queryConfig(String key) {
+        return configDao.queryValue(key);
+    }
 
-
+    public void saveConfig(String key, String value) {
+        configDao.saveValue(key, value);
+    }
 
 /*
     private boolean saveRecordInfo(RecordInfo recordInfo) {
@@ -358,6 +367,7 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 提供给Fragment通过getActivity()方法来注册自己的触摸事件的方法
+     *
      * @param listener
      */
     public void registerMyTouchListener(MyTouchListener listener) {
@@ -366,10 +376,11 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 提供给Fragment通过getActivity()方法来取消注册自己的触摸事件的方法
+     *
      * @param listener
      */
     public void unRegisterMyTouchListener(MyTouchListener listener) {
-        myTouchListeners.remove( listener );
+        myTouchListeners.remove(listener);
     }
 
     /**

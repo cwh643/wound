@@ -300,6 +300,9 @@ public class DeepCameraInfo {
     }
 
     public float getCamera_size_factor() {
+        if (camera_size_factor == 0) {
+            camera_size_factor = 1;
+        }
         return camera_size_factor;
     }
 
