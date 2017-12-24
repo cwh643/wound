@@ -1,7 +1,9 @@
 package com.dnion.app.android.injuriesapp;
 
 import android.animation.ValueAnimator;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -58,14 +60,13 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
     private Bitmap mWoundRgbBitmap;
     private Bitmap mAreaMeasureBitmap;
-    private Bitmap mLengthMeasureBitmap;
-    private Bitmap mWidthMeasureBitmap;
+    private Bitmap mLegendBitmap;
     //    final Bitmap mBitmap = Bitmap.createBitmap(DEFAULT_PREVIEW_WIDTH, DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
     private Button mOpenButton;
     private TextView mAreaView;
     private TextView mVolumeView;
-    private TextView mLengthView;
-    private TextView mWidthView;
+    private TextView mMaxTempView;
+    private TextView mMinTempView;
     private TextView mColorRedView;
     private TextView mColorBlackView;
     private TextView mColorYellowView;
@@ -73,8 +74,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private int mMeasureStat = 0;
     private ImageView mWoundRgbView;
     private ImageView mAreaMeasureView;
-    private ImageView mLengthMeasureView;
-    private ImageView mWidthMeasureView;
+    private ImageView mLegendView;
     private DeepModelDisplayView mModelView;
     private GestureDetector gestureDetector;
     private Paint paint;
@@ -99,6 +99,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private LinearLayout menu_bar;
 
     private ImageButton btn_menu_bar;
+
 
     public static RecordFragmentWoundIRMeasure createInstance() {
         RecordFragmentWoundIRMeasure fragment = new RecordFragmentWoundIRMeasure();
@@ -136,29 +137,22 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         gestureDetector = new GestureDetector(this.getContext(), onGestureListener);
         mAreaMeasureView = (ImageView) rootView.findViewById(R.id.area_image);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
-        mLengthMeasureView = (ImageView) rootView.findViewById(R.id.length_image);
-        mLengthMeasureView.setImageBitmap(mLengthMeasureBitmap);
-        mWidthMeasureView = (ImageView) rootView.findViewById(R.id.width_image);
-        mWidthMeasureView.setImageBitmap(mWidthMeasureBitmap);
+        mLegendView = (ImageView) rootView.findViewById(R.id.legend_image);
+
+        ApplicationInfo appInfo = mActivity.getApplicationInfo();
+        int resID = getResources().getIdentifier("ir_legend", "mipmap", appInfo.packageName);
+        mLegendBitmap = BitmapFactory.decodeResource(getResources(), resID);
+
         //  手势相关
         mAreaMeasureView.setOnTouchListener(mTouchEvent);
         mAreaMeasureView.setClickable(true);
-        //mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_area);
-        //mOpenButton.setOnClickListener(mMeasureAreaListener);
-        //mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_length);
-        //mOpenButton.setOnClickListener(mMeasureLengthListener);
-        //mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_width);
-        //mOpenButton.setOnClickListener(mMeasureWidthListener);
-        //mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_model);
-        //mOpenButton.setOnClickListener(mModelDisplayListener);
-        mAreaView = (TextView) rootView.findViewById(R.id.area_view);
-        mVolumeView = (TextView) rootView.findViewById(R.id.volume_view);
-        mLengthView = (TextView) rootView.findViewById(R.id.length_view);
-        mWidthView = (TextView) rootView.findViewById(R.id.width_view);
-        mColorRedView = (TextView) rootView.findViewById(R.id.color_rate_red);
-        mColorBlackView = (TextView) rootView.findViewById(R.id.color_rate_black);
-        mColorYellowView = (TextView) rootView.findViewById(R.id.color_rate_yellow);
-        mDeepView = (TextView) rootView.findViewById(R.id.wound_deep_view);
+
+        mMaxTempView = (TextView) rootView.findViewById(R.id.max_temp_view);
+        mMinTempView = (TextView) rootView.findViewById(R.id.min_temp_view);
+       // mColorRedView = (TextView) rootView.findViewById(R.id.color_rate_red);
+       // mColorBlackView = (TextView) rootView.findViewById(R.id.color_rate_black);
+       // mColorYellowView = (TextView) rootView.findViewById(R.id.color_rate_yellow);
+       // mDeepView = (TextView) rootView.findViewById(R.id.wound_deep_view);
         displayMat();
         int width = mWoundRgbBitmap.getWidth();
         int height = mWoundRgbBitmap.getHeight();
@@ -169,23 +163,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         paint.setColor(DRAW_COLOR);
         areaCanvas = new Canvas(mAreaMeasureBitmap);
         areaCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
-        //lengthCanvas = new Canvas(mLengthMeasureBitmap);
-        //lengthCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
-        //widthCanvas = new Canvas(mWidthMeasureBitmap);
-        //widthCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
-//
-        //if (deepCameraInfo.getAreaPointList().size() > 0) {
-        //    fillArea();
-        //    setArea();
-        //}
-        //if (deepCameraInfo.getLengthPointList().size() > 1) {
-        //    fillLength();
-        //    setLength();
-        //}
-        //if (deepCameraInfo.getWidthPointList().size() > 1) {
-        //    fillWidth();
-        //    setWidth();
-        //}
+
     }
 
     private void initMenuBar(View rootView) {
@@ -291,40 +269,6 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         measure_btn_save.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_save.setOnClickListener(mSaveDataListener);
 
-        //MeasureButton measure_btn_edit = (MeasureButton) rootView.findViewById(R.id.measure_btn_edit);
-        //measure_btn_edit.setText("测 量");
-        //measure_btn_edit.setImage(R.mipmap.measure_edit);
-        //measure_btn_edit.setSelectImage(R.mipmap.measure_edit_s);
-        //measure_btn_edit.setOnClickListener(new OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        btn_measure_bar.callOnClick();
-        //    }
-        //});
-
-        //measure_bar = (LinearLayout) rootView.findViewById(R.id.measure_bar);
-        //btn_measure_bar = (ImageButton) rootView.findViewById(R.id.btn_measure_bar);
-        //btn_measure_bar.setOnClickListener(new OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        Object tagValue = v.getTag();
-        //        final float distance = 428.0f;
-        //        float y = measure_bar.getY();
-//
-        //        ValueAnimator valueAnimator = null;
-        //        if (Integer.parseInt("" + tagValue) == 1) {
-        //            valueAnimator = ValueAnimator.ofFloat(y, y - distance);
-        //            v.setTag(2);
-        //        } else {
-        //            valueAnimator = ValueAnimator.ofFloat(y, y + distance);
-        //            v.setTag(1);
-        //        }
-        //        measureBarAnimator(valueAnimator);
-        //    }
-        //});
-        //btn_measure_bar.setTag(2);
-        //measure_bar.setY(measure_bar.getY() - 428.0f);
-
         menu_bar = (LinearLayout) rootView.findViewById(R.id.menu_bar);
         btn_menu_bar = (ImageButton) rootView.findViewById(R.id.btn_menu_bar);
         btn_menu_bar.setOnClickListener(new OnClickListener() {
@@ -414,23 +358,50 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         valueAnimator.start();
     }
 
+    private String formatDouble(double num) {
+        String format = new DecimalFormat("#.00").format(num);
+        return format;
+    }
     private void displayMat() {
-        if (displayMode == 1) {
+        Mat depth = deepCameraInfo.getDepthMat();
+        double tempMax = 0;
+        double tempMin = Double.MAX_VALUE;
+        for (int x = 0; x < depth.cols(); x++) {
+            for (int y = 0; y < depth.rows(); y++) {
+                double temp = depth.get(y, x)[0];
+                tempMax = Math.max(temp, tempMax);
+                tempMin = Math.min(temp, tempMin);
+            }
+        }
+        String max_format = formatDouble(tempMax / 100);
+        deepCameraInfo.setMaxDeep(new Float(max_format));
+        String min_format = formatDouble(tempMin / 100);
+        deepCameraInfo.setMaxDeep(new Float(min_format));
+        mMaxTempView.setText("最大温度：" + max_format + " ℃");
+        mMinTempView.setText("最小温度：" + min_format + " ℃");
+        if (displayMode == 2) {
             Bitmap rgb = deepCameraInfo.getRgbBitmap();
             mWoundRgbBitmap = rgb;
             mWoundRgbView.setImageBitmap(mWoundRgbBitmap);
-        } else if (displayMode == 2) {
-            Mat depth = deepCameraInfo.getDepthMat();
-            mWoundRgbBitmap = Bitmap.createBitmap(depth.cols(), depth.rows(), Bitmap.Config.RGB_565);
+        } else if (displayMode == 1) {
+            mWoundRgbBitmap = Bitmap.createBitmap(depth.cols(), depth.rows(), Bitmap.Config.ARGB_8888);
             for (int x = 0; x < depth.cols(); x++) {
                 for (int y = 0; y < depth.rows(); y++) {
-                    double temp = depth.get(y, x)[0]/100;
-                    int color = new Double(temp / 50 * 1000).intValue();
+                    double temp = depth.get(y, x)[0];
+                    int color = transTemp2Color(temp, tempMax, tempMin);
                     mWoundRgbBitmap.setPixel(x, y, color);
                 }
             }
             mWoundRgbView.setImageBitmap(mWoundRgbBitmap);
         }
+    }
+
+    private int transTemp2Color(double temp, double tempMax, double tempMin) {
+        int length = mLegendBitmap.getHeight();
+        int pos = length - 1 - new Double(((temp - tempMin) / (tempMax - tempMin)) * (length - 1)).intValue();
+        int color = mLegendBitmap.getPixel(10, pos);
+        //Log.d(TAG, "temp:" + temp + "pos:" + pos + "color:" + color);
+        return color;
     }
 
     private View.OnTouchListener mTouchEvent = new View.OnTouchListener() {
@@ -487,57 +458,12 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         double[] temps = depth.get(d_y, d_x);
         String temp = new DecimalFormat("#.00").format(temps[0] / 100);
         float text_x = t_x < 40 ? t_x : t_x - 40;
-        float text_y = t_y < 13? t_y + 13 : t_y;
+        float text_y = t_y < 13 ? t_y + 13 : t_y;
         areaCanvas.drawText(temp, text_x, text_y, paint);
-        areaCanvas.drawLine(0, t_y, bWidth -1, t_y, paint);
+        areaCanvas.drawLine(0, t_y, bWidth - 1, t_y, paint);
         areaCanvas.drawLine(t_x, 0, t_x, bHeight, paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
     }
-
-
-    private void setArea() {
-        mAreaView.setText("面积：" + deepCameraInfo.getWoundArea() + "cm²");
-        mVolumeView.setText("体积：" + deepCameraInfo.getWoundVolume() + " cm³");
-        mDeepView.setText("深度：" + deepCameraInfo.getWoundDeep() + " cm");
-        mColorRedView.setText("红色组织：" + deepCameraInfo.getWoundRedRate() + "%");
-        mColorBlackView.setText("黄色组织：" + deepCameraInfo.getWoundYellowRate() + "%");
-        mColorYellowView.setText("黑色组织：" + deepCameraInfo.getWoundBlackRate() + "%");
-    }
-
-    private void setLength() {
-        mLengthView.setText("长度：" + deepCameraInfo.getWoundWidth() + " cm");
-    }
-
-    private void setWidth() {
-        mWidthView.setText("宽度：" + deepCameraInfo.getWoundHeight() + " cm");
-    }
-
-    private final OnClickListener mMeasureAreaListener = new OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            mMeasureStat = 1;
-            ToastUtil.showLongToast(mActivity, "请圈选伤口边缘");
-            //canvas.restoreToCount(areaLayerID);
-        }
-    };
-
-    private final OnClickListener mMeasureLengthListener = new OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            mMeasureStat = 2;
-            ToastUtil.showLongToast(mActivity, "请划定伤口最大长度");
-            //canvas.restoreToCount(lengthLayerID);
-        }
-    };
-
-    private final OnClickListener mMeasureWidthListener = new OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            mMeasureStat = 3;
-            ToastUtil.showLongToast(mActivity, "请划定伤口最大宽度");
-            //canvas.restoreToCount(lengthLayerID);
-        }
-    };
 
     private final OnClickListener mModelDisplayListener = new OnClickListener() {
         @Override

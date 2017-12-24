@@ -37,6 +37,7 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -106,6 +107,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private LinearLayout menu_bar;
 
     private ImageButton btn_menu_bar;
+
+    private Mat mFilterDepth;
 
     public static RecordFragmentWoundMeasure createInstance() {
         RecordFragmentWoundMeasure fragment = new RecordFragmentWoundMeasure();
@@ -478,6 +481,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
         //Mat tmpMap = new Mat(mBitmap.getHeight(), mBitmap.getWidth(), CvType.CV_8UC1);
         //deepCameraInfo.getDepthMat().convertTo(tmpMap, tmpMap.type());
         Mat mDepth = deepCameraInfo.getDepthMat();
+        // 在此加入中值滤波器，
+        mFilterDepth = new Mat(mDepth.rows(), mDepth.cols(), mDepth.type());
+        Imgproc.medianBlur(mDepth, mFilterDepth, 3);
         Bitmap rgb = deepCameraInfo.getRgbBitmap();
         int lx = deepCameraInfo.getDeep_lx();
         int ly = deepCameraInfo.getDeep_ly();
@@ -659,7 +665,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         return deep;
     }
 
-    private double filterPoint(Mat depth, int x, int y) {
+    private double filterPointMediaBule(Mat depth, int x, int y) {
         // 取周围的点， 如果和周围最近点的距离超过阈值，则抛弃
         int dis = GlobalDef.MODEL_DEEP_CENTER_DIS;
         double minDeep = Double.MAX_VALUE;
@@ -702,7 +708,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         return deep;
     }
 
-    private double filterPointBk(Mat depth, int x, int y) {
+    private double filterPoint_dis(Mat depth, int x, int y) {
         // 取周围的点， 如果和周围最近点的距离超过阈值，则抛弃
         int dis = GlobalDef.MODEL_DEEP_CENTER_DIS;
         double minDeep = Double.MAX_VALUE;
@@ -733,6 +739,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
         return deep;
     }
 
+    private double filterPoint(Mat depth, int x, int y) {
+        return getDeep(mFilterDepth.get(y, x));
+    }
+
     private void clacColorRate(int color, ModelPointinfo mi) {
         int red = Color.red(color);
         int green = Color.green(color);
@@ -751,7 +761,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void clacArea() {
         List<Float> vertexList = deepCameraInfo.getVertexList();
         List<Float> colorList = deepCameraInfo.getColorList();
-        Mat mDepth = deepCameraInfo.getDepthMat();
+        //Mat mDepth = deepCameraInfo.getDepthMat();
+        Mat mDepth = mFilterDepth;
         Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
         vertexList.clear();
         colorList.clear();
@@ -862,7 +873,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                 test = 1;
             }
         }
-        volume = volume < 0 ? - volume : volume;
+        volume = volume < 0 ? -volume : volume;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
         String format_area = new DecimalFormat("#.00").format(area);
         String format_volume = new DecimalFormat("#.00").format(volume);
