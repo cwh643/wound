@@ -88,10 +88,10 @@ public class IRCameraHelper extends AbstractCameraHelper {
             rgbBitmap.setPixels(mImageBuffer, 0, 120, 0, 0, 120, 160);
             if (depthMat != null) {
                 for (int i = 0; i < mTempBuffer.length; i++) {
-                    int y = 319 - i / 240;
-                    int x = i % 240;
+                    int y = i % 240;
+                    int x = 319 - i / 240;
                     double temp = mTempBuffer[i] * 100;
-                    depthMat.put(x, y, temp);
+                    depthMat.put(y, x, temp);
                 }
             }
             return 0;
