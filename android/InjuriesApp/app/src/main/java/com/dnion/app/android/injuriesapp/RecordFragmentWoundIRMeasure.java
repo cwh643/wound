@@ -149,10 +149,10 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
         mMaxTempView = (TextView) rootView.findViewById(R.id.max_temp_view);
         mMinTempView = (TextView) rootView.findViewById(R.id.min_temp_view);
-       // mColorRedView = (TextView) rootView.findViewById(R.id.color_rate_red);
-       // mColorBlackView = (TextView) rootView.findViewById(R.id.color_rate_black);
-       // mColorYellowView = (TextView) rootView.findViewById(R.id.color_rate_yellow);
-       // mDeepView = (TextView) rootView.findViewById(R.id.wound_deep_view);
+        // mColorRedView = (TextView) rootView.findViewById(R.id.color_rate_red);
+        // mColorBlackView = (TextView) rootView.findViewById(R.id.color_rate_black);
+        // mColorYellowView = (TextView) rootView.findViewById(R.id.color_rate_yellow);
+        // mDeepView = (TextView) rootView.findViewById(R.id.wound_deep_view);
         displayMat();
         int width = mWoundRgbBitmap.getWidth();
         int height = mWoundRgbBitmap.getHeight();
@@ -362,6 +362,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         String format = new DecimalFormat("#.00").format(num);
         return format;
     }
+
     private void displayMat() {
         Mat depth = deepCameraInfo.getDepthMat();
         double tempMax = 0;
@@ -373,9 +374,9 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
                 tempMin = Math.min(temp, tempMin);
             }
         }
-        String max_format = formatDouble(tempMax / 100);
+        String max_format = formatDouble(tempMax);
         deepCameraInfo.setMaxDeep(new Float(max_format));
-        String min_format = formatDouble(tempMin / 100);
+        String min_format = formatDouble(tempMin);
         deepCameraInfo.setMaxDeep(new Float(min_format));
         mMaxTempView.setText("最大温度：" + max_format + " ℃");
         mMinTempView.setText("最小温度：" + min_format + " ℃");
@@ -397,8 +398,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     }
 
     private int transTemp2Color(double temp, double tempMax, double tempMin) {
-        int length = mLegendBitmap.getHeight();
-        int pos = length - 1 - new Double(((temp - tempMin) / (tempMax - tempMin)) * (length - 1)).intValue();
+        int length = mLegendBitmap.getHeight() - 1;
+        int pos = length - new Double(((temp - tempMin) / (tempMax - tempMin)) * length).intValue();
         int color = mLegendBitmap.getPixel(10, pos);
         //Log.d(TAG, "temp:" + temp + "pos:" + pos + "color:" + color);
         return color;
@@ -456,7 +457,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         int d_y = new Float(t_y * depthFactor).intValue();
         // 取温度数据
         double[] temps = depth.get(d_y, d_x);
-        String temp = new DecimalFormat("#.00").format(temps[0] / 100);
+        String temp = new DecimalFormat("#.00").format(temps[0]);
         float text_x = t_x < 40 ? t_x : t_x - 40;
         float text_y = t_y < 13 ? t_y + 13 : t_y;
         areaCanvas.drawText(temp, text_x, text_y, paint);

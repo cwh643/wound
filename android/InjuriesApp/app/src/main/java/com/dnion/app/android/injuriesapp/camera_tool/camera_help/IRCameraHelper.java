@@ -83,8 +83,17 @@ public class IRCameraHelper extends AbstractCameraHelper {
          * capture 读取 RGB 数据和温度数据
          */
         int ret = 0;
-        if (ret == irHandle.captureImage(mImageBuffer, 160 * 120 * Integer.SIZE,
-                mTempBuffer, 320 * 240 * Double.SIZE)) {
+        if (ret == irHandle.readImage(mImageBuffer, mImageBuffer.length * Integer.SIZE)) {
+            rgbBitmap.setPixels(mImageBuffer, 0, 120, 0, 0, 120, 160);
+            return 0;
+        }
+        return ret;
+    }
+
+    public int FetchFinalData(Mat depthMat, Bitmap rgbBitmap) {
+        int ret = 0;
+        if (ret == irHandle.captureImage(mImageBuffer, mImageBuffer.length * Integer.SIZE,
+                mTempBuffer, mTempBuffer.length * Double.SIZE)) {
             rgbBitmap.setPixels(mImageBuffer, 0, 120, 0, 0, 120, 160);
             if (depthMat != null) {
                 for (int i = 0; i < mTempBuffer.length; i++) {

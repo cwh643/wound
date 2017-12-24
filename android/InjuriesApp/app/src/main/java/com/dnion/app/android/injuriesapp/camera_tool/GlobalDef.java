@@ -23,8 +23,8 @@ public class GlobalDef {
     public static final int RES_CALC_HEIGHT = 1440;//为了没有毛边，设置的比较大
     public static final int RES_DEPTH_WIDTH = 640;//深度图分辨率
     public static final int RES_DEPTH_HEIGHT = 480;
-    /*public static final int RES_DEPTH_WIDTH = 320;//深度图分辨率
-    public static final int RES_DEPTH_HEIGHT = 240;*/
+    //public static final int RES_IR_RGB_WIDTH = 320;//深度图分辨率
+    //public static final int RES_IR_RGB_HEIGHT = 240;
     public static final int RES_IR_RGB_WIDTH = 160;//深度图分辨率
     public static final int RES_IR_RGB_HEIGHT = 120;
 

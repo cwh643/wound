@@ -408,7 +408,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
             }
             int ret = 0;
             if (getLastPicture) {
-                ret = irCamera.FetchData(mDepth, mRgbTrasBitmap);
+                ret = irCamera.FetchFinalData(mDepth, mRgbTrasBitmap);
                 getLastPicture = false;
             } else {
                 ret = irCamera.FetchData(null, mRgbTrasBitmap);
