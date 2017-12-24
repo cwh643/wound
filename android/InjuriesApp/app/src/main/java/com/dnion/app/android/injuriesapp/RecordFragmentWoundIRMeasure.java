@@ -214,7 +214,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             public void onClick(View v) {
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
                 mActivity.showTopBar();
@@ -235,7 +235,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             public void onClick(View v) {
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
                 mActivity.showTopBar();
@@ -251,7 +251,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
 
         MeasureButton measure_btn_rgb = (MeasureButton) rootView.findViewById(R.id.measure_btn_rgb);
-        measure_btn_rgb.setText("彩 色");
+        measure_btn_rgb.setText(getString(R.string.measure_color));
         measure_btn_rgb.setImage(R.mipmap.measure_ok);
         measure_btn_rgb.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_rgb.setOnClickListener(new OnClickListener() {
@@ -275,7 +275,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_modify = (MeasureButton) rootView.findViewById(R.id.measure_btn_mode);
-        measure_btn_modify.setText("模 式");
+        measure_btn_modify.setText(getString(R.string.measure_pattern));
         measure_btn_modify.setImage(R.mipmap.measure_modify);
         measure_btn_modify.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_modify.setOnClickListener(new OnClickListener() {
@@ -286,7 +286,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_save = (MeasureButton) rootView.findViewById(R.id.measure_btn_save);
-        measure_btn_save.setText("保 存");
+        measure_btn_save.setText(getString(R.string.save));
         measure_btn_save.setImage(R.mipmap.measure_modify);
         measure_btn_save.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_save.setOnClickListener(mSaveDataListener);

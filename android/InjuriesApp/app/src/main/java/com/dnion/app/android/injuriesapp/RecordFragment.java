@@ -302,7 +302,7 @@ public class RecordFragment extends Fragment {
     private void startFragment(Fragment fragment) {
         String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
         if (inpatientNo == null || inpatientNo.length() == 0) {
-            ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+            ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
             return;
         }
         mActivity.saveRecordInfo();

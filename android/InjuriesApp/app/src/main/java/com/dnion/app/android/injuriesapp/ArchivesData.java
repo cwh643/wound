@@ -120,17 +120,17 @@ public class ArchivesData {
         woundDressingDisc.put(1, "主要由聚氨酯类材料和脱敏医用粘胶组成，分内外两层，内层为未水性材料，可吸收创面渗液，外层材料具有良好的透气性和弹性。" +
                 "此类敷料的特点是透明，便于观察伤口，能密切黏附于创面表面，有效保持创面渗出液，从而提供有利于创面愈合的湿润环境，促使坏死组织脱落；" +
                 "缺点为该类敷料吸水性能欠佳，吸收饱和后易致膜下渗液积聚，可能诱发或加重感染，故只适用于相对清洁创面，不适于渗液多的创面。" +
-                "有临床研究表明[1]，在气管切开护理及中心静脉置管的维护中应用该类敷料的疗效较好，不但能有效防止感染，同时还能改善患者的舒适，提高生质量值得临床推广应用。");
+                "有临床研究表明，在气管切开护理及中心静脉置管的维护中应用该类敷料的疗效较好，不但能有效防止感染，同时还能改善患者的舒适，提高生质量值得临床推广应用。");
 
         woundDressingDisc.put(2, "是将水溶性高分子材料或其单体经特殊加工形成的一种具有三维网状结构且不溶于水的胶状物质，主要成分为纯水70%-90%、羧甲基纤维索及其他一些附加成分。" +
-                "有临床报道指出[2]：水凝胶敷料能与不平整的创面紧密黏合，减少细菌滋生的机会，防止创面感染，加速新生血管生成，促进上皮细胞生长。水凝胶的主要作用为自体清创，机制是在湿润环境中依靠创面自身渗出液中的胶原蛋白降解酶分解坏死物质。");
+                "有临床报道指出：水凝胶敷料能与不平整的创面紧密黏合，减少细菌滋生的机会，防止创面感染，加速新生血管生成，促进上皮细胞生长。水凝胶的主要作用为自体清创，机制是在湿润环境中依靠创面自身渗出液中的胶原蛋白降解酶分解坏死物质。");
 
-        woundDressingDisc.put(3, "水胶体类敷料是由亲水胶微粒的明胶、果胶和羧甲基纤维素混合形成。主要适应于Ⅰ、Ⅱ期压疮的预防与治疗，烧伤、整形供皮区的治疗[3]，各类浅表外伤口和整形美容伤口的治疗，慢性伤口上皮形成期及静脉炎的预防与治疗等[4]。");
+        woundDressingDisc.put(3, "水胶体类敷料是由亲水胶微粒的明胶、果胶和羧甲基纤维素混合形成。主要适应于Ⅰ、Ⅱ期压疮的预防与治疗，烧伤、整形供皮区的治疗，各类浅表外伤口和整形美容伤口的治疗，慢性伤口上皮形成期及静脉炎的预防与治疗等。");
         woundDressingDisc.put(4, "新型的泡沫类敷料外层为疏水材料，内层为亲水材料。此类敷料具有多孔性，表面张力低，富有弹性，可塑性强、轻便，对渗出液的吸收力可达到敷料本身质量的10倍。" +
                 "泡沫性敷料对创面渗出物的处理是靠水蒸汽的转运和吸收机制来控制的，可塑性好，能制成各种厚度，对创面具有较好的保护作用。" +
-                "目前使用最多的材料是聚氨酯泡沫和聚乙烯醇泡沫。其缺点是粘贴性较差，而需外固定材料；敷料不透明，难以观察创面情况；敷料孔隙大，创面肉芽组织易于长入，造成脱膜困难， 而且易受细菌污染[5]。");
+                "目前使用最多的材料是聚氨酯泡沫和聚乙烯醇泡沫。其缺点是粘贴性较差，而需外固定材料；敷料不透明，难以观察创面情况；敷料孔隙大，创面肉芽组织易于长入，造成脱膜困难， 而且易受细菌污染。");
         woundDressingDisc.put(5, "主要成分取自海水中的藻类，它是利用藻类中类似纤维素的不能溶解的多糖藻酸盐制成的敷料。海藻酸可与金属离子结合形成盐，是各种金属离子的良好载体，常见的有藻酸钙盐、藻酸锌盐敷料。" +
-                "藻酸钙盐敷料在更换过程中不造成新鲜肉芽损伤引起的疼痛，易被患者接受，还可以通过钙、钠离子交换，达到止血功能，同时还具有吸附细菌，阻止细菌进入创面的功能[6]。研究显示，藻酸锌盐敷料具有很好的凝血效应和增强血小板活性的作用。[7]");
+                "藻酸钙盐敷料在更换过程中不造成新鲜肉芽损伤引起的疼痛，易被患者接受，还可以通过钙、钠离子交换，达到止血功能，同时还具有吸附细菌，阻止细菌进入创面的功能。研究显示，藻酸锌盐敷料具有很好的凝血效应和增强血小板活性的作用。");
         woundDressingDisc.put(6, "即用浸渍或涂敷方法将药物涂覆于敷料上，如软膏类敷料、消毒敷料，以及中药敷料等，有保护创面、止痛、止血、消炎、促进新生肉芽组织及上皮细胞生长，加速创面愈合等功能。例如：具有抗菌作用的磺胺嘧啶银敷料、二氧化钛抗菌敷料，具有消炎作用的利多卡因敷料，具有快速祛痛、止血消炎功能的中草药敷料。");
         woundDressingDisc.put(7, "其他");
 
@@ -145,15 +145,15 @@ public class ArchivesData {
 
         woundDressingEnDisc.put(2, "It is a gelatinous material with three dimensional network structure and water insoluble, " +
                 "which is formed by special processing of water-soluble polymer materials or monomers. Its main components are pure water 70%-90%, " +
-                "carboxymethyl fiber cable and other additional components. According to clinical reports, [2]: hydrogel dressing can closely bond with uneven wounds," +
+                "carboxymethyl fiber cable and other additional components. According to clinical reports,: hydrogel dressing can closely bond with uneven wounds," +
                 " reduce the chances of bacterial growth, prevent wound infection, accelerate angiogenesis and promote epithelial cell growth. " +
                 "The main function of the hydrogel is self debridement. The mechanism is to decompose the necrotic substance by the collagen degrading enzyme " +
                 "in the wound self exudation fluid in the moist environment.");
 
         woundDressingEnDisc.put(3, "Hydrocolloid dressings are formed by the mixture of gelatin, pectin and carboxymethyl cellulose, " +
                 "which are hydrophilic particles. It is mainly used for prevention and treatment of stage I and II pressure sores, " +
-                "treatment of burn, plastic skin donor site, [3], treatment of various superficial wounds and cosmetic wounds, " +
-                "prevention and treatment of chronic wound epithelialization and phlebitis, [4].");
+                "treatment of burn, plastic skin donor site, treatment of various superficial wounds and cosmetic wounds, " +
+                "prevention and treatment of chronic wound epithelialization and phlebitis.");
 
         woundDressingEnDisc.put(4, "The outer layer of a new type of foam dressing is a hydrophobic material, and the inner layer is hydrophilic. " +
                 "Such dressings are porous, low surface tension, elastic, strong plasticity and light, " +
@@ -161,7 +161,7 @@ public class ArchivesData {
                 "The treatment of wound exudates by foam dressing is controlled by the mechanism of water vapor transport and absorption. It has good plasticity, " +
                 "can be made into various thickness, and has good protective effect on wounds. The most used materials are polyurethane foam and polyvinyl alcohol foam." +
                 " The drawback is that it is poor in stickability and needs external fixator. Dressing is opaque. It is difficult to observe the wound condition. " +
-                "It has large pore size and easy to grow into granulation tissue, resulting in difficulty of membrane removal and bacterial contamination. [5]");
+                "It has large pore size and easy to grow into granulation tissue, resulting in difficulty of membrane removal and bacterial contamination.");
 
         woundDressingEnDisc.put(5, "The main ingredient is the algae in the sea, which is used to make use of the insoluble polysaccharide alginate of algae like cellulose in algae. " +
                 "Alginate can combine with metal ions to form salt, which is a good carrier of various metal ions, " +

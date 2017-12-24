@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment {
                 }
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
                 btn_save_bi.setVisibility(View.VISIBLE);
@@ -161,7 +161,7 @@ public class HomeFragment extends Fragment {
                 }
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
                 btn_save_bi.setVisibility(View.GONE);
@@ -185,7 +185,7 @@ public class HomeFragment extends Fragment {
                 }
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
                 btn_save_bi.setVisibility(View.GONE);
@@ -271,13 +271,13 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
                 if (inpatientNo == null || inpatientNo.length() == 0) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
 
                 RecordInfo recordInfo = mActivity.getRecordInfo();
                 if (recordInfo == null) {
-                    ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
                     return;
                 }
 
@@ -523,7 +523,7 @@ public class HomeFragment extends Fragment {
     private void startFragment(Fragment fragment) {
         String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
         if (inpatientNo == null || inpatientNo.length() == 0) {
-            ToastUtil.showLongToast(mActivity, "先填写患者基本信息");
+            ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
             return;
         }
         mActivity.getSupportFragmentManager().beginTransaction()
