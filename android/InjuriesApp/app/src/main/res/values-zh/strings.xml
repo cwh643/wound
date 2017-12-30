@@ -60,6 +60,7 @@
     <string name="query_patient_name">患者姓名</string>
     <string name="query_query">查询</string>
     <string name="query_add">添加采集</string>
+    <string name="query_sync">数据同步</string>
     <string name="query_doc">医生（科室）</string>
     <string name="query_patient">患者（住院号）</string>
     <string name="query_record_time">采集时间（手术）</string>

@@ -50,6 +50,17 @@
             android:textColor="@color/btn_title"
             android:textSize="@dimen/rec_title_size"
             android:text="@string/query_add" />
+        <Button
+            android:id="@+id/btn_sync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/btn_photo_bg"
+            android:textColor="@color/btn_title"
+            android:textSize="@dimen/rec_title_size"
+            android:text="@string/query_sync"
+            android:layout_below="@+id/btn_query"
+            android:layout_toStartOf="@+id/btn_add"
+            android:layout_marginEnd="32dp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -66,7 +77,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="58dp"
                 android:text="@string/query_doc"
                 android:padding="15dp"
                 android:background="@color/query_table_title_bg"
@@ -88,7 +99,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="58dp"
                 android:padding="15dp"
                 android:text="@string/query_patient"
                 android:background="@color/query_table_title_bg"
@@ -109,20 +120,23 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="58dp"
+                android:background="@color/query_table_title_bg"
                 android:padding="15dp"
                 android:text="@string/query_record_time"
-                android:background="@color/query_table_title_bg"
                 android:textSize="20sp" />
+
             <ListView
                 android:id="@+id/record_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@drawable/query_list_bg"
                 android:divider="@color/login_pw"
-                android:dividerHeight="1dp"
-                android:layout_weight="1"/>
+                android:dividerHeight="1dp" />
+
         </LinearLayout>
     </LinearLayout>
 

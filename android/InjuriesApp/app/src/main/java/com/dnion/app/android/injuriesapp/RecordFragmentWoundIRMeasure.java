@@ -169,6 +169,31 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private void initMenuBar(View rootView) {
         mActivity.hiddenTopBar();
         mActivity.hiddenSubMenuBar();
+        //返回
+        Button btn_save_mbi = (Button) rootView.findViewById(R.id.btn_save_mbi);
+        btn_save_mbi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inpatientNo = mActivity.getPatientInfo().getInpatientNo();
+                if (inpatientNo == null || inpatientNo.length() == 0) {
+                    ToastUtil.showLongToast(mActivity, getString(R.string.message_fill_info));
+                    return;
+                }
+                mActivity.showTopBar();
+                mActivity.showSubMenuBar();
+                //save_layout.setVisibility(View.GONE);
+                mActivity.selectMenuButton(R.id.btn_photo);
+                Fragment fragment;
+                if (deepCameraInfo.isNew()) {
+                    fragment = RecordFragmentDeepCamera.createInstance();
+                } else {
+                    fragment = PhotoListFragment.createInstance();
+                }
+                mActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.detail_container, fragment)
+                        .commit();
+            }
+        });
         //基本信息
         ImageButton btn_base_info_w = (ImageButton) rootView.findViewById(R.id.btn_base_info_w);
         btn_base_info_w.setOnClickListener(new OnClickListener() {

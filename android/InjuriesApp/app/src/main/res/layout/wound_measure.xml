@@ -283,17 +283,18 @@
 
                 <TextView
                     android:id="@+id/measure_title"
-                    android:layout_width="70dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
+                    android:layout_above="@+id/color_rate_black"
+                    android:layout_alignParentStart="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
                     android:text="@string/measure_data"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/area_view"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/measure_title"
@@ -301,11 +302,11 @@
                     android:drawablePadding="5dp"
                     android:text="@string/measure_area"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/volume_view"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/area_view"
@@ -313,23 +314,24 @@
                     android:drawablePadding="5dp"
                     android:text="@string/measure_volume"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/wound_deep_view"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/volume_view"
+                    android:layout_alignBaseline="@+id/volume_view"
+                    android:layout_alignBottom="@+id/volume_view"
+                    android:layout_toEndOf="@+id/volume_view"
                     android:drawableLeft="@mipmap/measure_v"
                     android:drawablePadding="5dp"
                     android:text="@string/measure_deep"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/length_view"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/wound_deep_view"
@@ -337,11 +339,11 @@
                     android:drawablePadding="5dp"
                     android:text="@string/measure_length"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/width_view"
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/length_view"
@@ -349,46 +351,45 @@
                     android:drawablePadding="5dp"
                     android:text="@string/measure_width"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size" />
 
                 <TextView
                     android:id="@+id/color_rate_yellow"
-                    android:layout_width="120dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/volume_view"
-                    android:layout_below="@+id/volume_view"
-                    android:layout_marginTop="10dp"
                     android:drawableLeft="@mipmap/measure_cy"
                     android:drawablePadding="5dp"
                     android:text="@string/measure_yellow"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toEndOf="@+id/volume_view" />
 
                 <TextView
                     android:id="@+id/color_rate_red"
-                    android:layout_width="120dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/area_view"
-                    android:layout_below="@+id/area_view"
-                    android:layout_marginTop="10dp"
                     android:drawableLeft="@mipmap/measure_cr"
                     android:drawablePadding="5dp"
                     android:text="@string/measure_red"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size"
+                    android:layout_alignBaseline="@+id/color_rate_yellow"
+                    android:layout_alignBottom="@+id/color_rate_yellow"
+                    android:layout_toEndOf="@+id/measure_title" />
 
                 <TextView
                     android:id="@+id/color_rate_black"
-                    android:layout_width="120dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/wound_deep_view"
-                    android:layout_below="@+id/wound_deep_view"
-                    android:layout_marginTop="10dp"
                     android:drawableLeft="@mipmap/measure_cb"
                     android:drawablePadding="5dp"
                     android:text="@string/measure_black"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/rec_menu_title_size" />
+                    android:textSize="@dimen/measure_label_size"
+                    android:layout_alignBaseline="@+id/color_rate_yellow"
+                    android:layout_alignBottom="@+id/color_rate_yellow"
+                    android:layout_toEndOf="@+id/length_view" />
 
             </RelativeLayout>
 

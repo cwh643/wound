@@ -57,7 +57,8 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@mipmap/measure_left_bg"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ImageButton
                 android:id="@+id/btn_photo_w"
@@ -99,6 +100,17 @@
                 android:src="@mipmap/measure_menu_tab" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_save_mbi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:background="@mipmap/btn_save_bg"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/rec_menu_title_size" />
 
         <LinearLayout
             android:id="@+id/edit_bar"
@@ -199,14 +211,14 @@
                     android:id="@+id/min_temp_view"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/measure_v"
-                    android:drawablePadding="5dp"
-                    android:text="最小温度："
-                    android:textColor="@color/measure_title"
                     android:layout_alignBaseline="@+id/max_temp_view"
                     android:layout_alignBottom="@+id/max_temp_view"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="180dp" />
+                    android:layout_marginEnd="180dp"
+                    android:drawableLeft="@mipmap/measure_v"
+                    android:drawablePadding="5dp"
+                    android:text="最小温度："
+                    android:textColor="@color/measure_title" />
 
                 <!--<TextView
                     android:id="@+id/wound_deep_view"

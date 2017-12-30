@@ -40,10 +40,10 @@
     <string name="modify_pw_confirm">Confirm New Password</string>
     <string name="modify_pw_save">Confirm</string>
 
-    <string name="top_menu_base_info">Essential Information</string>
+    <string name="top_menu_base_info">Basic Info</string>
     <string name="top_menu_photo">Photograph</string>
-    <string name="top_menu_archives">Record</string>
-    <string name="top_menu_histroy">Historical Data</string>
+    <string name="top_menu_archives">Details</string>
+    <string name="top_menu_histroy">History data</string>
     <string name="top_menu_upload">Uploading</string>
     <string name="top_menu_save">Save</string>
 
@@ -60,6 +60,7 @@
     <string name="query_patient_name">Patient\'s Name</string>
     <string name="query_query">Query</string>
     <string name="query_add">Add</string>
+    <string name="query_sync">Synchronize</string>
     <string name="query_doc">Doctor（Administrative Office）</string>
     <string name="query_patient">Patient（Admission Numbe）</string>
     <string name="query_record_time">Acquisition Time（Operation）</string>
@@ -72,22 +73,22 @@
     <string name="base_info_age">Age</string>
     <string name="base_info_bed_id">Bed ID</string>
     <string name="base_info_admission">Admission Numbe</string>
-    <string name="base_info_qr_code">scan a QR code</string>
-    <string name="base_info_diagnosis">Admitting Diagnosis</string>
+    <string name="base_info_qr_code">scan QR code</string>
+    <string name="base_info_diagnosis">hospital diagnosis</string>
     <string name="base_info_doctor">Doctor-in-Charge</string>
 
-    <string name="record_complaint">Complaint</string>
-    <string name="record_record">Record</string>
+    <string name="record_complaint">Dictation</string>
+    <string name="record_record">Recorder</string>
     <string name="record_play">Play</string>
-    <string name="record_wound_type">The Wound Type</string>
-    <string name="record_wound_size">Size of the Wound</string>
+    <string name="record_wound_type">Wound Type</string>
+    <string name="record_wound_size">Wound Size</string>
     <string name="record_wound_length">Length</string>
     <string name="record_wound_width">Width</string>
     <string name="record_wound_depth">Depth</string>
     <string name="record_wound_area">Area</string>
     <string name="record_wound_volume">Volume</string>
     <string name="record_wound_time">Formation Time</string>
-    <string name="record_wound_take">Take Steps</string>
+    <string name="record_wound_take">Treatment</string>
     <string name="record_wound_property">Wound Property</string>
     <string name="record_wound_acute">Acute Wound</string>
     <string name="record_wound_chronic">Chronic Wound</string>
@@ -145,8 +146,8 @@
     <string name="camera_model">3D</string>
     <string name="camera_reset_pos">Reset</string>
     <string name="measure">Metrical</string>
-    <string name="measure_back">Photo Film</string>
-    <string name="measure_color">Color</string>
+    <string name="measure_back">Photo</string>
+    <string name="measure_color">3D Photo</string>
     <string name="measure_data">Metrical Data</string>
     <string name="measure_area">Area</string>
     <string name="measure_volume">Volume</string>
@@ -170,8 +171,8 @@
 
     <string name="check_photo">Check Photo</string>
     <string name="take_photo">Capture</string>
-    <string name="take_normal_photo">Capture Normal</string>
-    <string name="take_ir_photo">Capture IR</string>
+    <string name="take_normal_photo">3D Camera</string>
+    <string name="take_ir_photo">IR Camera</string>
     <string name="back">Back</string>
     <string name="no_data">No Data</string>
     <string name="record_time">Time</string>
