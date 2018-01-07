@@ -36,8 +36,9 @@ public class RecordDao {
     }
 
     public void updateSyncFlag(int recordId) {
-        String sql = "update archives_record set sync_flag = 1 where id = ?";
-        db.execSQL(sql, new Object[]{recordId});
+        String sql = "update archives_record set sync_flag = 1 and sync_time = ? where id = ?";
+        String dateString = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+        db.execSQL(sql, new Object[]{dateString, recordId});
     }
 
     public boolean insertRecordInfo(RecordInfo recordInfo) {
@@ -89,7 +90,7 @@ public class RecordDao {
                         "wound_leachate_volume", "wound_leachate_color", "wound_leachate_smell", "wound_heal_all",
                         "wound_heal_position", "wound_doppler",  "wound_cta",  "wound_mr", "wound_petct", "wound_dressing",
                         "wound_dressing_type", "favorites",
-                        "update_time", "complains", "wound_type_desc", "wound_exam", "wound_ache"},
+                        "update_time", "sync_flag", "complains", "wound_type_desc", "wound_exam", "wound_ache"},
                 new Object[]{recordInfo.getWoundType(), recordInfo.getWoundWidth(), recordInfo.getWoundHeight(),
                         recordInfo.getWoundDeep(), recordInfo.getWoundArea(), recordInfo.getWoundVolume(), recordInfo.getWoundTime(), recordInfo.getWoundPosition(),
                         recordInfo.getWoundPositionx(), recordInfo.getWoundPositiony(), recordInfo.getWoundMeasures(), recordInfo.getWoundDescribeClean(),
@@ -98,7 +99,7 @@ public class RecordDao {
                         recordInfo.getWoundLeachateVolume(), recordInfo.getWoundLeachateColor(), recordInfo.getWoundLeachateSmell(), recordInfo.getWoundHealAll(),
                         recordInfo.getWoundHealPosition(), recordInfo.getWoundDoppler(), recordInfo.getWoundCta(), recordInfo.getWoundMr(), recordInfo.getWoundPetct(),
                         recordInfo.getWoundDressing(), recordInfo.getWoundDressingType(), recordInfo.getFavorites(),
-                        DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()), recordInfo.getComplains(),
+                        DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()), 0, recordInfo.getComplains(),
                         recordInfo.getWoundTypeDesc(), recordInfo.getWoundExam(), recordInfo.getWoundAche()},
                 new String[]{"id"},
                 new String[]{""+ recordInfo.getId()});
@@ -185,6 +186,37 @@ public class RecordDao {
             RecordInfo info = warpRecordInfo(map);
             list.add(info);
 
+            String inpatientNo = info.getInpatientNo();
+            sql = " select * from patient_info where inpatient_no = ? ";
+            Map pmap  = db.queryItemMap(sql, new String[] {inpatientNo});
+            if (pmap != null && pmap.get("inpatient_no") != null) {
+                PatientInfo pinfo = PatientDao.warpPatientInfo(pmap);
+                info.setPatientInfo(pinfo);
+            }
+
+            String recordId = "" + info.getId();
+            List<RecordImage> imageList = new ArrayList<RecordImage>();
+            sql = " select * from record_image where record_id = ? and image_type = ? order by create_time desc ";
+            List<Map> imapList  = db.queryListMap(sql, new String[] {recordId, "deep"});
+            if (imapList != null && imapList.size() > 0) {
+                RecordImage image = RecordImageDao.warpRecordImage(imapList.get(0));
+                imageList.add(image);
+            }
+            info.setDeepList(imageList);
+        }
+        return list;
+    }
+
+    public List<RecordInfo> queryListBySyncStatus(int status) {
+        List<RecordInfo> list = new ArrayList<RecordInfo>();
+        String sql = " select * from archives_record where sync_flag = ?";
+        List<Map> mapList = db.queryListMap(sql, new String[] {"" + status});
+        if (mapList == null || mapList.size() == 0) {
+            return list;
+        }
+        for (Map map : mapList) {
+            RecordInfo info = warpRecordInfo(map);
+            list.add(info);
             String inpatientNo = info.getInpatientNo();
             sql = " select * from patient_info where inpatient_no = ? ";
             Map pmap  = db.queryItemMap(sql, new String[] {inpatientNo});

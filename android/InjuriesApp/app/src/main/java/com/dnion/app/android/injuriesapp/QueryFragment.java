@@ -14,9 +14,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 import com.dnion.app.android.injuriesapp.dao.PatientDao;
 import com.dnion.app.android.injuriesapp.dao.PatientInfo;
 import com.dnion.app.android.injuriesapp.dao.RecordDao;
+import com.dnion.app.android.injuriesapp.dao.RecordImage;
+import com.dnion.app.android.injuriesapp.dao.RecordImageDao;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
 import com.dnion.app.android.injuriesapp.dao.UserDao;
 import com.dnion.app.android.injuriesapp.dao.UserInfo;
@@ -30,12 +33,14 @@ import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.MapUtils;
 import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
+import com.dnion.app.android.injuriesapp.utils.XZip;
 import com.squareup.okhttp.Request;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +80,10 @@ public class QueryFragment extends Fragment {
 
     private String selectInpatientNo = "";
 
+    private RecordImageDao recordImageDao;
+
+    private ConfigDao configDao;
+
     public static QueryFragment createInstance() {
         QueryFragment fragment = new QueryFragment();
         Bundle bundle = new Bundle();
@@ -92,6 +101,8 @@ public class QueryFragment extends Fragment {
         recordDao = new RecordDao(mActivity);
         patientDao = new PatientDao(mActivity);
         userDao = new UserDao(mActivity);
+        configDao = new ConfigDao(mActivity);
+        recordImageDao = new RecordImageDao(mActivity);
     }
 
     @Override
@@ -160,6 +171,92 @@ public class QueryFragment extends Fragment {
                         .commit();
             }
         });
+
+        Button btn_sync = (Button)rootView.findViewById(R.id.btn_sync);
+        btn_sync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //uploadRecordInfo(mActivity.getPatientInfo(), mActivity.getRecordInfo());
+                syncRecordInfo();
+            }
+        });
+    }
+
+    private void syncRecordInfo() {
+        //获取未同步的数据
+        List<RecordInfo> syncRecordList = recordDao.queryListBySyncStatus(0);
+        if (syncRecordList == null || syncRecordList.size() == 0) {
+            return;
+        }
+
+        AlertDialogUtil.showAlertDialog(mActivity, mActivity.getString(R.string.message_title_tip), mActivity.getString(R.string.message_wait));
+
+        int allCnt = syncRecordList.size();
+        int successCnt = 0;
+        int failCnt = 0;
+        //同步数据
+        for (RecordInfo recordInfo : syncRecordList) {
+            boolean flag = uploadRecordInfo(recordInfo);
+            if (flag) {
+                recordDao.updateSyncFlag(recordInfo.getId());
+                successCnt++;
+            } else {
+                failCnt++;
+            }
+        }
+        ToastUtil.showLongToast(mActivity, "同步创伤信息总数:" + allCnt + "，成功:" + successCnt + "条，失败" + failCnt+ "条！");
+        //更新记录状态
+
+        AlertDialogUtil.dismissAlertDialog(mActivity);
+   };
+
+    boolean sync_flag = false;
+    private boolean uploadRecordInfo(RecordInfo recordInfo) {
+        sync_flag = false;
+        try {
+            final int recordId = recordInfo.getId();
+            String recordInfoJson = MapUtils.mGson.toJson(recordInfo);
+            String uuid = recordInfo.getUuid();
+            String srcFolder = mActivity.getRecordPath(uuid);
+            String zipFile = mActivity.getBaseDir() + File.separator + "recordInfo.zip";
+            XZip.ZipFolder(srcFolder, zipFile);
+            final String deviceId = configDao.queryValue(CommonUtil.DEVICE_ID);
+            final String remoteUrl = configDao.queryValue(CommonUtil.REMOTE_URL);
+
+            //AlertDialogUtil.showAlertDialog(mActivity, mActivity.getString(R.string.message_title_tip), mActivity.getString(R.string.message_wait));
+            String url = CommonUtil.initUrl(remoteUrl, "syncRecordInfo");
+            Log.d(TAG, "同步创伤信息,url=" + url);
+            OkHttpClientManager.postAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
+                        @Override
+                        public void onError(Request request, Exception e) {
+                            //AlertDialogUtil.dismissAlertDialog(mActivity);
+                            //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
+                            Log.e(TAG, "同步创伤信息失败", e);
+                        }
+
+                        @Override
+                        public void onResponse(String resultStr) {
+                            //AlertDialogUtil.dismissAlertDialog(mActivity);
+                            PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
+                            if (!res.isSuccess()) {
+                                String message = res.getMessage();
+                                //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
+                            } else {
+                                //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
+                                sync_flag = true;
+                                mActivity.updateSyncFlag(recordId);
+                            }
+                        }
+                    },new File(zipFile), "record",
+                    new OkHttpClientManager.Param("recordInfo", recordInfoJson),
+                    new OkHttpClientManager.Param("deviceId", deviceId));
+
+        } catch (Exception e) {
+            Log.e(TAG, "同步创伤信息失败", e);
+            //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
+        }
+        return sync_flag;
+
     }
 
     private void queryRecordList(String inpatientNo) {
