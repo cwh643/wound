@@ -741,7 +741,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
     }
 
     private double filterPoint(Mat depth, int x, int y) {
-        return getDeep(mFilterDepth.get(y, x));
+        double deep = getDeep(mFilterDepth.get(y, x));
+        return deep * 0.5;
     }
 
     private void clacColorRate(int color, ModelPointinfo mi) {
@@ -762,8 +763,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void clacArea() {
         List<Float> vertexList = deepCameraInfo.getVertexList();
         List<Float> colorList = deepCameraInfo.getColorList();
-        //Mat mDepth = deepCameraInfo.getDepthMat();
-        Mat mDepth = mFilterDepth;
+        Mat mDepth = deepCameraInfo.getDepthMat();
+        //Mat mDepth = mFilterDepth;
         Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
         vertexList.clear();
         colorList.clear();

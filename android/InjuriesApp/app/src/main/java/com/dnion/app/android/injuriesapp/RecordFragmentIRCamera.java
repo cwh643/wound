@@ -81,7 +81,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
     Bitmap mRgbBitmap = Bitmap.createBitmap(160, 120, Bitmap.Config.ARGB_8888);
     Bitmap mRgbTrasBitmap = Bitmap.createBitmap(120, 160, Bitmap.Config.ARGB_8888);
     //Bitmap mDepthBitmap = Bitmap.createBitmap(DEFAULT_PREVIEW_WIDTH, DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
-    Bitmap mDepthBitmap = Bitmap.createBitmap(GlobalDef.RES_COLOR_WIDTH, GlobalDef.RES_COLOR_HEIGHT, Bitmap.Config.RGB_565);
+    Bitmap mDepthBitmap = Bitmap.createBitmap(GlobalDef.RES_COLOR_WIDTH_320, GlobalDef.RES_COLOR_HEIGHT_240, Bitmap.Config.RGB_565);
     private Button mOpenButton;
     private ImageButton mShotButton;
     private TextView mParamView;
@@ -106,7 +106,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
     @Override
     public void onStart() {
         super.onStart();
-        irCamera.init(mActivity);
+        irCamera.init(mActivity, "");
         theHandler.postDelayed(mRefreshThread, 1000);
     }
 

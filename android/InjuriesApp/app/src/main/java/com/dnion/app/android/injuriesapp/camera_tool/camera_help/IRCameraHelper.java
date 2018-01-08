@@ -49,12 +49,13 @@ public class IRCameraHelper extends AbstractCameraHelper {
      */
     private double[] mTempBuffer;
 
-    private int mWidth = GlobalDef.RES_COLOR_WIDTH;
-    private int mHeight = GlobalDef.RES_COLOR_HEIGHT;
+    private int mWidth = GlobalDef.RES_COLOR_WIDTH_320;
+    private int mHeight = GlobalDef.RES_COLOR_HEIGHT_240;
     private IrSdk irHandle;
 
-    public void init(Context context) {
-        super.init(context);
+    @Override
+    public void init(Context context, String size) {
+        super.init(context, size);
         try {
             irHandle = new IrSdk(context);
         } catch (Exception e) {
@@ -68,7 +69,7 @@ public class IRCameraHelper extends AbstractCameraHelper {
     }
 
     @Override
-    protected void initSize() {
+    protected void initSize(String size) {
         mWidth = GlobalDef.RES_IR_RGB_WIDTH;
         mHeight = GlobalDef.RES_IR_RGB_HEIGHT;
     }
@@ -87,6 +88,20 @@ public class IRCameraHelper extends AbstractCameraHelper {
             rgbBitmap.setPixels(mImageBuffer, 0, 120, 0, 0, 120, 160);
             return 0;
         }
+        return ret;
+    }
+
+    public int FetchDataTest(Mat depthMat, Bitmap rgbBitmap) {
+        int ret = 0;
+        if (ret == irHandle.captureImage(mImageBuffer, mImageBuffer.length * Integer.SIZE,
+                mTempBuffer, mTempBuffer.length * Double.SIZE)) {
+            rgbBitmap.setPixels(mImageBuffer, 0, 120, 0, 0, 120, 160);
+        }
+        double max_temp = 0;
+        for (int i = 0; i < mTempBuffer.length; i++) {
+            max_temp = Math.max(max_temp, mTempBuffer[i]);
+        }
+        irHandle.setTempRange(100);
         return ret;
     }
 

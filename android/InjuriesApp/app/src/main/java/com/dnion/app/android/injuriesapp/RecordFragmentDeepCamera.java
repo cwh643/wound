@@ -192,7 +192,7 @@ public class RecordFragmentDeepCamera extends Fragment {
                 cameraHelper = new AbCameraHelper();
                 break;
         }
-        cameraHelper.init(this.getContext());
+        cameraHelper.init(this.getContext(), camera_size);
         mRgbBitmap = cameraHelper.getRgbBitmap();
         mDepthBitmap = cameraHelper.getDepthBitmap();
         mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);

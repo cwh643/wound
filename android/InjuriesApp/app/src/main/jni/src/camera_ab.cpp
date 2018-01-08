@@ -220,7 +220,7 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
             int fi = i - y_diff;
             int fj = j - x_diff;
             // LOGD("=== trans data %d,%d,%d,%d,%d", i,j,fi,fj, (int)*pView);
-            short value = *pView;
+            short &value = *pView;
             if (value < near || value > far) {
                 depth->at<short>(fi, width - fj - 1) = 0;
                 continue;

@@ -17,8 +17,8 @@ public class GlobalDef {
     public static final int RES_COLOR_HEIGHT_480 = 480;//彩色图显示高度，在非UVC下设置为与RES_COLOR_HEIGHT大小一致，否则与RES_UVC_HEIGHT一致
     public static final int RES_COLOR_WIDTH_480 = 480;//彩色图显示宽度，在非UVC下设置为与RES_COLOR_WIDTH大小一致，否则与RES_UVC_WIDTH一致
     public static final int RES_COLOR_HEIGHT_360 = 360;//彩色图显示高度，在非UVC下设置为与RES_COLOR_HEIGHT大小一致，否则与RES_UVC_HEIGHT一致
-    public static final int RES_COLOR_WIDTH = 320;//普通摄像头分辨率
-    public static final int RES_COLOR_HEIGHT = 240;
+    public static final int RES_COLOR_WIDTH_320 = 320;//普通摄像头分辨率
+    public static final int RES_COLOR_HEIGHT_240 = 240;
     public static final int RES_CALC_WIDTH = 1920;//为了没有毛边，设置的比较大
     public static final int RES_CALC_HEIGHT = 1440;//为了没有毛边，设置的比较大
     public static final int RES_DEPTH_WIDTH = 640;//深度图分辨率

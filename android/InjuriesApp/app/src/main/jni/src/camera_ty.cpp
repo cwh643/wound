@@ -157,7 +157,8 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
                 LOGD("RGB YUYV");
                 cv::Mat yuv(pColor->rows, pColor->cols
                         , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YUYV);
+                // 注意 这里是转换为RGB，源代码中是BGR，是sdk的bug还是demo写错了需要确认
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2RGB_YUYV);
             } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
                 LOGD("RGB RGB");
                 cv::Mat rgb(pColor->rows, pColor->cols
@@ -289,7 +290,7 @@ int frameHandler(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbM
             for(int i = ly; i < ry; i++)
             {
                 for(int j = lx; j < rx; j++) {
-                    short value = depth.at<short>(i, j);
+                    short &value = depth.at<short>(i, j);
                     
                     // LOGD("     get value  %d, %d", (int)value, min);
                     min = min > value && value > 400 ? value : min;
@@ -406,6 +407,11 @@ int frameHandler(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbM
     ASSERT_OK( TYEnqueueBuffer(pData->hDevice, frame.userBuffer, frame.bufferSize) );
 }
 
+void trans_width_and_log(int i, float &value, int factor) {
+    LOGD("=== index:%d, value:%f", i, (float)value);
+    value = value / factor;
+}
+
 int OpenDevice(jint width, jint heigth) {
 	   LOGD("=== Init lib");
 	    ASSERT_OK( TYInitLib() );
@@ -496,6 +502,13 @@ int OpenDevice(jint width, jint heigth) {
                 cb_data.colorD.create(5, 1, CV_32FC1);
                 memcpy(cb_data.colorM.data, color_intri.data, sizeof(color_intri.data));
                 memcpy(cb_data.colorD.data, color_dist.data, sizeof(float)*cb_data.colorD.rows);
+                if (image_size == TY_IMAGE_MODE_640x480) {
+                    // for640
+                    trans_width_and_log(0, cb_data.colorM.at<float>(0, 0), 2);
+                    trans_width_and_log(2, cb_data.colorM.at<float>(0, 2), 2);
+                    trans_width_and_log(4, cb_data.colorM.at<float>(1, 1), 2);
+                    trans_width_and_log(5, cb_data.colorM.at<float>(1, 2), 2);
+                }
             }
             else
             {//let's try  to load from file...

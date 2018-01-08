@@ -167,6 +167,7 @@ public class DeepModelDisplayViewV2 extends GLSurfaceView implements GLSurfaceVi
                 Point pt2 = new Point(new Double(ary[2]), new Double(ary[3]));
                 Point pt3 = new Point(new Double(ary[4]), new Double(ary[5]));
                 if (!deepMap.containsKey(pt1) || !deepMap.containsKey(pt2) || !deepMap.containsKey(pt3)) {
+                    Log.e(TAG, "error point" + pt1 + "," + pt2 + "," + pt3);
                     continue;
                 }
                 for (int k = 0; k < 6; k += 2) {
@@ -174,38 +175,40 @@ public class DeepModelDisplayViewV2 extends GLSurfaceView implements GLSurfaceVi
                     transVertex.add(new Float(ary[k]) - fix_width);
                     transVertex.add(new Float(ary[k + 1]) - fix_height);
 
-                    if (deepMap.containsKey(pt)) {
-                        PointInfo3D pinfo = deepMap.get(pt);
-                        Float deep = new Float(min_deep - pinfo.z);
-                        //if (deep < GlobalDef.MODEL_MIN_DEEP) {
-                        //    deep = GlobalDef.MODEL_MIN_DEEP;
-                        //}
-                        transVertex.add(deep);
-                        transColor.add(pinfo.colorR);
-                        transColor.add(pinfo.colorG);
-                        transColor.add(pinfo.colorB);
-                        transColor.add(pinfo.colorA);
-                    } else {
-                        transVertex.add(new Float(0));
-                        transColor.add(0f);
-                        transColor.add(0f);
-                        transColor.add(0f);
-                        transColor.add(0f);
-                    }
+                    PointInfo3D pinfo = deepMap.get(pt);
+                    Float deep = new Float(min_deep - pinfo.z);
+                    Log.d(TAG, "min :" + min_deep + " model_deep:" + deep);
+                    //if (deep < GlobalDef.MODEL_MIN_DEEP) {
+                    //    deep = GlobalDef.MODEL_MIN_DEEP;
+                    //}
+                    transVertex.add(deep);
+                    transColor.add(pinfo.colorR);
+                    transColor.add(pinfo.colorG);
+                    transColor.add(pinfo.colorB);
+                    transColor.add(pinfo.colorA);
                 }
 
 
             }
 
         }
+
         mVertex = new float[transVertex.size()];
         mColor = new float[transColor.size()];
-        for (int i = 0; i < mVertex.length; i++) {
+        for (
+                int i = 0;
+                i < mVertex.length; i++)
+
+        {
             mVertex[i] = transVertex.get(i);
         }
-        for (int i = 0; i < transColor.size(); i++) {
+        for (
+                int i = 0; i < transColor.size(); i++)
+
+        {
             mColor[i] = transColor.get(i);
         }
+
     }
 
 

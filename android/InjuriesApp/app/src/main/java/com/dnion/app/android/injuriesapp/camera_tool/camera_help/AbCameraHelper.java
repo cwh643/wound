@@ -52,10 +52,9 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
     private boolean depthStarted = false;
     boolean usbPermissonGrant = false;
 
-
-    public void init(Context context) {
-        super.init(context);
-
+    @Override
+    public void init(Context context, String size) {
+        super.init(context, size);
         nativeUtils = new AbNativeUtils();
         nativeUtils.deep_lx = param.deep_lx;
         nativeUtils.deep_rx = param.deep_rx;
@@ -72,11 +71,11 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
         OpenNI.initialize();
     }
 
-    @Override
-    protected void initSize() {
-        mWidth = GlobalDef.RES_COLOR_WIDTH;
-        mHeight = GlobalDef.RES_COLOR_HEIGHT;
-    }
+    //@Override
+    //protected void initSize() {
+    //    mWidth = GlobalDef.RES_COLOR_WIDTH;
+    //    mHeight = GlobalDef.RES_COLOR_HEIGHT;
+    //}
 
     public void onResume(Callback callback) {
         this.mLoadCallback = callback;
@@ -193,6 +192,34 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
             rgbStarted = true;
         }
 
+        try {
+            //OpenNI.waitForAnyStream(rgbStreams, 1000);
+            OpenNI.waitForAnyStream(depthStreams, 1000);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+            return GlobalDef.TIME_OUT;
+        }
+        VideoFrameRef rgbFrame = mRgbStream.readFrame();
+        nativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
+        Utils.matToBitmap(mRgbMat, rgbBitmap);
+
+        VideoFrameRef depthFrame = mDepthStream.readFrame();
+        nativeUtils.depth2mat(depthFrame.getData(), depthMat.getNativeObjAddr(), depthFrame.getStrideInBytes());
+        //计算中心点距离
+        centerDeep = nativeUtils.deep_center_deep;
+        return GlobalDef.SUCC;
+    }
+
+    public int FetchFinalDataBk(Mat depthMat, Bitmap rgbBitmap) {
+        if (!mInit_Ok) {
+            return GlobalDef.NOT_READY;
+        }
+        if (!rgbStarted) {
+            mDepthStream.start();
+            mRgbStream.start();
+            rgbStarted = true;
+        }
+
         Mat[] mats = new Mat[FINAL_DEPTH_NUM];
         for (int i = 0; i < FINAL_DEPTH_NUM; i++) {
             try {
@@ -211,7 +238,7 @@ public class AbCameraHelper extends AbstractCameraHelper implements OpenNIHelper
         nativeUtils.rgb2mat(rgbFrame.getData(), mRgbMat.getNativeObjAddr(), rgbFrame.getStrideInBytes());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
 
-        // 补全点击
+        // 补全点集
         double maxNumValue = 0;
         int maxNum = 0;
         Map<Double, Integer> cacheMap = new HashMap<>();

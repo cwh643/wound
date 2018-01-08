@@ -32,20 +32,9 @@ public abstract class AbstractCameraHelper {
     protected int mHeight = GlobalDef.RES_COLOR_HEIGHT_480;
     protected CameraParam param = new CameraParam();
 
-    public void init(Context context) {
-        mContext = context;
-        initSize();
-        mRgbMat = new Mat(mHeight, mWidth, CvType.CV_8UC3);
-        param.camera_size_factor = new Float(mWidth) / 640;
-        param.deep_lx = new Float(160 * param.camera_size_factor).intValue();
-        param.deep_ly = new Float(120 * param.camera_size_factor).intValue();
-        param.deep_rx = new Float(480 * param.camera_size_factor).intValue();
-        param.deep_ry = new Float(360 * param.camera_size_factor).intValue();
-    }
-
     public void init(Context context, String size) {
         mContext = context;
-        initSize();
+        initSize(size);
         mRgbMat = new Mat(mHeight, mWidth, CvType.CV_8UC3);
         param.camera_size_factor = new Float(mWidth) / 640;
         param.deep_lx = new Float(160 * param.camera_size_factor).intValue();
@@ -54,11 +43,21 @@ public abstract class AbstractCameraHelper {
         param.deep_ry = new Float(360 * param.camera_size_factor).intValue();
     }
 
-
-
-    protected void initSize() {
-        mWidth = GlobalDef.RES_COLOR_WIDTH_640;
-        mHeight = GlobalDef.RES_COLOR_HEIGHT_480;
+    protected void initSize(String size) {
+        switch (size) {
+            case "1280x960":
+                mWidth = GlobalDef.RES_COLOR_WIDTH_1280;
+                mHeight = GlobalDef.RES_COLOR_HEIGHT_960;
+                break;
+            case "640x480":
+                mWidth = GlobalDef.RES_COLOR_WIDTH_640;
+                mHeight = GlobalDef.RES_COLOR_HEIGHT_480;
+                break;
+            case "320x240":
+                mWidth = GlobalDef.RES_COLOR_WIDTH_320;
+                mHeight = GlobalDef.RES_COLOR_HEIGHT_240;
+                break;
+        }
     }
 
     protected int transIntParam(int p_value) {

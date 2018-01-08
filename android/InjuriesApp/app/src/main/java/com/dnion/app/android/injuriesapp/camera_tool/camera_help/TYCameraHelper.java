@@ -8,11 +8,10 @@ import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 
 public class TYCameraHelper extends TYCameraHelper8x {
     String TAG = "obColor";
-
-    @Override
-    protected void initSize() {
-        mWidth = GlobalDef.RES_COLOR_WIDTH_480;
-        mHeight = GlobalDef.RES_COLOR_HEIGHT_360;
-    }
+    //@Override
+    //protected void initSize() {
+    //    mWidth = GlobalDef.RES_COLOR_WIDTH_480;
+    //    mHeight = GlobalDef.RES_COLOR_HEIGHT_360;
+    //}
 
 }

@@ -29,8 +29,9 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
     boolean mInit_Ok = false;
     protected TyNativeUtils nativeUtils;
 
-    public void init(Context context) {
-        super.init(context);
+    @Override
+    public void init(Context context, String size) {
+        super.init(context, size);
         nativeUtils = new TyNativeUtils();
         nativeUtils.deep_lx = param.deep_lx;
         nativeUtils.deep_rx = param.deep_rx;
@@ -43,15 +44,14 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         //nativeUtils.deep_x_diff = transIntParam(0);
         //nativeUtils.deep_y_diff = transIntParam(0);
         nativeUtils.deep_center_dis = transIntParam(GlobalDef.DEPTH_CENTER_DIS);
-        //cameraSurfaceView = (CameraSurfaceView) rootView.findViewById(R.id.camera_surface_view);
-        //cameraSurfaceView.init();
-        //cameraSurfaceView.setPrewViewCallBack(mPreviewCallback);
+
     }
 
     @Override
-    protected void initSize() {
-        mWidth = GlobalDef.RES_COLOR_WIDTH_1280;
-        mHeight = GlobalDef.RES_COLOR_HEIGHT_960;
+    protected void initSize(String size) {
+        super.initSize(size);
+        //mWidth = GlobalDef.RES_COLOR_WIDTH_1280;
+        //mHeight = GlobalDef.RES_COLOR_HEIGHT_960;
     }
 
     public void onResume(Callback callback) {
