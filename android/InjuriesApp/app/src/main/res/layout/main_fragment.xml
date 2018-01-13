@@ -17,7 +17,7 @@
         <RelativeLayout
             android:id="@+id/sub_menu_bar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:background="#c9c9cb"
             android:orientation="horizontal"
             android:paddingLeft="20dp">
@@ -25,11 +25,11 @@
             <Button
                 android:id="@+id/btn_base_info"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@mipmap/menu_btn_select"
                 android:drawableLeft="@mipmap/icon_baseinfo"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
                 android:text="@string/top_menu_base_info"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
@@ -37,12 +37,12 @@
             <Button
                 android:id="@+id/btn_photo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_base_info"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_photo"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
                 android:text="@string/top_menu_photo"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
@@ -50,12 +50,12 @@
             <Button
                 android:id="@+id/btn_archives"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_photo"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_archives"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
                 android:text="@string/top_menu_archives"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
@@ -63,12 +63,12 @@
             <Button
                 android:id="@+id/btn_history"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_archives"
                 android:background="@mipmap/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_favorites"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
                 android:text="@string/top_menu_histroy"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
@@ -94,8 +94,8 @@
                 android:layout_toRightOf="@id/btn_history"
                 android:background="@drawable/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_favorites"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
                 android:text="@string/top_menu_upload"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />

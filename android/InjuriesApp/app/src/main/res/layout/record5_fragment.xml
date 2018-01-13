@@ -171,11 +171,20 @@
                             android:text="@string/record_wound_local_edema"
                             android:tag="04" />
 
+                    </LinearLayout>
+                </TableRow>
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="horizontal">
+
                         <CheckBox
                             android:id="@+id/effect_element_local_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginLeft="10dp"
                             android:textSize="@dimen/rec_title_size"
                             android:text="@string/record_wound_local_dry"
                             android:tag="05" />

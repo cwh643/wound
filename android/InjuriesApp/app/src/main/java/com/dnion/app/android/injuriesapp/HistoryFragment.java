@@ -143,10 +143,14 @@ public class HistoryFragment extends Fragment {
         mBarChart.setDrawBarShadow(false);
         mBarChart.setDrawGridBackground(false);
         //设置图例在上方
-        mBarChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        Legend legend = mBarChart.getLegend();
+        legend.setTextSize(16);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         mBarChart.getAxisRight().setEnabled(false); // 隐藏右边 的坐标轴
 
         XAxis xAxis = mBarChart.getXAxis();
+        xAxis.setTextSize(14);
+        xAxis.setLabelRotationAngle(30);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置横坐标在底部
         xAxis.setGridColor(Color.TRANSPARENT);//去掉网格中竖线的显
         xAxis.setLabelCount(list.size(), false);
@@ -162,6 +166,7 @@ public class HistoryFragment extends Fragment {
         });
 
         YAxis yAxis = mBarChart.getAxisLeft();
+        yAxis.setTextSize(14);
         yAxis.setSpaceBottom(0);
         yAxis.setAxisMinimum(0);
         yAxis.setValueFormatter(new IAxisValueFormatter() {
@@ -228,10 +233,14 @@ public class HistoryFragment extends Fragment {
         mLineChart.setScaleEnabled(false);// 是否可以缩放
 
         //设置图例在上方
-        mLineChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        Legend legend = mLineChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+        legend.setTextSize(16);
         mLineChart.getAxisRight().setEnabled(false); // 隐藏右边 的坐标轴
 
         XAxis xAxis = mLineChart.getXAxis();
+        xAxis.setTextSize(14);
+        xAxis.setLabelRotationAngle(30);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置横坐标在底部
         xAxis.setGridColor(Color.TRANSPARENT);//去掉网格中竖线的显示
         //xAxis.setGranularity(1f); // one hour
@@ -253,6 +262,7 @@ public class HistoryFragment extends Fragment {
 
 
         YAxis yAxis = mLineChart.getAxisLeft();
+        yAxis.setTextSize(14);
         yAxis.setSpaceBottom(0);
         yAxis.setAxisMinimum(0);
         yAxis.setValueFormatter(new IAxisValueFormatter() {
@@ -490,23 +500,23 @@ public class HistoryFragment extends Fragment {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
+            int data_text_size = 16;
             viewHolder.text_time.setText(goods.getRecordTime());
-            viewHolder.text_time.setTextSize(13);
+            viewHolder.text_time.setTextSize(data_text_size);
             viewHolder.text_height.setText("" + formatFloatValue(goods.getWoundHeight()));
-            viewHolder.text_height.setTextSize(13);
+            viewHolder.text_height.setTextSize(data_text_size);
             viewHolder.text_width.setText("" + formatFloatValue(goods.getWoundWidth()));
-            viewHolder.text_width.setTextSize(13);
+            viewHolder.text_width.setTextSize(data_text_size);
             viewHolder.text_area.setText("" + formatFloatValue(goods.getWoundArea()));
-            viewHolder.text_area.setTextSize(13);
+            viewHolder.text_area.setTextSize(data_text_size);
             viewHolder.text_volume.setText("" + formatFloatValue(goods.getWoundVolume()));
-            viewHolder.text_volume.setTextSize(13);
+            viewHolder.text_volume.setTextSize(data_text_size);
             viewHolder.text_red.setText("" + formatFloatValue(goods.getWoundColorRed()));
-            viewHolder.text_red.setTextSize(13);
+            viewHolder.text_red.setTextSize(data_text_size);
             viewHolder.text_yellow.setText("" + formatFloatValue(goods.getWoundColorYellow()));
-            viewHolder.text_yellow.setTextSize(13);
+            viewHolder.text_yellow.setTextSize(data_text_size);
             viewHolder.text_black.setText("" + formatFloatValue(goods.getWoundColorBlack()));
-            viewHolder.text_black.setTextSize(13);
+            viewHolder.text_black.setTextSize(data_text_size);
             return convertView;
         }
     }
