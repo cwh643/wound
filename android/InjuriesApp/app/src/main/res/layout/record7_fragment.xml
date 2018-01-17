@@ -39,7 +39,7 @@
                         android:orientation="horizontal">
                         <Button
                             android:id="@+id/btn_mr_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="50dp"
                             android:background="@mipmap/btn_photo_bg"
@@ -49,7 +49,7 @@
 
                         <Button
                             android:id="@+id/btn_mr"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_capture"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@id/btn_mr_image"
@@ -80,7 +80,7 @@
                         android:layout_marginLeft="10dp">
                         <Button
                             android:id="@+id/btn_petct_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="50dp"
                             android:background="@mipmap/btn_photo_bg"
@@ -90,7 +90,7 @@
 
                         <Button
                             android:id="@+id/btn_petct"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_capture"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_toRightOf="@id/btn_petct_image"

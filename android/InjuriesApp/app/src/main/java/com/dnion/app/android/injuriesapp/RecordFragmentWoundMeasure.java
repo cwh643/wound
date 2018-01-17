@@ -327,8 +327,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         MeasureButton measure_btn_depth = (MeasureButton) rootView.findViewById(R.id.measure_btn_depth);
         measure_btn_depth.setText(getString(R.string.measure_deep));
-        measure_btn_depth.setImage(R.mipmap.measure_delete);
-        measure_btn_depth.setSelectImage(R.mipmap.measure_delete_s);
+        measure_btn_depth.setImage(R.mipmap.measure_ok);
+        measure_btn_depth.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_depth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

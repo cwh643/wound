@@ -30,19 +30,20 @@
                         >
 
                         <TextView
-                            android:layout_width="230dp"
+                            android:layout_width="330dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/record_wound_ir_photo"
                             android:textSize="@dimen/rec_title_size" />
+
                         <Button
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="35dp"
                             android:background="@mipmap/btn_photo_bg"
+                            android:text="@string/check_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/check_photo" />
+                            android:textSize="@dimen/rec_title_size" />
                     </LinearLayout>
 
                 </TableRow>
@@ -55,24 +56,25 @@
                         >
 
                         <TextView
-                            android:layout_width="230dp"
+                            android:layout_width="330dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/record_wound_doppler"
                             android:textSize="@dimen/rec_title_size" />
+
                         <Button
                             android:id="@+id/btn_dpl_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="35dp"
                             android:background="@mipmap/btn_photo_bg"
+                            android:text="@string/check_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/check_photo" />
+                            android:textSize="@dimen/rec_title_size" />
 
                         <Button
                             android:id="@+id/btn_dpl_camera"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_capture"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginLeft="20dp"
@@ -94,24 +96,25 @@
                         >
 
                         <TextView
-                            android:layout_width="230dp"
+                            android:layout_width="330dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/record_wound_cta"
                             android:textSize="@dimen/rec_title_size" />
+
                         <Button
                             android:id="@+id/btn_cta_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="35dp"
                             android:background="@mipmap/btn_photo_bg"
+                            android:text="@string/check_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/check_photo" />
+                            android:textSize="@dimen/rec_title_size" />
 
                         <Button
                             android:id="@+id/btn_cta_camera"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_capture"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginLeft="20dp"
@@ -132,24 +135,25 @@
                         >
 
                         <TextView
-                            android:layout_width="230dp"
+                            android:layout_width="330dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/record_wound_inspection"
                             android:textSize="@dimen/rec_title_size" />
+
                         <Button
                             android:id="@+id/btn_exam_image"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_take_photo"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="35dp"
                             android:background="@mipmap/btn_photo_bg"
+                            android:text="@string/check_photo"
                             android:textColor="@color/btn_title"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/check_photo" />
+                            android:textSize="@dimen/rec_title_size" />
 
                         <Button
                             android:id="@+id/btn_exam_camera"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/record_capture"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginLeft="20dp"

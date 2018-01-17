@@ -26,7 +26,7 @@
     <string name="top_menu_new">New Folder</string>
     <string name="top_menu_query">Inquiry</string>
     <string name="top_menu_setting">Settings</string>
-    <string name="top_menu_modify_pw">Change Password</string>
+    <string name="top_menu_modify_pw">Password</string>
     <string name="top_menu_favorites">Favorites</string>
 
     <string name="setting_device_id">Device ID(Must be the only)</string>
@@ -101,7 +101,7 @@
     <string name="record_wound_limpidity">Limpidity</string>
     <string name="record_wound_blood">Blood Samples</string>
     <string name="record_wound_yellow">Yellow Pus</string>
-    <string name="record_wound_green">Green and Yellow Pus</string>
+    <string name="record_wound_green">Green&amp;Yellow Pus</string>
     <string name="record_wound_brownness">Brownness</string>
     <string name="record_wound_smell">Seepage Smell</string>
     <string name="record_wound_tasteless">Tasteless</string>
@@ -134,10 +134,10 @@
     <string name="record_wound_mr">MRI of Wound and Surrounding Tissue</string>
     <string name="record_wound_petct">PETCT of  Wound and Surrounding Tissue</string>
     <string name="record_wound_clear_level">The Cleanliness of the Wound</string>
-    <string name="record_wound_clear">Cleaning Wound</string>
-    <string name="record_wound_cont">Contaminated Wound</string>
-    <string name="record_wound_infected">Infected Wound</string>
-    <string name="record_wound_bacteria">The Type of Bacteria</string>
+    <string name="record_wound_clear">Cleaning</string>
+    <string name="record_wound_cont">Contaminated</string>
+    <string name="record_wound_infected">Infected</string>
+    <string name="record_wound_bacteria">Type of Bacteria</string>
     <string name="record_wound_base_color">The Base Color of the Wound</string>
     <string name="record_wound_skin">The Skin Around the Wound</string>
 

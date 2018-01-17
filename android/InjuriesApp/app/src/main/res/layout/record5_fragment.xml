@@ -47,24 +47,6 @@
                             android:tag="01" />
 
                         <CheckBox
-                            android:id="@+id/effect_element_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/record_wound_factors_malnutrition"
-                            android:tag="02" />
-
-                        <CheckBox
-                            android:id="@+id/effect_element_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/record_wound_factors_diabetes"
-                            android:tag="03" />
-
-                        <CheckBox
                             android:id="@+id/effect_element_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,12 +73,45 @@
                         android:orientation="horizontal">
 
                         <CheckBox
-                            android:id="@+id/effect_element_5"
+                            android:id="@+id/effect_element_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/rec_title_size"
+                            android:text="@string/record_wound_factors_malnutrition"
+                            android:tag="02" />
+
+                        <CheckBox
+                            android:id="@+id/effect_element_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
                             android:text="@string/record_wound_factors_immune"
                             android:tag="05" />
+                        <CheckBox
+                            android:id="@+id/effect_element_8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="@string/record_wound_factors_hormone"
+                            android:tag="08" />
+                    </LinearLayout>
+                </TableRow>
+                <TableRow android:padding="10dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal">
+                        <CheckBox
+                            android:id="@+id/effect_element_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/rec_title_size"
+                            android:text="@string/record_wound_factors_diabetes"
+                            android:tag="03" />
+
 
                         <CheckBox
                             android:id="@+id/effect_element_6"
@@ -107,14 +122,7 @@
                             android:text="@string/record_wound_factors_coagulant"
                             android:tag="06" />
 
-                        <CheckBox
-                            android:id="@+id/effect_element_8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:textSize="@dimen/rec_title_size"
-                            android:text="@string/record_wound_factors_hormone"
-                            android:tag="08" />
+
 
                     </LinearLayout>
                 </TableRow>
