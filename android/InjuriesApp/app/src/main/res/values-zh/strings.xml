@@ -154,6 +154,7 @@
     <string name="measure_length">长度</string>
     <string name="measure_width">宽度</string>
     <string name="measure_deep">深度</string>
+    <string name="measure_temp">温度</string>
     <string name="measure_model">模型</string>
     <string name="measure_pattern">模式</string>
     <string name="camera_shot">拍照</string>

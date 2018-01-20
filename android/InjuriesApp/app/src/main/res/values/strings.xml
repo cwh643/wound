@@ -154,6 +154,7 @@
     <string name="measure_length">Length</string>
     <string name="measure_width">Width</string>
     <string name="measure_deep">Depth</string>
+    <string name="measure_temp">Temp</string>
     <string name="measure_model">Model</string>
     <string name="measure_pattern">Pattern</string>
     <string name="camera_shot">Take Photo</string>

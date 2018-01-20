@@ -173,7 +173,7 @@
                 android:background="@null"
                 android:src="@mipmap/measure_wd"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
-                android:text="@string/measure_model" />
+                android:text="@string/measure_temp" />
 
             <ImageButton
                 android:id="@+id/btn_measure_bar"
