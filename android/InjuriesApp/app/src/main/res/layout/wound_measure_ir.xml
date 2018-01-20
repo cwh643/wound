@@ -33,19 +33,22 @@
             android:id="@+id/legend_image"
             android:layout_width="50px"
             android:layout_height="@dimen/image_measure_heigth"
-            android:src="@mipmap/ir_legend" />
+            android:src="@mipmap/ir_legend"/>
 
         <ImageView
-            android:id="@+id/width_image"
+            android:id="@+id/temp_point_image"
             android:layout_width="@dimen/image_measure_width"
             android:layout_height="@dimen/image_measure_heigth"
-            android:background="#00000000" />
+            android:background="#00000000"
+            />
 
         <ImageView
             android:id="@+id/area_image"
             android:layout_width="@dimen/image_measure_width"
             android:layout_height="@dimen/image_measure_heigth"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:alpha="0.5"
+             />
     </FrameLayout>
 
     <RelativeLayout
@@ -143,6 +146,43 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/measure_bar"
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="213dp"
+            android:background="@mipmap/measure_right_bg"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/measure_btn_area"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:src="@mipmap/measure_sd"
+                android:text="@string/measure_area" />
+
+            <Button
+                android:id="@+id/measure_btn_temp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:src="@mipmap/measure_wd"
+                android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:text="@string/measure_model" />
+
+            <ImageButton
+                android:id="@+id/btn_measure_bar"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:src="@mipmap/measure_menu_tab" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="85dp"
@@ -194,7 +234,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:text="数据:"
-                    android:textColor="@color/measure_title" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/max_temp_view"
@@ -205,7 +245,7 @@
                     android:drawableLeft="@mipmap/measure_s"
                     android:drawablePadding="5dp"
                     android:text="最大温度："
-                    android:textColor="@color/measure_title" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/min_temp_view"
@@ -218,77 +258,7 @@
                     android:drawableLeft="@mipmap/measure_v"
                     android:drawablePadding="5dp"
                     android:text="最小温度："
-                    android:textColor="@color/measure_title" />
-
-                <!--<TextView
-                    android:id="@+id/wound_deep_view"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/volume_view"
-                    android:drawableLeft="@mipmap/measure_v"
-                    android:drawablePadding="5dp"
-                    android:text="深度："
-                    android:textColor="@color/measure_title" />
-
-                <TextView
-                    android:id="@+id/length_view"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/wound_deep_view"
-                    android:drawableLeft="@mipmap/measure_l"
-                    android:drawablePadding="5dp"
-                    android:text="长度："
-                    android:textColor="@color/measure_title" />
-
-                <TextView
-                    android:id="@+id/width_view"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/length_view"
-                    android:drawableLeft="@mipmap/measure_w"
-                    android:drawablePadding="5dp"
-                    android:text="宽度："
-                    android:textColor="@color/measure_title" />
-
-                <TextView
-                    android:id="@+id/color_rate_yellow"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/volume_view"
-                    android:layout_below="@+id/volume_view"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@mipmap/measure_cy"
-                    android:drawablePadding="5dp"
-                    android:text="黄色组织："
-                    android:textColor="@color/measure_title" />
-
-                <TextView
-                    android:id="@+id/color_rate_red"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/area_view"
-                    android:layout_below="@+id/area_view"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@mipmap/measure_cr"
-                    android:drawablePadding="5dp"
-                    android:text="红色组织："
-                    android:textColor="@color/measure_title" />
-
-                <TextView
-                    android:id="@+id/color_rate_black"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/wound_deep_view"
-                    android:layout_below="@+id/wound_deep_view"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@mipmap/measure_cb"
-                    android:drawablePadding="5dp"
-                    android:text="黑色组织："
-                    android:textColor="@color/measure_title" />
-                    -->
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 

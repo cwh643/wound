@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayView;
+import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
@@ -61,6 +62,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private Bitmap mWoundRgbBitmap;
     private Bitmap mAreaMeasureBitmap;
     private Bitmap mLegendBitmap;
+    private Bitmap mTempPointBitmap;
     //    final Bitmap mBitmap = Bitmap.createBitmap(DEFAULT_PREVIEW_WIDTH, DEFAULT_PREVIEW_HEIGHT, Bitmap.Config.RGB_565);
     private Button mOpenButton;
     private TextView mAreaView;
@@ -74,19 +76,17 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private int mMeasureStat = 0;
     private ImageView mWoundRgbView;
     private ImageView mAreaMeasureView;
+    private ImageView mTempMeasureView;
     private ImageView mLegendView;
     private DeepModelDisplayView mModelView;
     private GestureDetector gestureDetector;
-    private Paint paint;
+    private Paint areaPaint;
+    private Paint tempPointpaint;
     private Canvas areaCanvas;
-    private Canvas lengthCanvas;
+    private Canvas tempPointCanvas;
     private Canvas widthCanvas;
 
     private DeepCameraInfo deepCameraInfo;
-    private int areaLayerID;
-    private int lengthLayerID;
-    private int widthLayerID;
-
 
     private LinearLayout measure_bar;
 
@@ -99,6 +99,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private LinearLayout menu_bar;
 
     private ImageButton btn_menu_bar;
+
+    private float displayFactor;
 
 
     public static RecordFragmentWoundIRMeasure createInstance() {
@@ -137,15 +139,24 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         gestureDetector = new GestureDetector(this.getContext(), onGestureListener);
         mAreaMeasureView = (ImageView) rootView.findViewById(R.id.area_image);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+
         mLegendView = (ImageView) rootView.findViewById(R.id.legend_image);
+        mLegendView.setImageBitmap(mLegendBitmap);
+
+        mTempMeasureView = (ImageView) rootView.findViewById(R.id.temp_point_image);
+        mTempMeasureView.setImageBitmap(mTempPointBitmap);
+
+        mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_area);
+        mOpenButton.setOnClickListener(mMeasureAreaListener);
+        mOpenButton = (Button) rootView.findViewById(R.id.measure_btn_temp);
+        mOpenButton.setOnClickListener(mMeasureTmepListener);
+        //  手势相关
+        mAreaMeasureView.setOnTouchListener(mTouchEvent);
+        mAreaMeasureView.setClickable(true);
 
         ApplicationInfo appInfo = mActivity.getApplicationInfo();
         int resID = getResources().getIdentifier("ir_legend", "mipmap", appInfo.packageName);
         mLegendBitmap = BitmapFactory.decodeResource(getResources(), resID);
-
-        //  手势相关
-        mAreaMeasureView.setOnTouchListener(mTouchEvent);
-        mAreaMeasureView.setClickable(true);
 
         mMaxTempView = (TextView) rootView.findViewById(R.id.max_temp_view);
         mMinTempView = (TextView) rootView.findViewById(R.id.min_temp_view);
@@ -157,12 +168,17 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         int width = mWoundRgbBitmap.getWidth();
         int height = mWoundRgbBitmap.getHeight();
         mAreaMeasureBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        //mLengthMeasureBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        //mWidthMeasureBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        paint = new Paint();
-        paint.setColor(DRAW_COLOR);
+        mTempPointBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        areaPaint = new Paint();
+        areaPaint.setColor(GlobalDef.AREA_COLOR);
+        tempPointpaint = new Paint();
+        tempPointpaint.setColor(GlobalDef.DEEP_COLOR);
+
         areaCanvas = new Canvas(mAreaMeasureBitmap);
         areaCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
+        tempPointCanvas = new Canvas(mTempPointBitmap);
+        tempPointCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
 
     }
 
@@ -400,9 +416,9 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             }
         }
         String max_format = formatDouble(tempMax);
-        deepCameraInfo.setMaxDeep(new Float(max_format));
+        deepCameraInfo.setMaxDeep(deepCameraInfo.getMaxDeep());
         String min_format = formatDouble(tempMin);
-        deepCameraInfo.setMaxDeep(new Float(min_format));
+        deepCameraInfo.setMaxDeep(deepCameraInfo.getMinDeep());
         mMaxTempView.setText("最大温度：" + max_format + " ℃");
         mMinTempView.setText("最小温度：" + min_format + " ℃");
         if (displayMode == 2) {
@@ -430,91 +446,58 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         return color;
     }
 
-    private View.OnTouchListener mTouchEvent = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            // 最后一个点
-            //gestureDetector.onTouchEvent(event);
-            getTemp(event);
-            return true;
-        }
-
-    };
-
-    private GestureDetector.OnGestureListener onGestureListener =
-            new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                    //getTemp(e2);
-                    return true;
-                }
-
-                @Override
-                public boolean onDown(MotionEvent e) {
-//                    Log.i("touch", "down" + e.getX() + ","+ e.getY());
-                    //getTemp(e);
-                    return true;
-                }
-
-                @Override
-                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                    Log.i("touch", "fling");
-                    return true;
-                }
-            };
-
     private void getTemp(MotionEvent e) {
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        areaCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        tempPointpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        tempPointCanvas.drawPaint(tempPointpaint);
+        tempPointpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         Bitmap rgb = deepCameraInfo.getRgbBitmap();
         Mat depth = deepCameraInfo.getDepthMat();
         int viewWidth = mWoundRgbView.getWidth();
-        int bWidth = rgb.getWidth();
-        int bHeight = rgb.getHeight();
+        int bWidth = mWoundRgbBitmap.getWidth();
+        int bHeight = mWoundRgbBitmap.getHeight();
         int tempWidth = depth.cols();
-        float viewFactor = new Float(bWidth) / viewWidth;
         float depthFactor = new Float(tempWidth) / bWidth;
+        //float viewFactor = depthFactor;
 
-        float t_x = new Float(e.getX() * viewFactor);
+        float t_x = new Float(e.getX() * displayFactor);
         int d_x = new Float(t_x * depthFactor).intValue();
-        float t_y = new Float(e.getY() * viewFactor);
+        float t_y = new Float(e.getY() * displayFactor);
         int d_y = new Float(t_y * depthFactor).intValue();
-        // 取温度数据
+
+        int text_witdh_diff = 50;
+        int text_heigth_diff = 10;
+        int tc_diff = 20;
+        float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
+        float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
+        float bolb = tempPointpaint.getStrokeWidth();
         double[] temps = depth.get(d_y, d_x);
-        String temp = new DecimalFormat("#.00").format(temps[0]);
-        float text_x = t_x < 40 ? t_x : t_x - 40;
-        float text_y = t_y < 13 ? t_y + 13 : t_y;
-        areaCanvas.drawText(temp, text_x, text_y, paint);
-        areaCanvas.drawLine(0, t_y, bWidth - 1, t_y, paint);
-        areaCanvas.drawLine(t_x, 0, t_x, bHeight, paint);
-        mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+        String temp = new DecimalFormat("#.00°C").format(temps[0]);
+        tempPointpaint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
+        tempPointCanvas.drawText(temp, text_x, text_y, tempPointpaint);
+        tempPointCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, tempPointpaint);
+        tempPointCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, tempPointpaint);
+        tempPointpaint.setStrokeWidth(bolb);
+
+        mTempMeasureView.setImageBitmap(mTempPointBitmap);
     }
 
-    private final OnClickListener mModelDisplayListener = new OnClickListener() {
+    private final OnClickListener mMeasureAreaListener = new OnClickListener() {
         @Override
         public void onClick(final View view) {
-            if (deepCameraInfo.getVertexList().size() <= 0) {
-                return;
-            }
-            RecordFragmentModelDisplay fragment = RecordFragmentModelDisplay.createInstance();
-            mActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_container, fragment)
-                    .commit();
+            mMeasureStat = 1;
+            ToastUtil.showLongToast(mActivity, "请圈选伤口边缘");
+            //canvas.restoreToCount(areaLayerID);
         }
-
     };
 
-    private void syncWoundNum1() {
-        mActivity.getRecordInfo().setWoundArea(1.0f);
-        mActivity.getRecordInfo().setWoundWidth(2.0f);
-        mActivity.getRecordInfo().setWoundHeight(3.0f);
-        mActivity.getRecordInfo().setWoundVolume(4.0f);
-        mActivity.getRecordInfo().setWoundDeep(5.0f);
-        mActivity.getRecordInfo().setWoundColorRed(6.0f);
-        mActivity.getRecordInfo().setWoundColorYellow(7.0f);
-        mActivity.getRecordInfo().setWoundColorBlack(8.0f);
-    }
+    private final OnClickListener mMeasureTmepListener = new OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            mMeasureStat = 2;
+            ToastUtil.showLongToast(mActivity, "请划定伤口位置");
+            //canvas.restoreToCount(lengthLayerID);
+        }
+    };
 
     private final OnClickListener mSaveDataListener = new OnClickListener() {
         @Override
@@ -531,6 +514,149 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
     };
 
+    private View.OnTouchListener mTouchEvent = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            // 最后一个点
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Log.i("touch", "up");
+                switch (mMeasureStat) {
+                    case 1:
+                        upArea(event);
+                        break;
+                    case 2:
+                        getTemp(event);
+                        break;
+                }
+
+                return true;
+            }
+            if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                Log.i("touch", "cancel");
+            }
+            gestureDetector.onTouchEvent(event);
+            return true;
+        }
+
+    };
+
+    private GestureDetector.OnGestureListener onGestureListener =
+            new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    switch (mMeasureStat) {
+                        case 1:
+                            drawArea(e1, e2);
+                            break;
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onDown(MotionEvent e) {
+//                    Log.i("touch", "down" + e.getX() + ","+ e.getY());
+                    displayFactor = new Float(mAreaMeasureBitmap.getWidth()) / mWoundRgbView.getWidth();
+                    switch (mMeasureStat) {
+                        case 1:
+                            downArea(e);
+                            break;
+                        case 2:
+                            getTemp(e);
+                            break;
+
+                    }
+                    return true;
+
+                }
+
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    Log.i("touch", "fling");
+                    return true;
+                }
+            };
+
+    private void downArea(MotionEvent e) {
+        areaPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        areaCanvas.drawPaint(areaPaint);
+        areaPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        deepCameraInfo.getAreaPointList().clear();
+
+        float x = Math.round(e.getX() * displayFactor);
+        float y = Math.round(e.getY() * displayFactor);
+        deepCameraInfo.getAreaPointList().add(new Point(x, y));
+    }
+
+    private void drawArea(MotionEvent e1, MotionEvent e2) {
+        List<Point> areaPointList = deepCameraInfo.getAreaPointList();
+        Point last_p = areaPointList.get(areaPointList.size() - 1);
+        float x1 = (float) last_p.x;
+        float y1 = (float) last_p.y;
+        float x2 = Math.round(e2.getX() * displayFactor);
+        float y2 = Math.round(e2.getY() * displayFactor);
+        areaCanvas.drawLine(x1, y1, x2, y2, areaPaint);
+        mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+        areaPointList.add(new Point(x2, y2));
+
+    }
+
+    private void upArea(MotionEvent e) {
+        fillArea();
+        // 计算面积
+        clacArea();
+        setArea();
+    }
+
+    private void fillArea() {
+        List<Point> areaPointList = deepCameraInfo.getAreaPointList();
+        if (areaPointList.size() <= 0) {
+            return;
+        }
+        Path path = new Path();
+        Point p = areaPointList.get(areaPointList.size() - 1);
+        path.moveTo((float) p.x, (float) p.y);
+        for (int i = areaPointList.size() - 2; i >= 0; i--) {
+            p = areaPointList.get(i);
+            path.lineTo((float) p.x, (float) p.y);
+        }
+        path.close();
+        areaPaint.setStyle(Paint.Style.FILL);
+        areaCanvas.drawPath(path, areaPaint);
+        mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+    }
+
+    private void clacArea() {
+        Mat tempMat = deepCameraInfo.getDepthMat();
+        int m_width = mAreaMeasureBitmap.getWidth();
+        int m_heigth = mAreaMeasureBitmap.getHeight();
+        int d_i = 0;
+        int d_j = 0;
+        float tempFactor = ((float) tempMat.cols()) / mAreaMeasureBitmap.getWidth();
+        double max_temp = 0;
+        double min_temp = Integer.MAX_VALUE;
+        for (int i = m_width - 1; i >= 0; i--) {
+            for (int j = m_heigth - 1; j > -0; j--) {
+                if (mAreaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
+                    d_i = new Float(i * tempFactor).intValue();
+                    d_j = new Float(j * tempFactor).intValue();
+
+                    double[] temps = tempMat.get(d_j, d_i);
+                    max_temp = Math.max(temps[0], max_temp);
+                    min_temp = Math.min(temps[0], min_temp);
+                }
+            }
+        }
+        deepCameraInfo.setMaxDeep(max_temp);
+        deepCameraInfo.setMinDeep(min_temp);
+    }
+
+    private void setArea() {
+        String max_format = formatDouble(deepCameraInfo.getMaxDeep());
+        String min_format = formatDouble(deepCameraInfo.getMinDeep());
+        mMaxTempView.setText("最大温度：" + max_format + " ℃");
+        mMinTempView.setText("最小温度：" + min_format + " ℃");
+    }
+
     private final OnClickListener mBackListener = new OnClickListener() {
         @Override
         public void onClick(final View view) {
@@ -543,7 +669,6 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         }
 
     };
-
 
     @Override
     public void onPause() {

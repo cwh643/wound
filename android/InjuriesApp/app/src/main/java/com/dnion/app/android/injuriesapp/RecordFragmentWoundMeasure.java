@@ -1025,7 +1025,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
         float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
         float bolb = paint.getStrokeWidth();
-        paint.setStrokeWidth(4);
+        paint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
         deepCanvas.drawText(temp, text_x, text_y, paint);
         deepCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, paint);
         deepCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, paint);

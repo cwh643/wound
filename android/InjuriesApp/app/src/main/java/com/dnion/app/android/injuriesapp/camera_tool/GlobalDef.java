@@ -41,6 +41,7 @@ public class GlobalDef {
     public static final int WIDTH_COLOR = Color.BLUE;
     public static final int DEEP_COLOR = Color.RED;
     public static final int FOCUS_BACK_COLOR = Color.YELLOW;
+    public static final int FOCUS_STROKE_WIDTH = 2;
 
     public static final int SUCC = 0;
     public static final int NOT_READY = -1;

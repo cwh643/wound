@@ -169,8 +169,8 @@ public class RecordFragmentDeepCamera extends Fragment {
         //  手势相关
         scollGestureDetector = new GestureDetector(this.getContext(), onScollGestureListener);
         scaleGestureDetector = new ScaleGestureDetector(this.getContext(), onScaleGestureListener);
-        mDepthView.setClickable(true);
-        mDepthView.setOnTouchListener(onTouchListener);
+        // mDepthView.setClickable(true);
+        // mDepthView.setOnTouchListener(onTouchListener);
 
 
         focusBackpaint = new Paint();
