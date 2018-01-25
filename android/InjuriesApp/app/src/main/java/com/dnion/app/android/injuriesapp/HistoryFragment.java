@@ -172,21 +172,21 @@ public class HistoryFragment extends Fragment {
         yAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return value + "%";
+                return String.format("%.1f", value) + "%";
             }
         });
 
-        int start = 1;
+        int start = 0;
         int groupCount = list.size();
         List<BarEntry> yRed = new ArrayList<>();
         List<BarEntry> yYellow = new ArrayList<>();
         List<BarEntry> yBlack = new ArrayList<>();
-        for (int i = start; i <= groupCount; i++) {
-            RecordInfo recordInfo = list.get(i - 1);
+        for (int i = start; i < groupCount; i++) {
+            RecordInfo recordInfo = list.get(i);
             //String date = recordInfo.getRecordTime();
-            yRed.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorRed())));
-            yYellow.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorYellow())));
-            yBlack.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorBlack())));
+            yRed.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorRed())));
+            yYellow.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorYellow())));
+            yBlack.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorBlack())));
         }
         // create 4 DataSets
         BarDataSet setRed = new BarDataSet(yRed, mActivity.getText(R.string.measure_red).toString());
@@ -268,7 +268,7 @@ public class HistoryFragment extends Fragment {
         yAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return value + "cm";
+                return String.format("%.1fcm", value);
             }
         });
 
@@ -279,14 +279,14 @@ public class HistoryFragment extends Fragment {
         long time = 0;
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            widthValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundWidth())));
+            widthValues.add(new Entry(list.size() - i, formatFloatValue(recordInfo.getWoundWidth())));
         }
 
         calendar = Calendar.getInstance();
         ArrayList<Entry> heightValues = new ArrayList<Entry>();
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            heightValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundHeight())));
+            heightValues.add(new Entry(list.size() - i, formatFloatValue(recordInfo.getWoundHeight())));
         }
 
         LineDataSet widthDataSet = new LineDataSet(widthValues, mActivity.getText(R.string.measure_width).toString());

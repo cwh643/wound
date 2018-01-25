@@ -48,14 +48,14 @@
     <string name="top_menu_save">Save</string>
 
     <string name="sub_menu_item1">Wound Information</string>
-    <string name="sub_menu_item9">Wound Location</string>
+    <string name="sub_menu_item9">Wound \nPosition</string>
     <string name="sub_menu_item2">Wound Description</string>
     <string name="sub_menu_item3">Wound Assessment</string>
     <string name="sub_menu_item4">Seepage Information</string>
     <string name="sub_menu_item5">Healing Influence Factors</string>
     <string name="sub_menu_item6">Auxiliary Examination</string>
     <string name="sub_menu_item7">Osteomyelitis</string>
-    <string name="sub_menu_item8">Wound Dressing</string>
+    <string name="sub_menu_item8">Dressing</string>
 
     <string name="query_patient_name">Patient\'s Name</string>
     <string name="query_query">Query</string>

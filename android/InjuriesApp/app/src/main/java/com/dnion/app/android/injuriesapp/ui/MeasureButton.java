@@ -99,10 +99,16 @@ public class MeasureButton extends FrameLayout {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if(event.getAction()==MotionEvent.ACTION_DOWN){
-                image_view.setImageResource(selectResourceId);
+                if (selectResourceId > 0) {
+                    image_view.setImageResource(selectResourceId);
+                }
+
                 //btn_title.setTextColor(Color.rgb(0,188,188));
             }else if(event.getAction()==MotionEvent.ACTION_UP) {
-                image_view.setImageResource(resourceId);
+                if (resourceId > 0) {
+                    image_view.setImageResource(resourceId);
+                }
+
                 //btn_title.setTextColor(Color.rgb(182,182,182));
             }
             return false;

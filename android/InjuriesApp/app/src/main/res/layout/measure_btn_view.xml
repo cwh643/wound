@@ -11,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:src="@mipmap/measure_ok" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/text_view"
