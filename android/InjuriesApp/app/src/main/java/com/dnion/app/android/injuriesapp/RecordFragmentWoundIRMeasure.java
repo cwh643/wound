@@ -37,6 +37,7 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Point3;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -69,6 +70,9 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
     private TextView mVolumeView;
     private TextView mMaxTempView;
     private TextView mMinTempView;
+    private TextView mMaxTempTipView;
+    private TextView mMinTempTipView;
+    private TextView mTempTipView;
     private TextView mColorRedView;
     private TextView mColorBlackView;
     private TextView mColorYellowView;
@@ -160,6 +164,9 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
         mMaxTempView = (TextView) rootView.findViewById(R.id.max_temp_view);
         mMinTempView = (TextView) rootView.findViewById(R.id.min_temp_view);
+        mMaxTempTipView = (TextView) rootView.findViewById(R.id.measure_tip_max_temp);
+        mMinTempTipView = (TextView) rootView.findViewById(R.id.measure_tip_min_temp);
+        mTempTipView = (TextView) rootView.findViewById(R.id.measure_tip_temp);
         // mColorRedView = (TextView) rootView.findViewById(R.id.color_rate_red);
         // mColorBlackView = (TextView) rootView.findViewById(R.id.color_rate_black);
         // mColorYellowView = (TextView) rootView.findViewById(R.id.color_rate_yellow);
@@ -490,6 +497,33 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         float t_y = new Float(e.getY() * displayFactor);
         int d_y = new Float(t_y * depthFactor).intValue();
 
+        double[] temps = depth.get(d_y, d_x);
+        String temp = new DecimalFormat("#.00°C").format(temps[0]);
+
+        mTempTipView.setText(temp);
+        mTempTipView.setX(e.getX());
+        mTempTipView.setY(e.getY());
+        mTempTipView.setVisibility(View.VISIBLE);
+    }
+
+    private void getTempOld(MotionEvent e) {
+        tempPointpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        tempPointCanvas.drawPaint(tempPointpaint);
+        tempPointpaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        Bitmap rgb = deepCameraInfo.getRgbBitmap();
+        Mat depth = deepCameraInfo.getDepthMat();
+        int viewWidth = mWoundRgbView.getWidth();
+        int bWidth = mWoundRgbBitmap.getWidth();
+        int bHeight = mWoundRgbBitmap.getHeight();
+        int tempWidth = depth.cols();
+        float depthFactor = new Float(tempWidth) / bWidth;
+        //float viewFactor = depthFactor;
+
+        float t_x = new Float(e.getX() * displayFactor);
+        int d_x = new Float(t_x * depthFactor).intValue();
+        float t_y = new Float(e.getY() * displayFactor);
+        int d_y = new Float(t_y * depthFactor).intValue();
+
         int text_witdh_diff = 50;
         int text_heigth_diff = 10;
         int tc_diff = 20;
@@ -498,6 +532,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         float bolb = tempPointpaint.getStrokeWidth();
         double[] temps = depth.get(d_y, d_x);
         String temp = new DecimalFormat("#.00°C").format(temps[0]);
+
         tempPointpaint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
         tempPointCanvas.drawText(temp, text_x, text_y, tempPointpaint);
         tempPointCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, tempPointpaint);
@@ -658,8 +693,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         int d_i = 0;
         int d_j = 0;
         float tempFactor = ((float) tempMat.cols()) / mAreaMeasureBitmap.getWidth();
-        double max_temp = 0;
-        double min_temp = Integer.MAX_VALUE;
+        Point3 max_temp = new Point3(0, 0, 0);
+        Point3 min_temp = new Point3(0, 0, Integer.MAX_VALUE);
         for (int i = m_width - 1; i >= 0; i--) {
             for (int j = m_heigth - 1; j > -0; j--) {
                 if (mAreaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
@@ -667,20 +702,41 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
                     d_j = new Float(j * tempFactor).intValue();
 
                     double[] temps = tempMat.get(d_j, d_i);
-                    max_temp = Math.max(temps[0], max_temp);
-                    min_temp = Math.min(temps[0], min_temp);
+                    if (temps[0] > max_temp.z) {
+                        max_temp.z = temps[0];
+                        max_temp.x = d_i;
+                        max_temp.y = d_j;
+                    }
+                    if (temps[0] < min_temp.z) {
+                        min_temp.z = temps[0];
+                        min_temp.x = d_i;
+                        min_temp.y = d_j;
+                    }
                 }
             }
         }
-        deepCameraInfo.setMaxDeep(max_temp);
-        deepCameraInfo.setMinDeep(min_temp);
+        deepCameraInfo.setMaxDeepPoint(max_temp);
+        deepCameraInfo.setMinDeepPoint(min_temp);
     }
 
     private void setArea() {
         String max_format = formatDouble(deepCameraInfo.getMaxDeep());
         String min_format = formatDouble(deepCameraInfo.getMinDeep());
-        mMaxTempView.setText("最大温度：" + max_format + " ℃");
-        mMinTempView.setText("最小温度：" + min_format + " ℃");
+        float tip_factor = (float) mAreaMeasureView.getWidth() / deepCameraInfo.getDepthMat().cols();
+        //float tip_factor = (float) mAreaMeasureBitmap.getWidth() / deepCameraInfo.getDepthMat().cols();
+
+        mMaxTempTipView.setText("max：" + max_format + "°C");
+        mMaxTempTipView.setX(new Double(deepCameraInfo.getMaxDeepPoint().x).floatValue() * tip_factor);
+        mMaxTempTipView.setY(new Double(deepCameraInfo.getMaxDeepPoint().y).floatValue() * tip_factor);
+        mMaxTempTipView.setVisibility(View.VISIBLE);
+
+        mMinTempTipView.setText("min：" + min_format + "°C");
+        mMinTempTipView.setX(new Double(deepCameraInfo.getMinDeepPoint().x).floatValue() * tip_factor);
+        mMinTempTipView.setY(new Double(deepCameraInfo.getMinDeepPoint().y).floatValue() * tip_factor);
+        mMinTempTipView.setVisibility(View.VISIBLE);
+
+        mMaxTempView.setText("最大温度：" + max_format + "°C");
+        mMinTempView.setText("最小温度：" + min_format + "°C");
     }
 
     private final OnClickListener mBackListener = new OnClickListener() {

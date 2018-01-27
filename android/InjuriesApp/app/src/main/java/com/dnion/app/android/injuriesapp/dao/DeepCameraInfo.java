@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Point3;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ public class DeepCameraInfo {
     private int depthMatWidth = 640;
     private int depthMatHeight = 480;
     private List<Point> areaPointList = new ArrayList<>();
-    private List<Point>  lengthPointList = new ArrayList<>();
-    private List<Point>  widthPointList = new ArrayList<>();
+    private List<Point> lengthPointList = new ArrayList<>();
+    private List<Point> widthPointList = new ArrayList<>();
     private float woundArea;
     private float woundWidth;
     private float woundHeight;
@@ -33,6 +34,8 @@ public class DeepCameraInfo {
     private float woundBlackRate;
     private double minDeep;
     private double maxDeep;
+    private Point3 minDeepPoint;
+    private Point3 maxDeepPoint;
     private double centerDeep;
     private int deep_lx;
     private int deep_ly;
@@ -84,6 +87,24 @@ public class DeepCameraInfo {
 
     public void setMaxDeep(double maxDeep) {
         this.maxDeep = maxDeep;
+    }
+
+    public Point3 getMinDeepPoint() {
+        return minDeepPoint;
+    }
+
+    public void setMinDeepPoint(Point3 minDeepPoint) {
+        this.minDeepPoint = minDeepPoint;
+        this.minDeep = minDeepPoint.z;
+    }
+
+    public Point3 getMaxDeepPoint() {
+        return maxDeepPoint;
+    }
+
+    public void setMaxDeepPoint(Point3 maxDeepPoint) {
+        this.maxDeepPoint = maxDeepPoint;
+        this.maxDeep = maxDeepPoint.z;
     }
 
     public Mat getDepthMat() {
@@ -216,7 +237,6 @@ public class DeepCameraInfo {
     public void setDeep_ry(int deep_ry) {
         this.deep_ry = deep_ry;
     }
-
 
 
     public int getDeep_near() {

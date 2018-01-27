@@ -60,16 +60,58 @@
             android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
         <TextView
-            android:id="@+id/measure_tip_length"
+            android:id="@+id/measure_tip_area"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2.5cm"
             android:textSize="16sp"
-            android:paddingLeft="25dp"
+            android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingRight="10dp"
-            android:background="@drawable/measure_tip_bg"/>
+            android:background="@drawable/measure_tip_bar_bg"
+            />
+
+        <TextView
+            android:id="@+id/measure_tip_length"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.5cm"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/measure_tip_bar_bg"
+            />
+        <TextView
+            android:id="@+id/measure_tip_width"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.5cm"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/measure_tip_bar_bg"
+            />
+        <TextView
+            android:id="@+id/measure_tip_deep"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.5cm"
+            android:textSize="16sp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/measure_tip_bar_bg"
+            />
     </FrameLayout>
 
     <RelativeLayout
