@@ -29,9 +29,13 @@ public class AlertDialogUtil {
     }
 
     public static AlertDialog showAlertDialog(Context context, String TitleID, String Message) {
-        mAlertDialog = new AlertDialog.Builder(context).setTitle(TitleID)
-                .setMessage(Message).create();
-        handler.postDelayed(runnable, 100);
+        if (mAlertDialog == null) {
+            mAlertDialog = new AlertDialog.Builder(context).create();
+        }
+        mAlertDialog.setTitle(TitleID);
+        mAlertDialog.setMessage(Message);
+        //handler.postDelayed(runnable, 100);
+        mAlertDialog.show();
         return mAlertDialog;
     }
 
