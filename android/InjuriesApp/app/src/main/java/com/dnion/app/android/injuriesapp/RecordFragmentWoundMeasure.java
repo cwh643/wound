@@ -1009,7 +1009,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         return point;
     }
 
-    private void drawDeepPoint(PointInfo3D point) {
+    private void drawDeepPoint(PointInfo3D point, boolean is_first) {
         String temp;
         float deep = point.z;
         float t_x = point.x;
@@ -1017,7 +1017,11 @@ public class RecordFragmentWoundMeasure extends Fragment {
         if (deep == 0) {
             temp = "未采集到";
         } else {
-            temp = new DecimalFormat("#.00").format(deep / 10) + "厘米";
+            if (is_first) {
+                temp = "基准";
+            } else {
+                temp = new DecimalFormat("#0").format(deep) + "mm";
+            }
         }
         int text_witdh_diff = 300;
         int text_heigth_diff = 80;
@@ -1038,18 +1042,22 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCanvas.drawPaint(paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         PointInfo3D point = getDeepPoint(e);
-        drawDeepPoint(point);
         if (point.z == 0) {
+            drawDeepPoint(point , false);
             return;
         }
         deep_mode_first = !deep_mode_first;
         if (!deep_mode_first) {
             wound_deep_first = point;
+            drawDeepPoint(point , false);
             return;
         }
-        drawDeepPoint(wound_deep_first);
-        double distince = Math.abs(point.z - wound_deep_first.z) / 10;
-        String format = new DecimalFormat("#.00").format(distince);
+        float distince = Math.abs(point.z - wound_deep_first.z);
+        String format = new DecimalFormat("#0").format(distince);
+        point.z = distince;
+        drawDeepPoint(point , false);
+        drawDeepPoint(wound_deep_first, true);
+
         deepCameraInfo.setWoundDeep(new Float(format));
         setDeep();
 
@@ -1113,7 +1121,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void setArea() {
         mAreaView.setText("面积：" + deepCameraInfo.getWoundArea() + "cm²");
         mVolumeView.setText("体积：" + deepCameraInfo.getWoundVolume() + " cm³");
-        mDeepView.setText("深度：" + deepCameraInfo.getWoundDeep() + " cm");
+        mDeepView.setText("深度：" + deepCameraInfo.getWoundDeep() + " mm");
         mColorRedView.setText("红色组织：" + deepCameraInfo.getWoundRedRate() + "%");
         mColorBlackView.setText("黄色组织：" + deepCameraInfo.getWoundYellowRate() + "%");
         mColorYellowView.setText("黑色组织：" + deepCameraInfo.getWoundBlackRate() + "%");
@@ -1128,7 +1136,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     }
 
     private void setDeep() {
-        mDeepView.setText("深度：" + deepCameraInfo.getWoundDeep() + " cm");
+        mDeepView.setText("深度：" + deepCameraInfo.getWoundDeep() + " mm");
     }
 
     private final OnClickListener mMeasureAreaListener = new OnClickListener() {
