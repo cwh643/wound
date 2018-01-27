@@ -34,7 +34,13 @@
             android:layout_width="50px"
             android:layout_height="@dimen/image_measure_heigth"
             android:src="@mipmap/ir_legend"/>
-
+        <ImageView
+            android:id="@+id/area_image"
+            android:layout_width="@dimen/image_measure_width"
+            android:layout_height="@dimen/image_measure_heigth"
+            android:background="#00000000"
+            android:alpha="0.7"
+            />
         <ImageView
             android:id="@+id/temp_point_image"
             android:layout_width="@dimen/image_measure_width"
@@ -42,13 +48,7 @@
             android:background="#00000000"
             />
 
-        <ImageView
-            android:id="@+id/area_image"
-            android:layout_width="@dimen/image_measure_width"
-            android:layout_height="@dimen/image_measure_heigth"
-            android:background="#00000000"
-            android:alpha="0.5"
-             />
+
     </FrameLayout>
 
     <RelativeLayout
@@ -234,7 +234,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:text="数据:"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    />
 
                 <TextView
                     android:id="@+id/max_temp_view"
@@ -245,7 +246,8 @@
                     android:drawableLeft="@mipmap/measure_s"
                     android:drawablePadding="5dp"
                     android:text="最大温度："
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    />
 
                 <TextView
                     android:id="@+id/min_temp_view"
@@ -258,7 +260,8 @@
                     android:drawableLeft="@mipmap/measure_v"
                     android:drawablePadding="5dp"
                     android:text="最小温度："
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                     />
 
             </RelativeLayout>
 
