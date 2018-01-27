@@ -149,9 +149,9 @@
         <LinearLayout
             android:id="@+id/measure_bar"
             android:layout_width="85dp"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="213dp"
+            android:layout_marginTop="145dp"
             android:background="@mipmap/measure_right_bg"
             android:orientation="vertical">
 
@@ -171,14 +171,14 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@mipmap/measure_wd"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:src="@mipmap/measure_wd"
                 android:text="@string/measure_temp" />
 
             <ImageButton
                 android:id="@+id/btn_measure_bar"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="22dp"
                 android:background="@null"
                 android:src="@mipmap/measure_menu_tab" />
         </LinearLayout>
