@@ -217,7 +217,7 @@ public class RecordFragment6 extends Fragment {
             }
 
             newBitmap.recycle();
-
+            mActivity.saveRecordInfo();
         }
     }
 

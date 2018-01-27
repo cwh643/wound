@@ -164,6 +164,8 @@ public class RecordFragment7 extends Fragment {
                 patientInfo.setWoundPetct(type + File.separator + "petct.jpg");
             }
             newBitmap.recycle();
+
+            mActivity.saveRecordInfo();
         }
     }
 

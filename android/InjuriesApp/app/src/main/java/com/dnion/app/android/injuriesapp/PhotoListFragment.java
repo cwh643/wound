@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.ThermalExpert.ThermalExpert;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
@@ -147,6 +148,7 @@ public class PhotoListFragment extends Fragment {
                 TagObj tag = new TagObj();
                 convertView.setTag(tag);
                 tag.image_item = (ImageView) convertView.findViewById(R.id.image_item);
+                tag.image_time = (TextView) convertView.findViewById(R.id.image_time);
             }
             RecordImage image = items.get(position);
             //String imagePath = image.getImagePath() + File.separator + DeepCameraInfoDao.LIST_IMAGE_FILE_NAME;
@@ -154,12 +156,14 @@ public class PhotoListFragment extends Fragment {
             TagObj tag = (TagObj) convertView.getTag();
             tag.image_item.setImageDrawable(new BitmapDrawable(mActivity.getResources(), CommonUtil.readBitMap(imagePath)));
             //tag.image_item.setImageResource(R.mipmap.ic_launcher);
+            tag.image_time.setText(image.getCreateTime());
             return convertView;
         }
     }
 
     private class TagObj {
         ImageView image_item;
+        TextView image_time;
     }
 
     private class ProcessTask extends AsyncTask<String, Object, Long> {

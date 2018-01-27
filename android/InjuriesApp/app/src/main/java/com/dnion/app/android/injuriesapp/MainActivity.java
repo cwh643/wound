@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.dnion.app.android.injuriesapp.dao.ConfigDao;
@@ -57,6 +59,10 @@ public class MainActivity extends BaseActivity {
 
     private ImageView image_perview;
 
+    private RelativeLayout image_perview_panel;
+
+    private ImageButton btn_close_panel;
+
     private DeepCameraInfo deepCameraInfo;
 
     @Override
@@ -73,11 +79,13 @@ public class MainActivity extends BaseActivity {
         settingDocTitle();
         addTopButtonEvent();
         image_perview = (ImageView) findViewById(R.id.image_perview);
-        image_perview.setOnClickListener(new View.OnClickListener() {
+        image_perview_panel = (RelativeLayout) findViewById(R.id.image_perview_panel);
+        btn_close_panel = (ImageButton) findViewById(R.id.btn_close_panel);
+        btn_close_panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 image_perview.setImageBitmap(null);
-                image_perview.setVisibility(View.GONE);
+                image_perview_panel.setVisibility(View.GONE);
             }
         });
 
@@ -241,7 +249,7 @@ public class MainActivity extends BaseActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(picPath);
         ImageView imageView = getImagePreView();
         imageView.setImageBitmap(bitmap);
-        imageView.setVisibility(View.VISIBLE);
+        image_perview_panel.setVisibility(View.VISIBLE);
     }
 
     public void updateSyncFlag(int recordId) {

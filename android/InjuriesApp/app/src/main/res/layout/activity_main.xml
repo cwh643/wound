@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,24 +9,37 @@
     tools:context="com.dnion.app.android.injuriesapp.MainActivity"
     tools:layout_editor_absoluteX="0dp"
     tools:layout_editor_absoluteY="89dp">
-
-    <include layout="@layout/top_bar" />
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-
+        android:background="@mipmap/home_bg"
+        android:orientation="vertical">
+        <include layout="@layout/top_bar" />
         <FrameLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             />
-        <ImageView
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image_perview_panel"
+        android:background="@color/white"
+        android:visibility="gone">
+        <com.dnion.app.android.injuriesapp.ui.TouchImageView
             android:id="@+id/image_perview"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"/>
-    </FrameLayout>
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/btn_close_panel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/btn_clear"
+            android:background="@null"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+</FrameLayout>

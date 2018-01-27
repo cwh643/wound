@@ -19,6 +19,16 @@ public class RecordImage {
 
     private boolean selected = false;
 
+    private String createTime;
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
     public RecordImage() {
 
     }

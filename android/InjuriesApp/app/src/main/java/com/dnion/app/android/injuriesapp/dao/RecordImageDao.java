@@ -65,6 +65,7 @@ public class RecordImageDao {
         recordImage.setId((Integer) map.get("id"));
         recordImage.setImageType((String) map.get("image_type"));
         recordImage.setImagePath((String) map.get("image_path"));
+        recordImage.setCreateTime((String) map.get("create_time"));
         return recordImage;
     }
 
