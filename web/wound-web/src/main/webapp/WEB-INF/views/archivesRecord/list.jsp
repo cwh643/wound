@@ -5,7 +5,7 @@
 
 <html>
 <head>
-	<title>创伤档案</title>
+	<title>榕创医疗</title>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
 				<label>患者姓名：</label> <input type="text" name="search_LIKE_patientName" class="input-small" value="${param.search_LIKE_patientName}"> 
 		</div>
 	    <div class="span1 ">
-	    	<button type="submit" class="btn" id="search_btn">Search</button>
+	    	<button type="submit" class="btn" id="search_btn">查询</button>
 	    </div>
 	    <%-- <tags:sort/> --%>
 	</div>

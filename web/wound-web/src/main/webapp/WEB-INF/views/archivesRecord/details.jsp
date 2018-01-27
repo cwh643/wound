@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>创伤资料</title>
+	<title>榕创医疗</title>
 	<style>
 	<!--
 	.bs-docs-example {
@@ -113,8 +113,8 @@
 	    margin-left: 60px;
 	}
 	.title1 > i {
-	    background: url(${ctx}/static/images/bar_button.png) no-repeat top left;
-	    width: 80px;
+	    background: url(${ctx}/static/images/bar_save_button.png) no-repeat top left;
+	    width: 30px;
 	    height: 30px;
 	    display: inline-block;
 	    margin-top: 5px;
@@ -146,10 +146,11 @@
           <li ><a href="#record8"><i class="icon-chevron-right"></i> 骨髓炎</a></li>
           <li ><a href="#record9"><i class="icon-chevron-right"></i> 伤口换药</a></li>
         </ul>
+        <a class="btn  btn-primary affix" id="back_btn" style="top:520px;" href="javascript:history.back();">返回</a>
     </div>
     <div class="span9">
 	    <div class="bs-docs-example"  id="baseinfo">
-	      <div class="title1"><span>基本信息</span><i></i></div>
+	      <div class="title1"><span>基本信息</span><i id="baseinfo_btn" style="cursor:pointer;"></i></div>
 		    <form id="baseinfoForm" class="form-horizontal">
 				<input type="hidden" name="id" value="${patient.id}"/>
 				<input type="hidden" name="doctorId" value="${patient.doctorId}"/>
@@ -209,7 +210,7 @@
 	    </div>
     
      <div class="bs-docs-example"  id="photo">
-      <div class="title1"><span>照片</span><i></i></div>
+      <div class="title1"><span>照片</span></div>
 		<div class="row-fluid">
 		  <c:forEach items="${images}" var="img" varStatus="status">
 		      <c:if test="${status.index % 4 == 0}">
@@ -236,7 +237,7 @@
      </div>
      
      <div class="bs-docs-example" id="record1">
-      <div class="title1"><span>伤口基本信息</span><i></i></div>
+      <div class="title1"><span>伤口基本信息</span><i id="record1_btn" style="cursor:pointer;"></i></div>
 	    <form id="record1Form" class="form-horizontal">
 			<input type="hidden" name="id" value="${record.id}"/>
 			<fieldset>
@@ -318,7 +319,7 @@
       </div>
     </div>
     <div class="bs-docs-example"  id="record3">
-      <div class="title1"><span>伤口的描述</span><i></i></div>
+      <div class="title1"><span>伤口的描述</span><i id="record2_btn" style="cursor:pointer;"></i></div>
         <form id="record2Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -362,7 +363,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record4">
-      <div class="title1"><span>伤口评估</span><i></i></div>
+      <div class="title1"><span>伤口评估</span><i id="record3_btn" style="cursor:pointer;"></i></div>
         <form id="record3Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -400,7 +401,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record5">
-      <div class="title1"><span>渗液信息</span><i></i></div>
+      <div class="title1"><span>渗液信息</span><i id="record4_btn" style="cursor:pointer;"></i></div>
         <form id="record4Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -433,7 +434,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record6">
-      <div class="title1"><span>影响伤口愈合的因素</span><i></i></div>
+      <div class="title1"><span>影响伤口愈合的因素</span><i id="record5_btn" style="cursor:pointer;"></i></div>
         <form id="record5Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -460,7 +461,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record7">
-      <div class="title1"><span>辅助检查</span><i></i></div>
+      <div class="title1"><span>辅助检查</span><i id="record6_btn" style="cursor:pointer;"></i></div>
         <form id="record6Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -499,7 +500,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record8">
-       <div class="title1"><span>骨髓炎</span><i></i></div>
+       <div class="title1"><span>骨髓炎</span><i id="record7_btn" style="cursor:pointer;"></i></div>
         <form id="record7Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>
@@ -526,7 +527,7 @@
     </div>
     
     <div class="bs-docs-example"  id="record9">
-      <div class="title1"><span>伤口换药</span><i></i></div>
+      <div class="title1"><span>伤口换药</span><i id="record8_btn" style="cursor:pointer;"></i></div>
       <form id="record8Form" class="form-horizontal">
 		<input type="hidden" name="id" value="${record.id}"/>
 		<fieldset>

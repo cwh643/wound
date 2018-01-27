@@ -10,7 +10,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="${ctx}">榕创医疗</a>
+          <a href="/" class="brand nav-block"><img src="${ctx}/static/images/ic_launcher.png" alt="榕创医疗"><span>榕创医疗</span></a>
+          <!-- <a class="brand" href="${ctx}">榕创医疗</a> -->
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li <c:if test ="${menu eq 1}">class="active"</c:if>><a href="${ctx}/archivesRecord">创伤信息</a></li>

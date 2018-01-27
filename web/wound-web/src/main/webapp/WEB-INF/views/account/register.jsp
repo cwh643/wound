@@ -4,7 +4,7 @@
 
 <html>
 <head>
-	<title>用户注册</title>
+	<title>榕创医疗</title>
 	
 	<script>
 		$(document).ready(function() {
