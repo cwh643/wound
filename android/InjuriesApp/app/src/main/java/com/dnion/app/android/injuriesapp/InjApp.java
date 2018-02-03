@@ -2,6 +2,7 @@ package com.dnion.app.android.injuriesapp;
 
 import android.app.Application;
 
+import com.dnion.app.android.injuriesapp.utils.CrashHandler;
 import com.dnion.app.android.injuriesapp.utils.DBHelper;
 import com.dnion.app.android.injuriesapp.utils.DatabaseContext;
 
@@ -16,6 +17,7 @@ public class InjApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        CrashHandler.getInstance().init(this);
     }
 
     public void initDb() {

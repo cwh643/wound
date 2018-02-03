@@ -52,7 +52,7 @@
     <string name="sub_menu_item2">Wound Description</string>
     <string name="sub_menu_item3">Wound Assessment</string>
     <string name="sub_menu_item4">Seepage Information</string>
-    <string name="sub_menu_item5">Healing Influence Factors</string>
+    <string name="sub_menu_item5">Influence Factors</string>
     <string name="sub_menu_item6">Auxiliary Examination</string>
     <string name="sub_menu_item7">Osteomyelitis</string>
     <string name="sub_menu_item8">Dressing</string>

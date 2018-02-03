@@ -172,7 +172,7 @@
 
     <string name="check_photo">查看照片</string>
     <string name="take_photo">拍照</string>
-    <string name="take_normal_photo">普通拍摄</string>
+    <string name="take_normal_photo">3D 拍摄</string>
     <string name="take_ir_photo">红外线拍摄</string>
     <string name="back">返回</string>
     <string name="no_data">没有数据</string>
