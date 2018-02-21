@@ -33,6 +33,8 @@
     <string name="setting_server_url">Servers URL</string>
     <string name="setting_camera_mode">Camera mode</string>
     <string name="setting_camera_size">Camera size</string>
+    <string name="setting_data_sync">Data Sync</string>
+    <string name="setting_data_export">Export</string>
 
     <string name="modify_pw_title">Change Password</string>
     <string name="modify_pw_old">Old Password</string>

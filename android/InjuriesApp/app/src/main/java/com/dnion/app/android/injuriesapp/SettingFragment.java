@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,24 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.dnion.app.android.injuriesapp.dao.ConfigDao;
+import com.dnion.app.android.injuriesapp.dao.RecordInfo;
+import com.dnion.app.android.injuriesapp.http.OkHttpClientManager;
+import com.dnion.app.android.injuriesapp.http.PatientResponse;
 import com.dnion.app.android.injuriesapp.ui.CustomerButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
+import com.dnion.app.android.injuriesapp.utils.MapUtils;
 import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
+import com.dnion.app.android.injuriesapp.utils.XZip;
+import com.squareup.okhttp.Request;
 
+import java.io.File;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class SettingFragment extends Fragment {
@@ -135,6 +147,24 @@ public class SettingFragment extends Fragment {
 
                 RecordFragmentDeepCamera.init_camera_param(camera_mode, camera_size);
                 ToastUtil.showLongToast(mActivity, "修改成功");
+            }
+        });
+
+        Button btn_export = (Button) rootView.findViewById(R.id.btn_export);
+        btn_export.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleDateFormat df =  new SimpleDateFormat("yyyyMMdd");
+                String fileName = df.format(new Date());
+                String srcFolder = mActivity.getBaseDir();
+                String zipFile = new File(mActivity.getBaseDir()).getParent() + File.separator + "wound_"+fileName+".zip";
+                try {
+                    XZip.ZipFolder(srcFolder, zipFile);
+                    ToastUtil.showLongToast(mActivity, "导出创伤信息成功，路径在：" + zipFile);
+                } catch (Exception e) {
+                    Log.e(TAG, "导出创伤信息失败", e);
+                    //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
+                }
             }
         });
     }
