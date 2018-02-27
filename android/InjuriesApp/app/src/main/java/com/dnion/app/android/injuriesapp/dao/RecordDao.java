@@ -80,6 +80,19 @@ public class RecordDao {
         return list;
     }
 
+    public List<RecordInfo> queryRecordHistoryList(String inpatientNo) {
+        List<RecordInfo> list = new ArrayList<RecordInfo>();
+        String sql = " select * from archives_record where inpatient_no = ? order by create_time asc ";
+        List<Map> mapList = db.queryListMap(sql, new String[] {inpatientNo});
+        if (mapList == null || mapList.size() == 0) {
+            return list;
+        }
+        for (Map map : mapList) {
+            list.add(warpRecordInfo(map));
+        }
+        return list;
+    }
+
     public boolean updateRecordInfo(RecordInfo recordInfo) {
         boolean success = db.update("archives_record",
                 new String[]{"wound_type", "wound_width", "wound_height",

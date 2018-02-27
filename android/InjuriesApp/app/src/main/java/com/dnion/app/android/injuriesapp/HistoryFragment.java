@@ -107,7 +107,7 @@ public class HistoryFragment extends Fragment {
         mLineChart = (LineChart)rootView.findViewById(R.id.line_chart);
         tableList = (ListView)rootView.findViewById(R.id.table_list);
         String inpatientNo = mActivity.getRecordInfo().getInpatientNo();
-        list = recordDao.queryRecordList(inpatientNo);
+        list = recordDao.queryRecordHistoryList(inpatientNo);
         initBarChart();
         initLineChart();
         initListView();
@@ -184,9 +184,9 @@ public class HistoryFragment extends Fragment {
         for (int i = start; i < groupCount; i++) {
             RecordInfo recordInfo = list.get(i);
             //String date = recordInfo.getRecordTime();
-            yRed.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorRed())));
-            yYellow.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorYellow())));
-            yBlack.add(new BarEntry(groupCount - i, formatFloatValue(recordInfo.getWoundColorBlack())));
+            yRed.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorRed())));
+            yYellow.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorYellow())));
+            yBlack.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorBlack())));
         }
         // create 4 DataSets
         BarDataSet setRed = new BarDataSet(yRed, mActivity.getText(R.string.measure_red).toString());
@@ -279,14 +279,14 @@ public class HistoryFragment extends Fragment {
         long time = 0;
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            widthValues.add(new Entry(list.size() - i, formatFloatValue(recordInfo.getWoundWidth())));
+            widthValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundWidth())));
         }
 
         calendar = Calendar.getInstance();
         ArrayList<Entry> heightValues = new ArrayList<Entry>();
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            heightValues.add(new Entry(list.size() - i, formatFloatValue(recordInfo.getWoundHeight())));
+            heightValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundHeight())));
         }
 
         LineDataSet widthDataSet = new LineDataSet(widthValues, mActivity.getText(R.string.measure_width).toString());
