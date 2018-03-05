@@ -69,7 +69,7 @@ public class RecordDao {
 
     public List<RecordInfo> queryRecordList(String inpatientNo) {
         List<RecordInfo> list = new ArrayList<RecordInfo>();
-        String sql = " select * from archives_record where inpatient_no = ? order by create_time desc ";
+        String sql = " select * from archives_record where inpatient_no = ? order by record_time desc ";
         List<Map> mapList = db.queryListMap(sql, new String[] {inpatientNo});
         if (mapList == null || mapList.size() == 0) {
             return list;
@@ -82,7 +82,7 @@ public class RecordDao {
 
     public List<RecordInfo> queryRecordHistoryList(String inpatientNo) {
         List<RecordInfo> list = new ArrayList<RecordInfo>();
-        String sql = " select * from archives_record where inpatient_no = ? order by create_time asc ";
+        String sql = " select * from archives_record where inpatient_no = ? order by record_time asc ";
         List<Map> mapList = db.queryListMap(sql, new String[] {inpatientNo});
         if (mapList == null || mapList.size() == 0) {
             return list;

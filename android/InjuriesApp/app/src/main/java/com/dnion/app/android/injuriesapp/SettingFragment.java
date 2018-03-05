@@ -160,10 +160,11 @@ public class SettingFragment extends Fragment {
                 String zipFile = new File(mActivity.getBaseDir()).getParent() + File.separator + "wound_"+fileName+".zip";
                 try {
                     XZip.ZipFolder(srcFolder, zipFile);
-                    ToastUtil.showLongToast(mActivity, "导出创伤信息成功，路径在：" + zipFile);
+                    AlertDialogUtil.showAlertDialog(mActivity, "导出成功", "路径在：" + zipFile);
+                    //ToastUtil.showLongToast(mActivity, "导出创伤信息成功，路径在：" + zipFile);
                 } catch (Exception e) {
                     Log.e(TAG, "导出创伤信息失败", e);
-                    //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
+                    ToastUtil.showLongToast(mActivity, "导出创伤信息失败！");
                 }
             }
         });

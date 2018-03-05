@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,11 +154,17 @@ public class HistoryFragment extends Fragment {
         xAxis.setLabelRotationAngle(30);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置横坐标在底部
         xAxis.setGridColor(Color.TRANSPARENT);//去掉网格中竖线的显
-        xAxis.setLabelCount(list.size(), false);
+        //xAxis.setDrawAxisLine(false);
+        if (list != null && list.size() > 0) {
+            xAxis.setLabelCount(list.size() - 1, false);
+        }
+        //xAxis.setXOffset(30);
+        //mBarChart.setExtraLeftOffset(-30);
         mBarChart.getXAxis().setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                if (value <= 1 || value >= list.size() + 1) {
+                Log.d("chenweihua", "mBarChart xAxis value="+value);
+                if (value <= 0 || value > list.size()) {
                     return "";
                 }
                 RecordInfo recordInfo = list.get((int)value - 1);
@@ -169,6 +176,7 @@ public class HistoryFragment extends Fragment {
         yAxis.setTextSize(14);
         yAxis.setSpaceBottom(0);
         yAxis.setAxisMinimum(0);
+        //yAxis.setXOffset(30);
         yAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -176,24 +184,27 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        int start = 0;
+        float start = 0.5f;
         int groupCount = list.size();
         List<BarEntry> yRed = new ArrayList<>();
         List<BarEntry> yYellow = new ArrayList<>();
         List<BarEntry> yBlack = new ArrayList<>();
-        for (int i = start; i < groupCount; i++) {
+        for (int i = 0; i < groupCount; i++) {
             RecordInfo recordInfo = list.get(i);
             //String date = recordInfo.getRecordTime();
-            yRed.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorRed())));
-            yYellow.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorYellow())));
-            yBlack.add(new BarEntry(i + 1, formatFloatValue(recordInfo.getWoundColorBlack())));
+            yRed.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorRed())));
+            yYellow.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorYellow())));
+            yBlack.add(new BarEntry(i, formatFloatValue(recordInfo.getWoundColorBlack())));
         }
         // create 4 DataSets
         BarDataSet setRed = new BarDataSet(yRed, mActivity.getText(R.string.measure_red).toString());
+        setRed.setDrawValues(false);
         setRed.setColor(Color.RED);
         BarDataSet setYellow = new BarDataSet(yYellow, mActivity.getText(R.string.measure_yellow).toString());
+        setYellow.setDrawValues(false);
         setYellow.setColor(Color.YELLOW);
         BarDataSet setBlack = new BarDataSet(yBlack, mActivity.getText(R.string.measure_black).toString());
+        setBlack.setDrawValues(false);
         setBlack.setColor(Color.BLACK);
 
         BarData barData = new BarData(setRed, setYellow, setBlack);
@@ -248,16 +259,17 @@ public class HistoryFragment extends Fragment {
             //private SimpleDateFormat mFormat = new SimpleDateFormat("MM-dd");
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                if (value == 0 || value > list.size()) {
+                Log.d("chenweihua", "mLineChart xAxis value="+value);
+                if (value >= list.size()) {
                     return "";
                 }
-                RecordInfo recordInfo = list.get((int)value - 1);
+                RecordInfo recordInfo = list.get((int)value);
                 return recordInfo.getRecordTime().substring(5, 10);
             }
         });
 
-        if (list != null) {
-            xAxis.setLabelCount(list.size(), false);////第一个参数是坐标轴label的个数，第二个参数是 是否不均匀分布，true是不均匀分布
+        if (list != null && list.size() > 0) {
+            xAxis.setLabelCount(list.size() - 1, false);////第一个参数是坐标轴label的个数，第二个参数是 是否不均匀分布，true是不均匀分布
         }
 
 
@@ -268,30 +280,38 @@ public class HistoryFragment extends Fragment {
         yAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return String.format("%.1fcm", value);
+                return String.format("%.1f", value);
             }
         });
 
         //每个点的坐标,自己随便搞点（x,y）坐标就可以了
         ArrayList<Entry> widthValues = new ArrayList<Entry>();
 
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         long time = 0;
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            widthValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundWidth())));
+            //widthValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundWidth())));
+            widthValues.add(new Entry(i, formatFloatValue(recordInfo.getWoundDeep())));
         }
 
-        calendar = Calendar.getInstance();
+        //calendar = Calendar.getInstance();
         ArrayList<Entry> heightValues = new ArrayList<Entry>();
         for (int i = 0; i < list.size(); i++) {
             RecordInfo recordInfo = list.get(i);
-            heightValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundHeight())));
+            //heightValues.add(new Entry(i + 1, formatFloatValue(recordInfo.getWoundHeight())));
+            heightValues.add(new Entry(i, formatFloatValue(recordInfo.getWoundArea())));
         }
 
-        LineDataSet widthDataSet = new LineDataSet(widthValues, mActivity.getText(R.string.measure_width).toString());
+        LineDataSet widthDataSet = new LineDataSet(widthValues, mActivity.getText(R.string.measure_deep).toString());
+        widthDataSet.setDrawCircles(false);//不显示坐标点的小圆点
+        widthDataSet.setDrawValues(false);//不显示坐标点的数据
+        widthDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//设置平滑曲线
         widthDataSet.setColor(Color.BLUE);
-        LineDataSet heightDataSet = new LineDataSet(heightValues, mActivity.getText(R.string.measure_length).toString());
+        LineDataSet heightDataSet = new LineDataSet(heightValues, mActivity.getText(R.string.measure_area).toString());
+        heightDataSet.setDrawCircles(false);//不显示坐标点的小圆点
+        heightDataSet.setDrawValues(false);//不显示坐标点的数据
+        heightDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);//设置平滑曲线
         heightDataSet.setColor(Color.GREEN);
         //线的集合（可单条或多条线）
         List<ILineDataSet> dataSets = new ArrayList<>();
@@ -299,6 +319,8 @@ public class HistoryFragment extends Fragment {
         dataSets.add(heightDataSet);
         //把要画的所有线(线的集合)添加到LineData里
         LineData lineData = new LineData(dataSets);
+        xAxis.setAxisMinimum(0);
+        xAxis.setAxisMaximum(list.size() - 1);
         //把最终的数据setData
         mLineChart.setData(lineData);
         //设置动画
@@ -509,7 +531,8 @@ public class HistoryFragment extends Fragment {
             viewHolder.text_width.setTextSize(data_text_size);
             viewHolder.text_area.setText("" + formatFloatValue(goods.getWoundArea()));
             viewHolder.text_area.setTextSize(data_text_size);
-            viewHolder.text_volume.setText("" + formatFloatValue(goods.getWoundVolume()));
+            //viewHolder.text_volume.setText("" + formatFloatValue(goods.getWoundVolume()));
+            viewHolder.text_volume.setText("" + formatFloatValue(goods.getWoundDeep()));
             viewHolder.text_volume.setTextSize(data_text_size);
             viewHolder.text_red.setText("" + formatFloatValue(goods.getWoundColorRed()));
             viewHolder.text_red.setTextSize(data_text_size);

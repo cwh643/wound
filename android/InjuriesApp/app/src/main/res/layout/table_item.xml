@@ -87,7 +87,7 @@
         android:singleLine="true"
         android:paddingTop="10dp"
         android:gravity="center"
-        android:text="@string/measure_volume_unit" />
+        android:text="@string/measure_deep_unit" />
 
     <View
         android:layout_width="1.5dp"
