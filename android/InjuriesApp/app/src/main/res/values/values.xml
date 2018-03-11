@@ -20,5 +20,6 @@
     <dimen name="image_measure_heigth_hw">1152px</dimen>
     <dimen name="image_measure_width">1075px</dimen>
     <dimen name="image_measure_heigth">806px</dimen>
-    <dimen name="image_measure_text_size">20sp</dimen>
+    <dimen name="image_measure_text_size">15sp</dimen>
+    <dimen name="image_measure_text_label_size">10sp</dimen>
 </resources>

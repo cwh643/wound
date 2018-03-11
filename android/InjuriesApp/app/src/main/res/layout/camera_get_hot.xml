@@ -1,108 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (c) 2012, The Android Open Source Project
 
-    <TextView
-        android:id="@+id/textview"
-        android:layout_width="fill_parent"
-        android:layout_height="20dp"
-        android:text="" />
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/textview">
+          http://www.apache.org/licenses/LICENSE-2.0
 
-        <ImageView
-            android:id="@+id/image_preview"
-            android:layout_width="368dp"
-            android:layout_height="495dp"
-            android:scaleType="fitXY" />
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
-        <Button
-            android:id="@+id/play_button"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="关闭"
-            android:textColor="#ffff0000" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/calibration_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/play_button"
-            android:text="拍照"
-            android:textColor="#ffff0000" />
+            <com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView
+                android:id="@+id/camera_surface_view"
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
 
-        <Button
-            android:id="@+id/color_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/calibration_button"
-            android:text="gray"
-            android:textColor="#ffff0000" />
+            <ImageView
+                android:id="@+id/rgb_view"
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
+            <ImageView
+                android:id="@+id/deep_camera_view"
+                android:layout_width="@dimen/camera_image_width"
+                android:layout_height="@dimen/camera_image_heigth"
+                />
 
-        <TextView
-            android:id="@+id/temperature_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/color_button"
-            android:text="00.00"
-            android:textColor="#ffff0000" />
 
-        <TextView
-            android:id="@+id/temperature_coor_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/temperature_textview"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/color_button"
-            android:text="(000,\n 000)"
-            android:textColor="#ffff0000" />
 
-        <TextView
-            android:id="@+id/temperature_rect_max"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/temperature_coor_textview"
-            android:text="00.00"
-            android:textColor="#ffff0000" />
+        </FrameLayout>
 
-        <TextView
-            android:id="@+id/temperature_rect_avg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/temperature_rect_max"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/temperature_coor_textview"
-            android:text="00.00"
-            android:textColor="#ffff0000" />
 
-        <TextView
-            android:id="@+id/temperature_rect_min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/temperature_rect_avg"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/temperature_coor_textview"
-            android:text="00.00"
-            android:textColor="#ffff0000" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/temperature_rect_coor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/temperature_rect_min"
-            android:layout_marginLeft="10.0dip"
-            android:layout_toRightOf="@id/temperature_coor_textview"
-            android:text="(000, 000), \n(000, 000)"
-            android:textColor="#ffff0000" />
-    </RelativeLayout>
-</RelativeLayout>
+
+            <!-- <Switch
+                android:id="@+id/image_swith"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="RGB"
+                android:textOn="DEPTH"
+                android:layout_marginLeft="40px"
+                android:layout_marginTop="40px"
+                android:layout_marginBottom="40px"/>-->
+
+            <ImageButton
+                android:id="@+id/camera_shot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@null"
+                android:src="@mipmap/capture_deep"
+                android:text="@string/camera_shot" />
+
+
+            <TextView
+                android:id="@+id/rgb_param"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+            <Button
+                android:id="@+id/back_button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/menu_btn_select"
+                android:textColor="@color/btn_title"
+                android:textSize="@dimen/rec_title_size"
+                android:text= "@string/back"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="58dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

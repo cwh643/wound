@@ -1,52 +1,25 @@
 package com.dnion.app.android.injuriesapp;
 
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageFormat;
 import android.graphics.Rect;
-import android.graphics.YuvImage;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ThermalExpert.ThermalExpert;
-import com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView;
-import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
-import com.dnion.app.android.injuriesapp.utils.BitmapUtils;
 import com.dnion.app.android.injuriesapp.utils.DateUtils;
 import com.dnion.app.android.injuriesapp.utils.ImageTools;
-import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -108,7 +81,7 @@ public class RecordFragmentHotCamera extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.camera_get_hot, container, false);
+        View rootView = inflater.inflate(R.layout.camera_get_hot_test, container, false);
         configView(rootView);
         mActivity.registerMyTouchListener(myTouchListener);
         return rootView;

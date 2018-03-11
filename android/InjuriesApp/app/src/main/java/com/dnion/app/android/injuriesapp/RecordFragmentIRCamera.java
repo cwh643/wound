@@ -122,7 +122,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.camera_get_hot_new, container, false);
+        View rootView = inflater.inflate(R.layout.camera_get_hot, container, false);
         configView(rootView);
         return rootView;
     }

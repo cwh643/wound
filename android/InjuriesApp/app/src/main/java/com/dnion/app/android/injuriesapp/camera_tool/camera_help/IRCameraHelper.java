@@ -114,7 +114,7 @@ public class IRCameraHelper extends AbstractCameraHelper {
                 for (int i = 0; i < mTempBuffer.length; i++) {
                     int y = i % 240;
                     int x = 319 - i / 240;
-                    double temp = mTempBuffer[i] * 100;
+                    double temp = mTempBuffer[i];
                     depthMat.put(y, x, temp);
                 }
             }
