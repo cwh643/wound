@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dnion.app.android.injuriesapp.dao.RecordImage;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
@@ -42,6 +43,8 @@ public class RecordFragment9 extends Fragment {
 
     private PhotoListAdapter adapter;
 
+    private TextView txtPositionDesc;
+
     public static RecordFragment9 createInstance() {
         RecordFragment9 fragment = new RecordFragment9();
 
@@ -69,21 +72,24 @@ public class RecordFragment9 extends Fragment {
 
     private void configView(final View rootView) {
         patientInfo = mActivity.getRecordInfo();
+        txtPositionDesc = (TextView) rootView.findViewById(R.id.txt_position_desc);
         GridView wound_container = (GridView) rootView.findViewById(R.id.wound_container);
         imageList = new ArrayList<RecordImage>();
-        imageList.add(new RecordImage(R.mipmap.position_1, R.mipmap.position_1s, 1));
-        imageList.add(new RecordImage(R.mipmap.position_2, R.mipmap.position_2s, 2));
-        imageList.add(new RecordImage(R.mipmap.position_3, R.mipmap.position_3s, 3));
-        imageList.add(new RecordImage(R.mipmap.position_4, R.mipmap.position_4s, 4));
-        imageList.add(new RecordImage(R.mipmap.position_5, R.mipmap.position_5s, 5));
-        imageList.add(new RecordImage(R.mipmap.position_6, R.mipmap.position_6s, 6));
-        imageList.add(new RecordImage(R.mipmap.position_7, R.mipmap.position_7s, 7));
+        imageList.add(new RecordImage(R.mipmap.position_1, R.mipmap.position_1s, 1, "头部"));
+        imageList.add(new RecordImage(R.mipmap.position_2, R.mipmap.position_2s, 2, "肩部"));
+        imageList.add(new RecordImage(R.mipmap.position_3, R.mipmap.position_3s, 3, "手部"));
+        imageList.add(new RecordImage(R.mipmap.position_4, R.mipmap.position_4s, 4, "脚部"));
+        imageList.add(new RecordImage(R.mipmap.position_5, R.mipmap.position_5s, 5, "腰部"));
+        imageList.add(new RecordImage(R.mipmap.position_6, R.mipmap.position_6s, 6, "腿部"));
+        imageList.add(new RecordImage(R.mipmap.position_7, R.mipmap.position_7s, 7, "背部"));
 
+        txtPositionDesc.setText("");
         Integer position = patientInfo.getWoundPosition();
         if (position != null) {
             for (RecordImage image : imageList) {
                 if (position.equals(image.getPositionId())) {
                     image.setSelected(true);
+                    txtPositionDesc.setText(image.getDescribe());
                 }
             }
         }
@@ -99,8 +105,11 @@ public class RecordFragment9 extends Fragment {
                 }
                 RecordImage recordImage = (RecordImage)adapter.getItem(position);
                 recordImage.setSelected(true);
+                //显示文字
+                txtPositionDesc.setText(recordImage.getDescribe());
                 adapter.notifyDataSetChanged();
                 patientInfo.setWoundPosition(recordImage.getPositionId());
+                patientInfo.setWoundPositionDesc(recordImage.getDescribe());
             }
         });
 

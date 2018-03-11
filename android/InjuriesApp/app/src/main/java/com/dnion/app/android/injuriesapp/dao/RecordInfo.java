@@ -29,6 +29,7 @@ public class RecordInfo {
     private Integer woundPosition;//伤口的位置
     private Integer woundPositionx;//伤口的位置X
     private Integer woundPositiony;//伤口的位置Y
+    private String woundPositionDesc;//伤口位置描述
     private Integer woundDescribeClean;//伤口的清洁程度
     private Float woundColorRed;//伤口的基底颜色-红
     private Float woundColorYellow;//伤口的基底颜色-黄
@@ -55,6 +56,14 @@ public class RecordInfo {
     private String woundTypeDesc;//伤口类型描述
     private String woundExam;//常规检查
     private Integer woundAche;//疼痛等级
+
+    public String getWoundPositionDesc() {
+        return woundPositionDesc;
+    }
+
+    public void setWoundPositionDesc(String woundPositionDesc) {
+        this.woundPositionDesc = woundPositionDesc;
+    }
 
     public String getWoundTypeDesc() {
         return woundTypeDesc;

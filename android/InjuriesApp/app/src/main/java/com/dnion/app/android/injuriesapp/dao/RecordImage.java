@@ -21,6 +21,8 @@ public class RecordImage {
 
     private String createTime;
 
+    private String describe;//描述
+
     public String getCreateTime() {
         return createTime;
     }
@@ -32,10 +34,11 @@ public class RecordImage {
     public RecordImage() {
 
     }
-    public RecordImage(Integer id, Integer selectId, Integer positionId) {
+    public RecordImage(Integer id, Integer selectId, Integer positionId, String describe) {
         this.id = id;
         this.selectId = selectId;
         this.positionId = positionId;
+        this.describe = describe;
     }
 
     public Integer getSelectId() {
@@ -92,5 +95,13 @@ public class RecordImage {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
     }
 }

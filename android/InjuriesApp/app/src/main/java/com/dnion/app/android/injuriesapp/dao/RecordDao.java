@@ -46,7 +46,7 @@ public class RecordDao {
         boolean success = db.insert("archives_record",
                 new String[]{"doctor_id", "inpatient_no", "record_time", "is_operation", "wound_type", "wound_width", "wound_height",
                         "wound_deep", "wound_area", "wound_volume", "wound_time", "wound_postion",
-                        "wound_postionx", "wound_postiony", "wound_measures", "wound_describe_clean",
+                        "wound_postionx", "wound_postiony", "wound_position_desc", "wound_measures", "wound_describe_clean",
                         "wound_color_red", "wound_color_yellow", "wound_color_black",
                         "wound_describe_skin", "wound_assess_prop", "wound_assess_infect", "wound_assess_infect_desc",
                         "wound_leachate_volume", "wound_leachate_color", "wound_leachate_smell", "wound_heal_all",
@@ -56,7 +56,7 @@ public class RecordDao {
                 new Object[]{recordInfo.getDoctorId(), recordInfo.getInpatientNo(), recordInfo.getRecordTime(), recordInfo.getIsOperation(), recordInfo.getWoundType(),
                         recordInfo.getWoundWidth(), recordInfo.getWoundHeight(),
                         recordInfo.getWoundDeep(), recordInfo.getWoundArea(), recordInfo.getWoundVolume(), recordInfo.getWoundTime(), recordInfo.getWoundPosition(),
-                        recordInfo.getWoundPositionx(), recordInfo.getWoundPositiony(), recordInfo.getWoundMeasures(), recordInfo.getWoundDescribeClean(),
+                        recordInfo.getWoundPositionx(), recordInfo.getWoundPositiony(), recordInfo.getWoundPositionDesc(), recordInfo.getWoundMeasures(), recordInfo.getWoundDescribeClean(),
                         recordInfo.getWoundColorRed(), recordInfo.getWoundColorYellow(), recordInfo.getWoundColorBlack(),
                         recordInfo.getWoundDescribeSkin(), recordInfo.getWoundAssessProp(), recordInfo.getWoundAssessInfect(), recordInfo.getWoundAssessInfectDesc(),
                         recordInfo.getWoundLeachateVolume(), recordInfo.getWoundLeachateColor(), recordInfo.getWoundLeachateSmell(), recordInfo.getWoundHealAll(),
@@ -97,7 +97,7 @@ public class RecordDao {
         boolean success = db.update("archives_record",
                 new String[]{"wound_type", "wound_width", "wound_height",
                         "wound_deep", "wound_area", "wound_volume", "wound_time", "wound_postion",
-                        "wound_postionx", "wound_postiony", "wound_measures", "wound_describe_clean",
+                        "wound_postionx", "wound_postiony", "wound_position_desc", "wound_measures", "wound_describe_clean",
                         "wound_color_red", "wound_color_yellow", "wound_color_black",
                         "wound_describe_skin", "wound_assess_prop", "wound_assess_infect", "wound_assess_infect_desc",
                         "wound_leachate_volume", "wound_leachate_color", "wound_leachate_smell", "wound_heal_all",
@@ -106,7 +106,7 @@ public class RecordDao {
                         "update_time", "sync_flag", "complains", "wound_type_desc", "wound_exam", "wound_ache"},
                 new Object[]{recordInfo.getWoundType(), recordInfo.getWoundWidth(), recordInfo.getWoundHeight(),
                         recordInfo.getWoundDeep(), recordInfo.getWoundArea(), recordInfo.getWoundVolume(), recordInfo.getWoundTime(), recordInfo.getWoundPosition(),
-                        recordInfo.getWoundPositionx(), recordInfo.getWoundPositiony(), recordInfo.getWoundMeasures(), recordInfo.getWoundDescribeClean(),
+                        recordInfo.getWoundPositionx(), recordInfo.getWoundPositiony(), recordInfo.getWoundPositionDesc(), recordInfo.getWoundMeasures(), recordInfo.getWoundDescribeClean(),
                         recordInfo.getWoundColorRed(), recordInfo.getWoundColorYellow(), recordInfo.getWoundColorBlack(),
                         recordInfo.getWoundDescribeSkin(), recordInfo.getWoundAssessProp(), recordInfo.getWoundAssessInfect(), recordInfo.getWoundAssessInfectDesc(),
                         recordInfo.getWoundLeachateVolume(), recordInfo.getWoundLeachateColor(), recordInfo.getWoundLeachateSmell(), recordInfo.getWoundHealAll(),
@@ -135,6 +135,7 @@ public class RecordDao {
         recordInfo.setWoundPosition(getIntValue(map,"wound_postion"));
         recordInfo.setWoundPositionx(getIntValue(map,"wound_postionx"));
         recordInfo.setWoundPositiony(getIntValue(map,"wound_postiony"));
+        recordInfo.setWoundPositionDesc((String)map.get("wound_position_desc"));
         recordInfo.setWoundMeasures(getIntValue(map,"wound_measures"));
         recordInfo.setWoundDescribeClean(getIntValue(map,"wound_describe_clean"));
         recordInfo.setWoundColorRed(getFloatValue(map,"wound_color_red"));

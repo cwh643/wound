@@ -34,7 +34,7 @@ public class DBHelper extends DataBaseHelper {
 
     @Override
     protected int getMDbVersion(Context context) {
-        return 6;
+        return 7;
     }
 
     @Override
@@ -194,6 +194,9 @@ public class DBHelper extends DataBaseHelper {
             sqlArray.add(" ALTER TABLE `archives_record` ADD `wound_type_desc` TEXT(32) ");//伤口类型描述
             sqlArray.add(" ALTER TABLE `archives_record` ADD `wound_exam` TEXT(255) ");//常规检查
             sqlArray.add(" ALTER TABLE `archives_record` ADD `wound_ache` INTEGER ");//疼痛等级
+        }
+        if (oldVersion <= 6) {
+            sqlArray.add(" ALTER TABLE `archives_record` ADD `wound_position_desc` TEXT(32) ");//伤口位置描述
         }
         return sqlArray.toArray(new String [sqlArray.size()]);
     }
