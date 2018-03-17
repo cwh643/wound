@@ -1,5 +1,7 @@
 package com.dnion.app.android.injuriesapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,9 +24,12 @@ import com.dnion.app.android.injuriesapp.http.RecordResponse;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.MapUtils;
+import com.dnion.app.android.injuriesapp.utils.PdfViewer;
+import com.dnion.app.android.injuriesapp.utils.SDCardHelper;
 import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 import com.dnion.app.android.injuriesapp.utils.XZip;
+import com.itextpdf.text.DocumentException;
 import com.squareup.okhttp.Request;
 
 import java.io.File;
@@ -261,7 +266,21 @@ public class HomeFragment extends Fragment {
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadRecordInfo(mActivity.getPatientInfo(), mActivity.getRecordInfo());
+                //uploadRecordInfo(mActivity.getPatientInfo(), mActivity.getRecordInfo());
+                try {
+                    String filePath = mActivity.getBaseDir() + "/report" + "/chapter_title.pdf";
+                    PdfViewer.createPdf(mActivity, filePath, mActivity.getPatientInfo(), mActivity.getRecordInfo());
+                    File file = new File(filePath);
+                    Intent intent = new Intent("android.intent.action.VIEW");
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setDataAndType (Uri.fromFile(file), "application/pdf");
+                    startActivity(Intent.createChooser(intent, "请选择程序打开伤口报告"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

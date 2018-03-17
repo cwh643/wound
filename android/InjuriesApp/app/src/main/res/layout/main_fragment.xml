@@ -89,8 +89,7 @@
             <Button
                 android:id="@+id/btn_upload"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_history"
                 android:background="@drawable/menu_btn_bg"
                 android:drawableLeft="@mipmap/icon_favorites"
