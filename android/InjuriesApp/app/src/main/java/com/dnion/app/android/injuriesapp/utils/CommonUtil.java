@@ -23,6 +23,7 @@ import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -201,5 +202,11 @@ public class CommonUtil {
     }
 
 
-
+    public static String getDictName(List<Pair> dict, Integer woundType) {
+        for (Pair item : dict) {
+            if (woundType.equals(item.first))
+                return "" + item.second;
+        }
+        return "";
+    }
 }

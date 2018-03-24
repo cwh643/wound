@@ -1,7 +1,9 @@
 package com.dnion.app.android.injuriesapp.utils;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 
+import com.dnion.app.android.injuriesapp.ArchivesData;
 import com.dnion.app.android.injuriesapp.R;
 import com.dnion.app.android.injuriesapp.dao.PatientInfo;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
@@ -18,10 +20,13 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.CMYKColor;
+import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
@@ -48,7 +53,7 @@ public class PdfViewer {
         fontName += ",1";
         BaseFont chineseFont = BaseFont.createFont(fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);//中文简体
 
-        createPdf(dest, chineseFont);
+        createPdf(context, dest, chineseFont, patientInfo, recordInfo);
 
 //        Document document = new Document();
 //        PdfWriter.getInstance(document, new FileOutputStream(dest));
@@ -84,7 +89,7 @@ public class PdfViewer {
         return cell;
     }
 
-    private static void createPdf(String pdfPath, BaseFont chineseFont) throws IOException, DocumentException {
+    private static void createPdf(Context context, String pdfPath, BaseFont chineseFont, PatientInfo patientInfo, RecordInfo recordInfo) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
@@ -107,27 +112,125 @@ public class PdfViewer {
         patientTitle.setSpacingBefore(25f);//设置上面空白宽度
         document.add(patientTitle);
 
-        float[] widths = { 35f, 35f, 30f };
-        PdfPTable table = new PdfPTable(widths);// 建立一个pdf表格
+        //float[] widths = { 35f, 35f, 30f };
+        PdfPTable table = new PdfPTable(new float[] { 35f, 35f, 30f });// 建立一个pdf表格
         table.setSpacingBefore(20f);// 设置表格上面空白宽度
         //table.setTotalWidth(500);// 设置表格的宽度
         table.setWidthPercentage(100);//设置表格宽度为%100
 
-        PdfPCell cell = createCell("患者ID", "55588990", titleChinese);
+        PdfPCell cell = createCell("患者ID", patientInfo.getInpatientNo(), titleChinese);
         table.addCell(cell);
-        cell = createCell("年龄", "90", titleChinese);
-        table.addCell(cell);
-        cell = createCell("性别", "女", titleChinese);
+        cell = createCell("年龄", patientInfo.getAge(), titleChinese);
         table.addCell(cell);
 
-        cell = createCell("姓名", "测试员", titleChinese);
+        int sex = patientInfo.getSex();
+        String sexStr = context.getString(R.string.base_info_female);
+        if (1 == sex) {
+            sexStr = context.getString(R.string.base_info_male);
+        }
+        cell = createCell("性别", sexStr, titleChinese);
         table.addCell(cell);
-        cell = createCell("出生日期", "2015/10/05", titleChinese);
+
+        cell = createCell("姓名", patientInfo.getName(), titleChinese);
         table.addCell(cell);
-        cell = createCell("主治医师", "Dr 高", titleChinese);
+        cell = createCell("出生日期", "", titleChinese);//DateFormat.format("yyyy-MM-dd", calendar)
+        table.addCell(cell);
+        cell = createCell("主治医师", patientInfo.getDoctor(), titleChinese);
         table.addCell(cell);
 
         document.add(table);
+
+
+        patientTitle = new Paragraph("检测结果", titleChinese);
+        patientTitle.setSpacingBefore(25f);//设置上面空白宽度
+        document.add(patientTitle);
+
+
+        table = new PdfPTable(new float[] { 35f, 35f, 30f });// 建立一个pdf表格
+        table.setSpacingBefore(20f);// 设置表格上面空白宽度
+        //table.setTotalWidth(500);// 设置表格的宽度
+        table.setWidthPercentage(100);//设置表格宽度为%100
+
+
+        cell = createCell("检测日期", recordInfo.getRecordTime(), titleChinese);
+        table.addCell(cell);
+        cell = createCell("检测编号", "90", titleChinese);
+        table.addCell(cell);
+
+        Integer woundType = recordInfo.getWoundType();
+        String woundName = "";
+        if (CommonUtil.isEn(context)) {
+            woundName = CommonUtil.getDictName(ArchivesData.typeEnDict, woundType);
+        } else {
+            woundName = CommonUtil.getDictName(ArchivesData.typeDict, woundType);
+        }
+        cell = createCell("伤口类型", woundName, titleChinese);
+        table.addCell(cell);
+
+        cell = createCell("形成时间", recordInfo.getWoundTime(), titleChinese);
+        table.addCell(cell);
+        cell = createCell("伤口位置", recordInfo.getWoundPositionDesc(), titleChinese);
+        cell.setColspan(2);
+        table.addCell(cell);
+
+        document.add(table);
+
+        //画图
+        Rectangle pageSize = PageSize.LETTER;
+        float space = 30;
+        float width = (pageSize.getWidth() / 2) - (3 * space);
+        float height = width;
+        float x = pageSize.getLeft() + space;
+        float y = pageSize.getTop() - 300 - height;
+
+        PdfContentByte canvas = writer.getDirectContent();
+
+        //canvas.saveState();
+        //canvas.setColorStroke(new GrayColor(0.2f));
+        //canvas.setColorFill(new GrayColor(0.9f));
+        //canvas.circle(x, y, 5);
+        //canvas.restoreState();
+
+        canvas.saveState();
+        Rectangle rect = new Rectangle(x, y, x + width, y + height);
+        rect.setBackgroundColor(new GrayColor(0.9f));
+        canvas.rectangle(rect);
+        canvas.restoreState();
+
+        canvas.saveState();
+        float barWidth = width / 5 ;
+        float barHeight = height * 0.8f;
+        float barX = x + barWidth / 2 ;
+        float barY = y ;
+        Rectangle redRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+        redRect.setBackgroundColor(BaseColor.RED);
+        canvas.rectangle(redRect);
+
+        barX = barX + barWidth + barWidth / 2;
+        barHeight = height * 0.2f;
+        Rectangle yellowRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+        yellowRect.setBackgroundColor(BaseColor.YELLOW);
+        canvas.rectangle(yellowRect);
+
+        barX = barX + barWidth + barWidth / 2;
+        barHeight = height * 0.5f;
+        Rectangle blackRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+        blackRect.setBackgroundColor(BaseColor.BLACK);
+        canvas.rectangle(blackRect);
+        canvas.restoreState();
+
+
+        patientTitle = new Paragraph("注释", titleChinese);
+        patientTitle.setSpacingBefore(300f);//设置上面空白宽度
+        document.add(patientTitle);
+
+        patientTitle = new Paragraph("科室：创伤科    医生签名：", titleChinese);
+        patientTitle.setSpacingBefore(25f);//设置上面空白宽度
+        patientTitle.setAlignment(Paragraph.ALIGN_RIGHT);
+        document.add(patientTitle);
+
+
+
         /*
         title = new Paragraph("致：XXX公司", BoldChinese);// 抬头
         title.setSpacingBefore(25f);//设置上面空白宽度
@@ -236,6 +339,8 @@ public class PdfViewer {
 
         document.close();
     }
+
+
 
     class PdfBackground extends PdfPageEventHelper {
         @Override
