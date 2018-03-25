@@ -1,7 +1,11 @@
 package com.dnion.app.android.injuriesapp.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.util.Log;
+import android.view.View;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -15,6 +19,7 @@ import java.util.List;
  */
 
 public class BitmapUtils {
+    public static String TAG = "BitmapUtils";
     public static Bitmap scale_image(Bitmap bm, int x, int y, int width, int height, int newWidth, int newHeight) {
 
         // 计算缩放比例
@@ -41,7 +46,7 @@ public class BitmapUtils {
         for (int i = lines.length - 1; i >= 0; i--) {
             String[] items = lines[i].split(",");
             for (int j = items.length - 1; j >= 0; j--) {
-                mat.put(i,j, new Double(items[j]));
+                mat.put(i, j, new Double(items[j]));
             }
         }
         return mat;
@@ -78,5 +83,34 @@ public class BitmapUtils {
             sb.append(y).append(",");
         }
         return sb.toString();
+    }
+
+    public static Bitmap mergeBitmap(Bitmap backBitmap, Bitmap... frontBitmaps) {
+        if (backBitmap == null || backBitmap.isRecycled()) {
+            Log.e(TAG, "backBitmap error:" + backBitmap + ";");
+            return null;
+        }
+        Bitmap ret = backBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(ret);
+        Rect baseRect = new Rect(0, 0, backBitmap.getWidth(), backBitmap.getHeight());
+        for (Bitmap frontBitmap : frontBitmaps) {
+            if (backBitmap == null || backBitmap.isRecycled()
+                    || frontBitmap == null || frontBitmap.isRecycled()) {
+                Log.e(TAG, "frontBitmap error:" + frontBitmap);
+                continue;
+            }
+            Rect frontRect = new Rect(0, 0, frontBitmap.getWidth(), frontBitmap.getHeight());
+            canvas.drawBitmap(frontBitmap, frontRect, baseRect, null);
+        }
+        return ret;
+    }
+
+    public static Bitmap getViewBitmap(View view) {
+        view.setDrawingCacheEnabled(true);
+        Bitmap tBitmap = view.getDrawingCache();
+        // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
+        tBitmap = tBitmap.createBitmap(tBitmap);
+        view.setDrawingCacheEnabled(false);
+        return tBitmap;
     }
 }

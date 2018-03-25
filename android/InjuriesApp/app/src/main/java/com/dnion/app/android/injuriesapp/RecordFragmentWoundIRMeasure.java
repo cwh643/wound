@@ -31,6 +31,7 @@ import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
+import com.dnion.app.android.injuriesapp.utils.BitmapUtils;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 
 import org.opencv.android.Utils;
@@ -567,6 +568,11 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             AlertDialogUtil.showAlertDialog(mActivity,
                     mActivity.getString(R.string.message_title_tip),
                     mActivity.getString(R.string.message_wait_save));
+
+            Bitmap pdf = BitmapUtils.mergeBitmap(mWoundRgbBitmap, mAreaMeasureBitmap,
+                    BitmapUtils.getViewBitmap(mMaxTempTipView),
+                    BitmapUtils.getViewBitmap(mMinTempTipView));
+            deepCameraInfo.setPdfBitmap(pdf);
             mActivity.saveIRCameraInfo();
             ToastUtil.showShortToast(mActivity, "保存成功");
             AlertDialogUtil.dismissAlertDialog(mActivity);

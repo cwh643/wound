@@ -20,6 +20,7 @@ import java.io.File;
 public class DeepCameraInfoDao {
     public static final String TAG = "deep_camera_info_dao";
     public final static String RGB_FILE_NAME = "rgb.jpeg";
+    public final static String PDF_IMAGE_FILE_NAME = "pdf.jpeg";
     public final static String DEEP_FILE_NAME = "deep.data";
     public final static String LIST_IMAGE_FILE_NAME = "list_rgb.jpeg";
     public final static String MODEL_FILE_NAME = "model.data";
@@ -41,6 +42,9 @@ public class DeepCameraInfoDao {
         String deepStr = FileUtils.readFile(path, DEEP_FILE_NAME);
         Mat depth = BitmapUtils.get_mat_from_string(deepStr, dci.getDepthMatWidth(), dci.getDepthMatHeight());
         dci.setDepthMat(depth);
+        // 加载pdf图片
+        Bitmap pdf = ImageTools.getPhotoFromSDCard(path, PDF_IMAGE_FILE_NAME);
+        dci.setPdfBitmap(pdf);
         return dci;
     }
 
@@ -52,10 +56,17 @@ public class DeepCameraInfoDao {
                 String rgbPath = path + File.separator + RGB_FILE_NAME;
                 Log.i(TAG, "rgb_path:" + rgbPath);
                 ImageTools.savePhotoToSDCard(dci.getRgbBitmap(), path, RGB_FILE_NAME);
+
+                // 保存pdf图片
+                String pdfImagePath = path + File.separator + PDF_IMAGE_FILE_NAME;
+                ImageTools.savePhotoToSDCard(dci.getPdfBitmap(), path, PDF_IMAGE_FILE_NAME);
+                Log.i(TAG, "pdf_path:" + pdfImagePath);
+
                 // 保存rgb略缩图片
                 String listRgbPath = path + File.separator + LIST_IMAGE_FILE_NAME;
                 Bitmap listBitmap = BitmapUtils.scale_image(dci.getRgbBitmap(), 0, 0, dci.getRgbBitmap().getWidth(), dci.getRgbBitmap().getHeight(), 320, 240);
-                Log.i(TAG, "rgb_path:" + listRgbPath);
+                Log.i(TAG, "List_rgb_path:" + listRgbPath);
+
                 ImageTools.savePhotoToSDCard(listBitmap, listRgbPath, LIST_IMAGE_FILE_NAME);
                 // 保存deep点云
                 String deepPath = path + File.separator + DEEP_FILE_NAME;

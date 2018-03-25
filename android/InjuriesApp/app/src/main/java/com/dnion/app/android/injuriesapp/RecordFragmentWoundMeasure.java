@@ -61,6 +61,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private int displayMode = 1; // 1 rgb, 2 depth, 3 orgin rgb
 
     private Bitmap mWoundRgbBitmap;
+    private Bitmap mWoundCalcBitmap;
     private Bitmap mAreaMeasureBitmap;
     private Bitmap mLengthMeasureBitmap;
     private Bitmap mWidthMeasureBitmap;
@@ -520,8 +521,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
             mDepth.convertTo(tmpMap, tmpMap.type());
             Bitmap orgDepth = Bitmap.createBitmap(mDepth.cols(), mDepth.rows(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(tmpMap, orgDepth);
-            Bitmap depthBitmap = Bitmap.createBitmap(orgDepth, lx, ly, bitmapWidth, bitmapHeight);
-            mWoundRgbView.setImageBitmap(depthBitmap);
+            mWoundCalcBitmap = Bitmap.createBitmap(orgDepth, lx, ly, bitmapWidth, bitmapHeight);
+            mWoundRgbView.setImageBitmap(mWoundCalcBitmap);
         } else if (displayMode == 3) {
             mWoundOrgRgbView.setImageBitmap(rgb);
             mWoundOrgRgbView.setVisibility(View.VISIBLE);
@@ -1307,6 +1308,19 @@ public class RecordFragmentWoundMeasure extends Fragment {
                         @Override
                         public void exec() {
                             super.exec();
+                            Bitmap baseBitmap = null;
+                            if (mWoundCalcBitmap != null) {
+                                baseBitmap = mWoundCalcBitmap;
+                            } else if (mWoundRgbBitmap != null){
+                                baseBitmap = mWoundCalcBitmap;
+                            }
+                            Bitmap pdf = BitmapUtils.mergeBitmap(baseBitmap, mAreaMeasureBitmap,
+                                    mLengthMeasureBitmap,mWidthMeasureBitmap,mDeepMeasureBitmap,
+                                    BitmapUtils.getViewBitmap(mAreaTipView),
+                                    BitmapUtils.getViewBitmap(mLengthTipView),
+                                    BitmapUtils.getViewBitmap(mWidthTipView),
+                                    BitmapUtils.getViewBitmap(mDeepTipView));
+                            deepCameraInfo.setPdfBitmap(pdf);
                             mActivity.saveDeepCameraInfo();
                             syncWoundNum();
                             // ToastUtil.showShortToast(mActivity, "保存成功");

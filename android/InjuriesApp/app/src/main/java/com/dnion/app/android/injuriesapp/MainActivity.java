@@ -2,6 +2,7 @@ package com.dnion.app.android.injuriesapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,6 +38,7 @@ import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
     public static final String TAG = "main_activty";
@@ -368,6 +370,36 @@ public class MainActivity extends BaseActivity {
 
     public void setDeepCameraInfo(DeepCameraInfo deepCameraInfo) {
         this.deepCameraInfo = deepCameraInfo;
+    }
+
+    public Bitmap getPdfRgbImage(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getRgbBitmap();
+    }
+
+    public Bitmap getPdfDeepImage(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getPdfBitmap();
+    }
+
+    public Bitmap getPdfIrImage(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'ir'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getPdfBitmap();
     }
 
     // 保存MyTouchListener接口的列表

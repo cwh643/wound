@@ -1,6 +1,7 @@
 package com.dnion.app.android.injuriesapp.dao;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.text.format.DateFormat;
 
 import com.dnion.app.android.injuriesapp.InjApp;

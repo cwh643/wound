@@ -1,6 +1,11 @@
 package com.dnion.app.android.injuriesapp.dao;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+
+import com.dnion.app.android.injuriesapp.utils.BitmapUtils;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -18,6 +23,7 @@ public class DeepCameraInfo {
     private String filepath;
     private transient boolean isNew = true;
     private transient Bitmap rgbBitmap;
+    private transient Bitmap PdfBitmap;
     private transient Mat depthMat;
     private int depthMatWidth = 640;
     private int depthMatHeight = 480;
@@ -71,6 +77,14 @@ public class DeepCameraInfo {
 
     public void setRgbBitmap(Bitmap rgbBitmap) {
         this.rgbBitmap = rgbBitmap;
+    }
+
+    public Bitmap getPdfBitmap() {
+        return PdfBitmap;
+    }
+
+    public void setPdfBitmap(Bitmap pdfBitmap) {
+        PdfBitmap = pdfBitmap;
     }
 
     public double getMinDeep() {
@@ -329,4 +343,5 @@ public class DeepCameraInfo {
     public void setCamera_size_factor(float camera_size_factor) {
         this.camera_size_factor = camera_size_factor;
     }
+
 }
