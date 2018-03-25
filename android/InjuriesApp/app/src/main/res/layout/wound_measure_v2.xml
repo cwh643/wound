@@ -169,9 +169,10 @@
             android:id="@+id/btn_save_mbi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
             android:background="@mipmap/btn_save_bg"
             android:text="@string/back"
             android:textColor="@color/white"
@@ -184,8 +185,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="85dp"
             android:background="@mipmap/measure_right_hov_bg"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btn_measure_edit_bar"
@@ -207,8 +207,7 @@
                 android:id="@+id/measure_btn_rgb"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                ></com.dnion.app.android.injuriesapp.ui.MeasureButton>
+                android:layout_weight="1"></com.dnion.app.android.injuriesapp.ui.MeasureButton>
 
 
             <com.dnion.app.android.injuriesapp.ui.MeasureButton
