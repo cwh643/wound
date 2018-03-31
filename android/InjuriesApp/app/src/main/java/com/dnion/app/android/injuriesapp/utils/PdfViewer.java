@@ -213,14 +213,14 @@ public class PdfViewer {
         canvas.restoreState();
 
         float redValue = (recordInfo.getWoundColorRed() == null ? 0 : recordInfo.getWoundColorRed());
-        float yellowValue = (recordInfo.getWoundColorYellow() == null ? 0 : recordInfo.getWoundColorRed());
-        float blackValue = (recordInfo.getWoundColorBlack() == null ? 0 : recordInfo.getWoundColorRed());
-        float maxValue = Math.max(redValue, Math.max(yellowValue, blackValue)) * 0.8f;
+        float yellowValue = (recordInfo.getWoundColorYellow() == null ? 0 : recordInfo.getWoundColorYellow());
+        float blackValue = (recordInfo.getWoundColorBlack() == null ? 0 : recordInfo.getWoundColorBlack());
+        float maxValue = Math.max(redValue, Math.max(yellowValue, blackValue));
 
         if (maxValue > 0) {
             canvas.saveState();
             float barWidth = width / 5 ;
-            float barHeight = redValue / maxValue * height;
+            float barHeight = (redValue / maxValue) * (height * 0.8f);
             float barX = x + barWidth / 2 ;
             float barY = y ;
             Rectangle redRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
@@ -228,13 +228,13 @@ public class PdfViewer {
             canvas.rectangle(redRect);
 
             barX = barX + barWidth + barWidth / 2;
-            barHeight = yellowValue / maxValue * height;
+            barHeight = (yellowValue / maxValue) * (height * 0.8f);
             Rectangle yellowRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
             yellowRect.setBackgroundColor(BaseColor.YELLOW);
             canvas.rectangle(yellowRect);
 
             barX = barX + barWidth + barWidth / 2;
-            barHeight = blackValue / maxValue * height;
+            barHeight = (blackValue / maxValue) * (height * 0.8f);
             Rectangle blackRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
             blackRect.setBackgroundColor(BaseColor.BLACK);
             canvas.rectangle(blackRect);
