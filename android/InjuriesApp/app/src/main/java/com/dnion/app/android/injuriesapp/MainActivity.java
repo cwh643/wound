@@ -402,6 +402,33 @@ public class MainActivity extends BaseActivity {
         return image.getImagePath() + File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
     }
 
+    public String getPdfRgbImagePath(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.RGB_FILE_NAME;
+    }
+
+    public String getPdfDeepImagePath(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
+    }
+
+    public String getPdfIrImagePath(String recordId) {
+        List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'ir'");
+        if (imageList.size() <= 0) {
+            return null;
+        }
+        RecordImage image = imageList.get(0);
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.DEEP_FILE_NAME;
+    }
+
     // 保存MyTouchListener接口的列表
     private ArrayList<MyTouchListener> myTouchListeners = new ArrayList<MainActivity.MyTouchListener>();
 
