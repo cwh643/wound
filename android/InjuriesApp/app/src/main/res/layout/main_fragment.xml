@@ -95,10 +95,21 @@
                 android:drawableLeft="@mipmap/icon_favorites"
                 android:drawablePadding="10dp"
                 android:padding="10dp"
-                android:text="@string/top_menu_upload"
+                android:text="@string/top_menu_report"
                 android:textColor="@color/white"
                 android:textSize="@dimen/rec_menu_title_size" />
-
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/btn_upload"
+                android:background="@drawable/menu_btn_bg"
+                android:drawableLeft="@mipmap/icon_favorites"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="@string/top_menu_back"
+                android:textColor="@color/white"
+                android:textSize="@dimen/rec_menu_title_size" />
             <ImageButton
                 android:id="@+id/btn_favorites"
                 android:layout_width="100dp"

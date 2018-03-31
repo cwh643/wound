@@ -372,34 +372,34 @@ public class MainActivity extends BaseActivity {
         this.deepCameraInfo = deepCameraInfo;
     }
 
-    public Bitmap getPdfRgbImage(String recordId) {
+    public String getPdfRgbImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return dci.getRgbBitmap();
+        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return image.getImagePath() + File.separator + DeepCameraInfoDao.RGB_FILE_NAME;
     }
 
-    public Bitmap getPdfDeepImage(String recordId) {
+    public String getPdfDeepImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return dci.getPdfBitmap();
+        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return image.getImagePath() + File.separator + DeepCameraInfoDao.DEEP_FILE_NAME;
     }
 
-    public Bitmap getPdfIrImage(String recordId) {
+    public String getPdfIrImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'ir'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return dci.getPdfBitmap();
+        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return image.getImagePath() + File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
     }
 
     // 保存MyTouchListener接口的列表

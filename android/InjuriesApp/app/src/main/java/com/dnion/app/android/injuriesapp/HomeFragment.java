@@ -72,13 +72,28 @@ public class HomeFragment extends Fragment {
 
     public static final String ACQUISITION_TIME = "acquisitionTime";
 
+    public static final String IS_FROM_QUERY = "isFromQuery";
+
     private Button btn_save_bi;
+
+    private Button btn_back;
 
     public static HomeFragment createInstance(String selectInpatientNo, String acquisitionTime) {
         Bundle bundle = new Bundle();
         HomeFragment fragment = new HomeFragment();
         bundle.putString(SELECT_INPATIENT_NO, selectInpatientNo);
         bundle.putString(ACQUISITION_TIME, acquisitionTime);
+        bundle.putString(IS_FROM_QUERY, "");
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static HomeFragment createInstance(String selectInpatientNo, String acquisitionTime, String isFromQuery) {
+        Bundle bundle = new Bundle();
+        HomeFragment fragment = new HomeFragment();
+        bundle.putString(SELECT_INPATIENT_NO, selectInpatientNo);
+        bundle.putString(ACQUISITION_TIME, acquisitionTime);
+        bundle.putString(IS_FROM_QUERY, isFromQuery);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -103,7 +118,22 @@ public class HomeFragment extends Fragment {
     private void configView(final View rootView) {
         //save_layout = (ViewGroup) rootView.findViewById(R.id.save_layout);
         //detail_container = findViewById(R.id.detail_container);
+        final String isFromQuery = getArguments().getString(IS_FROM_QUERY);
         btn_save_bi = (Button)rootView.findViewById(R.id.btn_save_bi);
+        btn_back = (Button)rootView.findViewById(R.id.btn_back);
+        if (isFromQuery != null && "1".equals(isFromQuery)) {
+            btn_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mActivity.getSupportFragmentManager().beginTransaction()
+                            .remove(HomeFragment.this)
+                            .commit();
+                }
+            });
+        } else {
+            btn_back.setVisibility(View.GONE);
+        }
+
         final String selectInpatientNo = getArguments().getString(SELECT_INPATIENT_NO);
         final String acquisitionTime = getArguments().getString(ACQUISITION_TIME);
         //基本信息

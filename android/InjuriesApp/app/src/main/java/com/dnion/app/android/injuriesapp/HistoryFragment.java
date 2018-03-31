@@ -149,6 +149,7 @@ public class HistoryFragment extends Fragment {
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         mBarChart.getAxisRight().setEnabled(false); // 隐藏右边 的坐标轴
 
+        final float start = 0.5f;
         XAxis xAxis = mBarChart.getXAxis();
         xAxis.setTextSize(14);
         xAxis.setLabelRotationAngle(30);
@@ -164,11 +165,18 @@ public class HistoryFragment extends Fragment {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 Log.d("chenweihua", "mBarChart xAxis value="+value);
-                if (value <= 0 || value > list.size()) {
+                float relVal = value - start;
+                if (relVal < 0 || relVal >= list.size()) {
                     return "";
+                    //return "" + value;
                 }
-                RecordInfo recordInfo = list.get((int)value - 1);
-                return recordInfo.getRecordTime().substring(5, 10);
+                if (relVal == (int)relVal) {
+                    return "";
+                } else {
+                    RecordInfo recordInfo = list.get((int)relVal);
+                    return recordInfo.getRecordTime().substring(5, 10);
+                }
+
             }
         });
 
@@ -184,7 +192,7 @@ public class HistoryFragment extends Fragment {
             }
         });
 
-        float start = 0.5f;
+
         int groupCount = list.size();
         List<BarEntry> yRed = new ArrayList<>();
         List<BarEntry> yYellow = new ArrayList<>();
@@ -259,12 +267,17 @@ public class HistoryFragment extends Fragment {
             //private SimpleDateFormat mFormat = new SimpleDateFormat("MM-dd");
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                Log.d("chenweihua", "mLineChart xAxis value="+value);
-                if (value >= list.size()) {
+                //Log.d("chenweihua", "mLineChart xAxis value="+value);
+                //int intVal = (int)value;
+                if (value < 0 || value >= list.size()) {
                     return "";
+                    //return "" + value;
                 }
-                RecordInfo recordInfo = list.get((int)value);
-                return recordInfo.getRecordTime().substring(5, 10);
+                if (value == (int)value) {
+                    RecordInfo recordInfo = list.get((int)value);
+                    return recordInfo.getRecordTime().substring(5, 10);
+                }
+                return "";
             }
         });
 

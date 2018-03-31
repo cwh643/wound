@@ -118,9 +118,10 @@ public class QueryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectInpatientNo != null && selectInpatientNo.length() > 0) {
-                    HomeFragment fragment = HomeFragment.createInstance(selectInpatientNo, "");
+                    HomeFragment fragment = HomeFragment.createInstance(selectInpatientNo, "", "1");
                     mActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_container, fragment)
+                            .add(R.id.main_container, fragment)
+                            //.replace(R.id.main_container, fragment)
                             .commit();
                 } else {
                     ToastUtil.showLongToast(mActivity, "请选择患者");
@@ -165,9 +166,10 @@ public class QueryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 RecordInfo record = (RecordInfo)recordAdapter.getItem(position);
                 String recordTime = record.getRecordTime();
-                HomeFragment fragment = HomeFragment.createInstance(selectInpatientNo, recordTime);
+                HomeFragment fragment = HomeFragment.createInstance(selectInpatientNo, recordTime, "1");
                 mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_container, fragment)
+                        .add(R.id.main_container, fragment)
+                        //.replace(R.id.main_container, fragment)
                         .commit();
             }
         });
