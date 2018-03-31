@@ -242,35 +242,42 @@ public class PdfViewer {
         }
 
 
-        //深度
-        String path = context.getPdfRgbImage(recordInfo.getUuid());
+        //RGB
+        String path = context.getPdfRgbImagePath("" + recordInfo.getId());
         if (path != null && path.length() > 0) {
             Image img = Image.getInstance(path);//选择图片
-            img.scaleAbsolute(100,100);//控制图片大小
-            img.setAbsolutePosition(0,200);//控制图片位置
+            //height = (int)(img.getHeight() * width / img.getWidth());
+            //img.scaleAbsolute(width,height);//控制图片大小
+            img.scaleAbsolute(width,height);
+            img.setAbsolutePosition(x + width + space,y);//控制图片位置
+            document.add(img);
+        }
+
+
+        //深度
+        path = context.getPdfDeepImagePath("" + recordInfo.getId());
+        if (path != null && path.length() > 0) {
+            Image img = Image.getInstance(path);//选择图片
+            //height = (int)(img.getHeight() * width / img.getWidth());
+            //img.scaleAbsolute(width,height);//控制图片大小
+            img.scaleAbsolute(width,height);
+            img.setAbsolutePosition(x,y - height - space);//控制图片位置
             document.add(img);
         }
 
         //深度
-        path = context.getPdfDeepImage(recordInfo.getUuid());
+        path = context.getPdfIrImagePath("" + recordInfo.getId());
         if (path != null && path.length() > 0) {
             Image img = Image.getInstance(path);//选择图片
-            img.scaleAbsolute(100,100);//控制图片大小
-            img.setAbsolutePosition(250,200);//控制图片位置
+            //img.scaleAbsolute(100,100);//控制图片大小
+            img.scaleAbsolute(width,height);
+            img.setAbsolutePosition(x + width + space,y - height - space);//控制图片位置
             document.add(img);
         }
 
-        //深度
-        path = context.getPdfIrImage(recordInfo.getUuid());
-        if (path != null && path.length() > 0) {
-            Image img = Image.getInstance(path);//选择图片
-            img.scaleAbsolute(100,100);//控制图片大小
-            img.setAbsolutePosition(250,0);//控制图片位置
-            document.add(img);
-        }
-
+        document.newPage();
         table = new PdfPTable(new float[] { 30f, 10f, 10f, 10f, 10f, 10f, 10f, 10f });// 建立一个pdf表格
-        table.setSpacingBefore(300f);// 设置表格上面空白宽度
+        table.setSpacingBefore(20f);// 设置表格上面空白宽度
         //table.setTotalWidth(500);// 设置表格的宽度
         table.setWidthPercentage(100);//设置表格宽度为%100
 

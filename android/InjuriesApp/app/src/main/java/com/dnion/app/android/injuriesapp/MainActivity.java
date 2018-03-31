@@ -372,37 +372,38 @@ public class MainActivity extends BaseActivity {
         this.deepCameraInfo = deepCameraInfo;
     }
 
-    public String getPdfRgbImage(String recordId) {
+    public Bitmap getPdfRgbImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return image.getImagePath() + File.separator + DeepCameraInfoDao.RGB_FILE_NAME;
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getRgbBitmap();
     }
 
-    public String getPdfDeepImage(String recordId) {
+    public Bitmap getPdfDeepImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return image.getImagePath() + File.separator + DeepCameraInfoDao.DEEP_FILE_NAME;
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getPdfBitmap();
     }
 
-    public String getPdfIrImage(String recordId) {
+    public Bitmap getPdfIrImage(String recordId) {
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'ir'");
         if (imageList.size() <= 0) {
             return null;
         }
         RecordImage image = imageList.get(0);
-        //DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
-        return image.getImagePath() + File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
+        DeepCameraInfo dci = queryDeepCameraInfo(image.getImagePath());
+        return dci.getPdfBitmap();
     }
 
     public String getPdfRgbImagePath(String recordId) {
+        //return getBaseDir() +  "/61d88446b2104bb39eb7fab498017a7e/deep/19700101002717/"+ DeepCameraInfoDao.RGB_FILE_NAME;
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
@@ -412,6 +413,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public String getPdfDeepImagePath(String recordId) {
+        //return getBaseDir() +  "/61d88446b2104bb39eb7fab498017a7e/deep/19700101002717/"+ DeepCameraInfoDao.RGB_FILE_NAME;
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'deep'");
         if (imageList.size() <= 0) {
             return null;
@@ -421,6 +423,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public String getPdfIrImagePath(String recordId) {
+        //return getBaseDir() +  "/61d88446b2104bb39eb7fab498017a7e/deep/19700101002717/"+ DeepCameraInfoDao.RGB_FILE_NAME;
         List<RecordImage> imageList = recordImageDao.queryRecordImage(recordId, "'ir'");
         if (imageList.size() <= 0) {
             return null;
