@@ -109,7 +109,8 @@
                 android:padding="10dp"
                 android:text="@string/top_menu_back"
                 android:textColor="@color/white"
-                android:textSize="@dimen/rec_menu_title_size" />
+                android:textSize="@dimen/rec_menu_title_size"
+                android:visibility="gone"/>
             <ImageButton
                 android:id="@+id/btn_favorites"
                 android:layout_width="100dp"
@@ -149,16 +150,39 @@
         </LinearLayout>
         -->
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_save_bi"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/operation_bi"
+        android:layout_width="274dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
-        android:background="@mipmap/btn_save_bg"
-        android:text="@string/top_menu_save"
-        android:textColor="@color/white"
-        android:textSize="@dimen/rec_menu_title_size"
-        android:visibility="gone"/>
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/btn_save_bi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="30dp"
+            android:background="@mipmap/btn_save_bg"
+            android:text="@string/top_menu_save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/rec_menu_title_size"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            />
+        <Button
+            android:id="@+id/btn_back_bi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/btn_save_bg"
+            android:text="@string/top_menu_back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/rec_menu_title_size"
+            android:layout_marginEnd="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/btn_save_bi"
+            />
+    </RelativeLayout>
+
 </FrameLayout>

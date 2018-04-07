@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 import com.dnion.app.android.injuriesapp.dao.PatientDao;
@@ -78,6 +79,10 @@ public class HomeFragment extends Fragment {
 
     private Button btn_back;
 
+    private Button btn_back_bi;
+
+    private ViewGroup operation_bi;
+
     public static HomeFragment createInstance(String selectInpatientNo, String acquisitionTime) {
         Bundle bundle = new Bundle();
         HomeFragment fragment = new HomeFragment();
@@ -120,6 +125,8 @@ public class HomeFragment extends Fragment {
         //detail_container = findViewById(R.id.detail_container);
         final String isFromQuery = getArguments().getString(IS_FROM_QUERY);
         btn_save_bi = (Button)rootView.findViewById(R.id.btn_save_bi);
+        operation_bi = (RelativeLayout)rootView.findViewById(R.id.operation_bi);
+        btn_back_bi = (Button)rootView.findViewById(R.id.btn_back_bi);
         btn_back = (Button)rootView.findViewById(R.id.btn_back);
         if (isFromQuery != null && "1".equals(isFromQuery)) {
             btn_back.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +137,17 @@ public class HomeFragment extends Fragment {
                             .commit();
                 }
             });
+            btn_back_bi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mActivity.getSupportFragmentManager().beginTransaction()
+                            .remove(HomeFragment.this)
+                            .commit();
+                }
+            });
         } else {
             btn_back.setVisibility(View.GONE);
+            btn_back_bi.setVisibility(View.GONE);
         }
 
         final String selectInpatientNo = getArguments().getString(SELECT_INPATIENT_NO);
@@ -145,6 +161,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 btn_save_bi.setVisibility(View.VISIBLE);
+                operation_bi.setVisibility(View.VISIBLE);
                 //save_layout.setVisibility(View.GONE);
                 selectMenuButton(v);
                 BaseInfoFragment fragment = BaseInfoFragment.createInstance();
@@ -169,6 +186,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 btn_save_bi.setVisibility(View.VISIBLE);
+                operation_bi.setVisibility(View.VISIBLE);
                 //save_layout.setVisibility(View.VISIBLE);
                 selectMenuButton(v);
                 RecordFragment fragment = RecordFragment.createInstance();
@@ -200,6 +218,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 btn_save_bi.setVisibility(View.GONE);
+                operation_bi.setVisibility(View.GONE);
                 //save_layout.setVisibility(View.GONE);
                 selectMenuButton(v);
                 HistoryFragment fragment = HistoryFragment.createInstance();
@@ -224,6 +243,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
                 btn_save_bi.setVisibility(View.GONE);
+                operation_bi.setVisibility(View.GONE);
                 //save_layout.setVisibility(View.GONE);
                 selectMenuButton(v);
                 PhotoListFragment fragment = PhotoListFragment.createInstance();
@@ -247,6 +267,7 @@ public class HomeFragment extends Fragment {
                         currentFragment = fragment;
                         //save_layout.setVisibility(View.GONE);
                         btn_save_bi.setVisibility(View.GONE);
+                        operation_bi.setVisibility(View.GONE);
                         mActivity.getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.detail_container, fragment)
                                 .commit();
@@ -258,6 +279,7 @@ public class HomeFragment extends Fragment {
                     currentFragment = fragment;
                     //save_layout.setVisibility(View.VISIBLE);
                     btn_save_bi.setVisibility(View.VISIBLE);
+                    operation_bi.setVisibility(View.VISIBLE);
                     mActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.detail_container, fragment)
                             .commit();
@@ -357,6 +379,7 @@ public class HomeFragment extends Fragment {
             currentFragment = fragment;
             //save_layout.setVisibility(View.GONE);
             btn_save_bi.setVisibility(View.VISIBLE);
+            operation_bi.setVisibility(View.VISIBLE);
         }
 
         btn_favorites.setImageResource(R.mipmap.btn_favorites);
@@ -492,6 +515,7 @@ public class HomeFragment extends Fragment {
         selectMenuButton(btn_archives);
         //save_layout.setVisibility(View.VISIBLE);
         btn_save_bi.setVisibility(View.VISIBLE);
+        operation_bi.setVisibility(View.VISIBLE);
     }
 
     private void queryRemotePatientInfo(final String inpatientNo, final String acquisitionTime) {
