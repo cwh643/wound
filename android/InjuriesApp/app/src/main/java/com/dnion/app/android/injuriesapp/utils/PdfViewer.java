@@ -3,10 +3,12 @@ package com.dnion.app.android.injuriesapp.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import com.dnion.app.android.injuriesapp.ArchivesData;
 import com.dnion.app.android.injuriesapp.MainActivity;
 import com.dnion.app.android.injuriesapp.R;
+import com.dnion.app.android.injuriesapp.dao.DeepCameraInfoDao;
 import com.dnion.app.android.injuriesapp.dao.PatientInfo;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
 import com.itextpdf.text.BaseColor;
@@ -21,23 +23,31 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfImage;
+import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfIndirectObject;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
+import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -51,39 +61,206 @@ public class PdfViewer {
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
-        //if (file.exists()) {
-        //    file.delete();
-        //}
+
         // 使用微软雅黑字体显示中文
         String fontName = context.getResources().getString(R.raw.msyh);
         fontName += ",1";
         BaseFont chineseFont = BaseFont.createFont(fontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);//中文简体
 
+        //createPdf(context, dest, chineseFont, patientInfo, recordInfo);
         createPdf(context, dest, chineseFont, patientInfo, recordInfo);
 
-//        Document document = new Document();
-//        PdfWriter.getInstance(document, new FileOutputStream(dest));
-//        document.open();
-//
-//        Font chapterFont = new Font(BaseFont.createFont(yaHeiFontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 16);//中文简体
-//        Font paragraphFont = new Font(BaseFont.createFont(yaHeiFontName, BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 12);//中文简体
+    }
 
-        //Font chapterFont = FontFactory.getFont(FontFactory.HELVETICA, 16, Font.BOLDITALIC);
-        //Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
-       // Chunk chunk = new Chunk("This is the title", chapterFont);
-//        Chapter chapter = new Chapter(new Paragraph(chunk), 1);
-//        chapter.setNumberDepth(0);
-//        chapter.add(new Paragraph("This is the paragraph", paragraphFont));
-//        document.add(chapter);
+    private static void createPdf(MainActivity context, String pdfPath, BaseFont chineseFont, PatientInfo patientInfo, RecordInfo recordInfo){
+        try {
+            FileOutputStream out = new FileOutputStream(pdfPath);// 输出流
+            PdfReader reader = new PdfReader(context.getResources().openRawResource(R.raw.report_model));// 读取pdf模板
+            PdfStamper stamper = new PdfStamper(reader, out);
+            try {
+                AcroFields form = stamper.getAcroFields();
+                addText(form, "patient_id", chineseFont, patientInfo.getInpatientNo());
+                addText(form, "patient_age", chineseFont, patientInfo.getAge());
+                int sex = patientInfo.getSex();
+                String sexStr = context.getString(R.string.base_info_female);
+                if (1 == sex) {
+                    sexStr = context.getString(R.string.base_info_male);
+                }
+                addText(form, "patient_sex", chineseFont, sexStr);
+                addText(form, "patient_name", chineseFont, patientInfo.getName());
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                addText(form, "patient_birthday", chineseFont, (patientInfo.getBirthday() == null ? "" : df.format(patientInfo.getBirthday())));
+                addText(form, "doctor", chineseFont, patientInfo.getDoctor());
+                addText(form, "exam_date", chineseFont, recordInfo.getRecordTime());
+                addText(form, "exam_no", chineseFont, "10");
+                Integer woundType = recordInfo.getWoundType();
 
-//        Chunk chunk = new Chunk("这是文档标题", chapterFont);
-//        Chapter chapter = new Chapter(new Paragraph(chunk), 1);
-//        chapter.setNumberDepth(0);
-//        chapter.add(new Paragraph("副标题", paragraphFont));
-//        document.add(chapter);
-//        document.close();
+                String woundName = "";
+                if (CommonUtil.isEn(context)) {
+                    woundName = CommonUtil.getDictName(ArchivesData.typeEnDict, woundType);
+                } else {
+                    woundName = CommonUtil.getDictName(ArchivesData.typeDict, woundType);
+                }
+                addText(form, "wound_type", chineseFont, woundName);
+                addText(form, "wound_date", chineseFont, recordInfo.getWoundTime());
+                addText(form, "wound_position", chineseFont, recordInfo.getWoundPositionDesc());
+
+                addTable(stamper, form, "wound_table", chineseFont, recordInfo);
+
+                addDraw(stamper, form, "wound_bar", recordInfo);
+                String deepPath = context.getPdfDeepImagePath("" + recordInfo.getId());
+                if (deepPath != null && deepPath.length() > 0) {
+                    addImage(stamper, form, "wound_deep", deepPath);
+                }
+                String irPath = context.getPdfIrImagePath("" + recordInfo.getId());
+                if (irPath != null && irPath.length() > 0) {
+                    addImage(stamper, form, "wound_ir", irPath);
+                }
+                String rgbPath = context.getPdfRgbImagePath("" + recordInfo.getId());
+                if (rgbPath != null && rgbPath.length() > 0) {
+                    addImage(stamper, form, "wound_rgb", rgbPath);
+
+                }
 
 
+
+            } finally {
+                stamper.setFormFlattening(true);// 如果为false那么生成的PDF文件还能编辑，一定要设为true
+                stamper.close();
+                //copy.close();
+                //out.close();
+                reader.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addTable(PdfStamper stamper, AcroFields form, String fieldName, BaseFont baseFont, RecordInfo recordInfo) {
+        int pageNo = form.getFieldPositions(fieldName).get(0).page;
+        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+        PdfContentByte canvas = stamper.getOverContent(pageNo);
+
+        Font titleChinese = new Font(baseFont, 10);
+        //PdfPTable table = new PdfPTable(new float[] { 24f, 10f, 10f, 10f, 10f, 12f, 12f, 12f });// 建立一个pdf表格
+        PdfPTable table = new PdfPTable(new float[] { 10f, 10f, 10f, 10f, 12f, 12f, 12f });
+        float totalWidth = signRect.getRight() - signRect.getLeft() - 1;
+        table.setTotalWidth(totalWidth);
+
+        //PdfPCell cell = createCell("时间", titleChinese);
+        //table.addCell(cell);
+        PdfPCell cell = createCell("长度", titleChinese);
+        table.addCell(cell);
+        cell = createCell("宽度", titleChinese);
+        table.addCell(cell);
+        cell = createCell("面积", titleChinese);
+        table.addCell(cell);
+        cell = createCell("深度", titleChinese);
+        table.addCell(cell);
+        cell = createCell("红色组织", titleChinese);
+        table.addCell(cell);
+        cell = createCell("黄色组织", titleChinese);
+        table.addCell(cell);
+        cell = createCell("黑色组织", titleChinese);
+        table.addCell(cell);
+
+        //cell = createCell(recordInfo.getRecordTime(), titleChinese);
+        //table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundHeight()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundWidth()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundArea()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundDeep()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundColorRed()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundColorYellow()), titleChinese);
+        table.addCell(cell);
+        cell = createCell("" + formatFloatValue(recordInfo.getWoundColorBlack()), titleChinese);
+        table.addCell(cell);
+
+        table.writeSelectedRows(0, -1, signRect.getLeft(), signRect.getTop(), canvas);
+    }
+
+    private static void addText(AcroFields form, String fieldName, BaseFont baseFont, String txt) {
+        try {
+            form.setFieldProperty(fieldName, "textfont", baseFont, null);
+            form.setField(fieldName, txt);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addDraw(PdfStamper stamper, AcroFields form, String fieldName, RecordInfo recordInfo) {
+        try {
+            // 通过域名获取所在页和坐标，左下角为起点
+            int pageNo = form.getFieldPositions(fieldName).get(0).page;
+            Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+            float x = signRect.getLeft();
+            float y = signRect.getBottom();
+            float width = signRect.getWidth();
+            float height = signRect.getHeight();
+
+            float redValue = (recordInfo.getWoundColorRed() == null ? 0 : recordInfo.getWoundColorRed());
+            float yellowValue = (recordInfo.getWoundColorYellow() == null ? 0 : recordInfo.getWoundColorYellow());
+            float blackValue = (recordInfo.getWoundColorBlack() == null ? 0 : recordInfo.getWoundColorBlack());
+            float maxValue = Math.max(redValue, Math.max(yellowValue, blackValue));
+
+            PdfContentByte canvas = stamper.getOverContent(pageNo);
+            if (maxValue > 0) {
+                canvas.saveState();
+                float barWidth = width / 5 ;
+                float barHeight = (redValue / maxValue) * (height * 0.8f);
+                float barX = x + barWidth / 2 ;
+                float barY = y ;
+                Rectangle redRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+                redRect.setBackgroundColor(BaseColor.RED);
+                canvas.rectangle(redRect);
+
+                barX = barX + barWidth + barWidth / 2;
+                barHeight = (yellowValue / maxValue) * (height * 0.8f);
+                Rectangle yellowRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+                yellowRect.setBackgroundColor(BaseColor.YELLOW);
+                canvas.rectangle(yellowRect);
+
+                barX = barX + barWidth + barWidth / 2;
+                barHeight = (blackValue / maxValue) * (height * 0.8f);
+                Rectangle blackRect = new Rectangle(barX, barY, barX + barWidth, barY + barHeight);
+                blackRect.setBackgroundColor(BaseColor.BLACK);
+                canvas.rectangle(blackRect);
+                canvas.restoreState();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void addImage(PdfStamper stamper, AcroFields form, String fieldName, String imagePath) {
+        try {
+            // 通过域名获取所在页和坐标，左下角为起点
+            int pageNo = form.getFieldPositions(fieldName).get(0).page;
+            Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+            float x = signRect.getLeft();
+            float y = signRect.getBottom();
+
+            // 读图片
+            Image image = Image.getInstance(imagePath);
+            // 获取操作的页面
+            PdfContentByte under = stamper.getOverContent(pageNo);
+            // 根据域的大小缩放图片
+            image.scaleToFit(signRect.getWidth(), signRect.getHeight());
+            // 添加图片
+            image.setAbsolutePosition(x, y);
+            under.addImage(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private static PdfPCell createCell(String value, Font font) {
@@ -104,7 +281,7 @@ public class PdfViewer {
         return cell;
     }
 
-    private static void createPdf(MainActivity context, String pdfPath, BaseFont chineseFont, PatientInfo patientInfo, RecordInfo recordInfo) throws IOException, DocumentException {
+    private static void createPdfOld(MainActivity context, String pdfPath, BaseFont chineseFont, PatientInfo patientInfo, RecordInfo recordInfo) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
