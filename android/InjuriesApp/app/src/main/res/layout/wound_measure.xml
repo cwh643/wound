@@ -19,6 +19,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/image_frame_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="60dp">

@@ -19,6 +19,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/image_frame_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dp">
@@ -116,6 +117,208 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="85dp"
+            android:background="@mipmap/measure_button_bg"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!--<TextView-->
+            <!--android:id="@+id/measure_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="@string/measure_data"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="20sp" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_s"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_area_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/area_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_v"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_volume_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/volume_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_v"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_deep_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/wound_deep_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_l"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_length_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/length_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_w"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_width_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/width_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cy"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_yellow_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_yellow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cr"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_red_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cb"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_black_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/doc_title"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawableLeft="@mipmap/user"
+                android:text="Dr.测试医生"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/menu_bar"
@@ -321,207 +524,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="85dp"
-            android:background="@mipmap/measure_button_bg"
-            android:orientation="vertical"
-            android:padding="10dp">
 
-            <!--<TextView-->
-            <!--android:id="@+id/measure_title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:text="@string/measure_data"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="20sp" />-->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_s"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_area_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/area_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_volume_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/volume_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_deep_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/wound_deep_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_l"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_length_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/length_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_w"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_width_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/width_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cy"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_yellow_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/color_rate_yellow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cr"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_red_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/color_rate_red"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cb"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_black_unit"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_label_size" />
-
-                    <TextView
-                        android:id="@+id/color_rate_black"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/image_measure_text_size" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/doc_title"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:drawableLeft="@mipmap/user"
-                android:text="Dr.测试医生"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
     </RelativeLayout>
 
     <!--

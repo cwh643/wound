@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +90,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private ImageView mLengthMeasureView;
     private ImageView mWidthMeasureView;
     private ImageView mDeepMeasureView;
+    private FrameLayout mImageFrameLayout;
     private DeepModelDisplayView mModelView;
     private GestureDetector gestureDetector;
     private Paint paint;
@@ -148,8 +150,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     private void initRgbview(View rootView) {
         deepCameraInfo = mActivity.getDeepCameraInfo();
-        mWoundRgbView = (ImageView) rootView.findViewById(R.id.wound_rgb_image);
+        mImageFrameLayout = (FrameLayout) rootView.findViewById(R.id.image_frame_layout);
         mWoundOrgRgbView = (ImageView) rootView.findViewById(R.id.org_rgb_image);
+        mWoundRgbView = (ImageView) rootView.findViewById(R.id.wound_rgb_image);
         gestureDetector = new GestureDetector(this.getContext(), onGestureListener);
         mAreaMeasureBitmap = Bitmap.createBitmap(GlobalDef.RES_CALC_WIDTH, GlobalDef.RES_CALC_HEIGHT, Bitmap.Config.ARGB_8888);
         mLengthMeasureBitmap = Bitmap.createBitmap(GlobalDef.RES_CALC_WIDTH, GlobalDef.RES_CALC_HEIGHT, Bitmap.Config.ARGB_8888);
@@ -1311,15 +1314,12 @@ public class RecordFragmentWoundMeasure extends Fragment {
                             Bitmap baseBitmap = null;
                             if (mWoundCalcBitmap != null) {
                                 baseBitmap = mWoundCalcBitmap;
-                            } else if (mWoundRgbBitmap != null){
-                                baseBitmap = mWoundCalcBitmap;
+                            } else if (mWoundRgbBitmap != null) {
+                                baseBitmap = mWoundRgbBitmap;
                             }
-                            Bitmap pdf = BitmapUtils.mergeBitmap(baseBitmap, mAreaMeasureBitmap,
-                                    mLengthMeasureBitmap,mWidthMeasureBitmap,mDeepMeasureBitmap,
-                                    BitmapUtils.getViewBitmap(mAreaTipView),
-                                    BitmapUtils.getViewBitmap(mLengthTipView),
-                                    BitmapUtils.getViewBitmap(mWidthTipView),
-                                    BitmapUtils.getViewBitmap(mDeepTipView));
+                            //Bitmap pdf = baseBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+                            Bitmap pdf = BitmapUtils.getViewBitmap(mImageFrameLayout);
                             deepCameraInfo.setPdfBitmap(pdf);
                             mActivity.saveDeepCameraInfo();
                             syncWoundNum();

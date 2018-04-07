@@ -429,7 +429,7 @@ public class MainActivity extends BaseActivity {
             return null;
         }
         RecordImage image = imageList.get(0);
-        return image.getImagePath()+ File.separator + DeepCameraInfoDao.DEEP_FILE_NAME;
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
     }
 
     // 保存MyTouchListener接口的列表

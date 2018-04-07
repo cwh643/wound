@@ -3,6 +3,7 @@ package com.dnion.app.android.injuriesapp.utils;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class BitmapUtils {
     public static String TAG = "BitmapUtils";
+
     public static Bitmap scale_image(Bitmap bm, int x, int y, int width, int height, int newWidth, int newHeight) {
 
         // 计算缩放比例
@@ -90,8 +92,8 @@ public class BitmapUtils {
             Log.e(TAG, "backBitmap error:" + backBitmap + ";");
             return null;
         }
-        Bitmap ret = backBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(ret);
+        Canvas canvas = new Canvas(backBitmap);
+        Paint paint = new Paint();
         Rect baseRect = new Rect(0, 0, backBitmap.getWidth(), backBitmap.getHeight());
         for (Bitmap frontBitmap : frontBitmaps) {
             if (backBitmap == null || backBitmap.isRecycled()
@@ -99,18 +101,45 @@ public class BitmapUtils {
                 Log.e(TAG, "frontBitmap error:" + frontBitmap);
                 continue;
             }
+            paint.setAlpha(125);
             Rect frontRect = new Rect(0, 0, frontBitmap.getWidth(), frontBitmap.getHeight());
-            canvas.drawBitmap(frontBitmap, frontRect, baseRect, null);
+            canvas.drawBitmap(frontBitmap, frontRect, baseRect, paint);
         }
-        return ret;
+        return backBitmap;
     }
 
     public static Bitmap getViewBitmap(View view) {
         view.setDrawingCacheEnabled(true);
         Bitmap tBitmap = view.getDrawingCache();
+        if (tBitmap == null) {
+            return null;
+        }
         // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
-        tBitmap = tBitmap.createBitmap(tBitmap);
+        tBitmap = Bitmap.createBitmap(tBitmap);
         view.setDrawingCacheEnabled(false);
         return tBitmap;
+    }
+
+    public static Bitmap mergeBitmap(Bitmap backgroud, View... views) {
+        Canvas canvas = new Canvas(backgroud);
+        Paint paint = new Paint();
+        for (View view : views) {
+            view.setDrawingCacheEnabled(true);
+            Bitmap tBitmap = view.getDrawingCache();
+            // 拷贝图片，否则在setDrawingCacheEnabled(false)以后该图片会被释放掉
+            if (tBitmap == null || backgroud == null) {
+                return null;
+            }
+            paint.setAlpha(125);
+            // 需要计算位置和大小
+            int x = new Float(view.getX()).intValue();
+            int y = new Float(view.getY()).intValue();
+            Rect baseRect = new Rect(x, y
+                    , x + tBitmap.getWidth(), y + tBitmap.getHeight());
+            Rect frontRect = new Rect(0, 0, tBitmap.getWidth(), tBitmap.getHeight());
+            canvas.drawBitmap(tBitmap, frontRect, baseRect, paint);
+            view.setDrawingCacheEnabled(false);
+        }
+        return backgroud;
     }
 }

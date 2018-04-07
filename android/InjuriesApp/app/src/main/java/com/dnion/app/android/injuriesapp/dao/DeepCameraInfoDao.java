@@ -57,23 +57,24 @@ public class DeepCameraInfoDao {
                 Log.i(TAG, "rgb_path:" + rgbPath);
                 ImageTools.savePhotoToSDCard(dci.getRgbBitmap(), path, RGB_FILE_NAME);
 
-                // 保存pdf图片
-                String pdfImagePath = path + File.separator + PDF_IMAGE_FILE_NAME;
-                ImageTools.savePhotoToSDCard(dci.getPdfBitmap(), path, PDF_IMAGE_FILE_NAME);
-                Log.i(TAG, "pdf_path:" + pdfImagePath);
-
                 // 保存rgb略缩图片
                 String listRgbPath = path + File.separator + LIST_IMAGE_FILE_NAME;
                 Bitmap listBitmap = BitmapUtils.scale_image(dci.getRgbBitmap(), 0, 0, dci.getRgbBitmap().getWidth(), dci.getRgbBitmap().getHeight(), 320, 240);
                 Log.i(TAG, "List_rgb_path:" + listRgbPath);
 
-                ImageTools.savePhotoToSDCard(listBitmap, listRgbPath, LIST_IMAGE_FILE_NAME);
+                ImageTools.savePhotoToSDCard(listBitmap, path, LIST_IMAGE_FILE_NAME);
                 // 保存deep点云
                 String deepPath = path + File.separator + DEEP_FILE_NAME;
                 Log.i(TAG, "deep_path:" + deepPath);
                 FileUtils.writeFile(BitmapUtils.save_mat_to_string(dci.getDepthMat()), path, DEEP_FILE_NAME, true);
                 // 其他属性保存到json中
             }
+            // 保存pdf图片,因为是后加的功能 所以对于旧图片需要重新保存pdf
+            String pdfImagePath = path + File.separator + PDF_IMAGE_FILE_NAME;
+            ImageTools.savePhotoToSDCard(dci.getPdfBitmap(), path, PDF_IMAGE_FILE_NAME);
+            Log.i(TAG, "pdf_path:" + pdfImagePath);
+
+
             Gson gson = new Gson();
             String data_json = gson.toJson(dci);
             FileUtils.writeFile(data_json, path, MODEL_FILE_NAME, true);

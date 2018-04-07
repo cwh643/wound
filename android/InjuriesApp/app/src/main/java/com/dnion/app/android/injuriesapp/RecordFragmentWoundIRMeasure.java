@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,6 +62,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
     private int displayMode = 1; // 1 rgb, 2 depth
 
+    private FrameLayout mImageFrameLayout;
     private Bitmap mWoundRgbBitmap;
     private Bitmap mAreaMeasureBitmap;
     private Bitmap mLegendBitmap;
@@ -140,6 +142,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
     private void initRgbview(View rootView) {
         deepCameraInfo = mActivity.getDeepCameraInfo();
+        mImageFrameLayout = (FrameLayout) rootView.findViewById(R.id.image_frame_layout);
         mWoundRgbView = (ImageView) rootView.findViewById(R.id.wound_rgb_image);
         gestureDetector = new GestureDetector(this.getContext(), onGestureListener);
         mAreaMeasureView = (ImageView) rootView.findViewById(R.id.area_image);
@@ -325,8 +328,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             @Override
             public void onClick(View v) {
                 Object tagValue = v.getTag();
-                float scale=getContext().getResources().getDisplayMetrics().density;
-                final float distance = 145* scale;
+                float scale = getContext().getResources().getDisplayMetrics().density;
+                final float distance = 145 * scale;
                 float y = measure_bar.getY();
 
                 ValueAnimator valueAnimator = null;
@@ -341,8 +344,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             }
         });
         btn_measure_bar.setTag(2);
-        float scale=getContext().getResources().getDisplayMetrics().density;
-        measure_bar.setY(measure_bar.getY() - (145* scale));
+        float scale = getContext().getResources().getDisplayMetrics().density;
+        measure_bar.setY(measure_bar.getY() - (145 * scale));
 
         menu_bar = (LinearLayout) rootView.findViewById(R.id.menu_bar);
         btn_menu_bar = (ImageButton) rootView.findViewById(R.id.btn_menu_bar);
@@ -569,9 +572,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
                     mActivity.getString(R.string.message_title_tip),
                     mActivity.getString(R.string.message_wait_save));
 
-            Bitmap pdf = BitmapUtils.mergeBitmap(mWoundRgbBitmap, mAreaMeasureBitmap,
-                    BitmapUtils.getViewBitmap(mMaxTempTipView),
-                    BitmapUtils.getViewBitmap(mMinTempTipView));
+            Bitmap pdf = BitmapUtils.getViewBitmap(mImageFrameLayout);
             deepCameraInfo.setPdfBitmap(pdf);
             mActivity.saveIRCameraInfo();
             ToastUtil.showShortToast(mActivity, "保存成功");
