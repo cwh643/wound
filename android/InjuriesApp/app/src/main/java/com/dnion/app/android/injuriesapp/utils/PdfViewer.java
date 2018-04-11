@@ -254,6 +254,8 @@ public class PdfViewer {
             // 根据域的大小缩放图片
             image.scaleToFit(signRect.getWidth(), signRect.getHeight());
             // 添加图片
+            x = x + (signRect.getWidth() - image.getWidth()) / 2;
+            y = y + (signRect.getHeight() - image.getHeight()) / 2;
             image.setAbsolutePosition(x, y);
             under.addImage(image);
         } catch (IOException e) {
