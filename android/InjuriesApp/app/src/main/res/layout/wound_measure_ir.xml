@@ -227,7 +227,7 @@
 
         <LinearLayout
             android:layout_width="85dp"
-            android:layout_height="142dp"
+            android:layout_height="213dp"
             android:layout_alignParentRight="true"
             android:background="@mipmap/measure_right_bg1"
             android:orientation="vertical">
@@ -253,6 +253,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/login_pw" />
+
+            <com.dnion.app.android.injuriesapp.ui.MeasureButton
+                android:id="@+id/measure_btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"></com.dnion.app.android.injuriesapp.ui.MeasureButton>
 
         </LinearLayout>
 
