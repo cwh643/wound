@@ -180,6 +180,7 @@ public class RecordFragment9 extends Fragment {
         */
     }
 
+    /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -203,13 +204,16 @@ public class RecordFragment9 extends Fragment {
             }
         }
     }
+    */
 
+    /*
     private void showImage(String picPath) {
         Bitmap bitmap = BitmapFactory.decodeFile(picPath);
         ImageView imageView = mActivity.getImagePreView();
         imageView.setImageBitmap(bitmap);
         imageView.setVisibility(View.VISIBLE);
     }
+    */
 
     private class PhotoListAdapter extends BaseAdapter {
 

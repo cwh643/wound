@@ -155,13 +155,15 @@ public class RecordFragment7 extends Fragment {
             String type = "other";
             //将处理过的图片显示在界面上，并保存到本地
             String path = mActivity.getImagePath(type);
-
+            long time = System.currentTimeMillis();
             if(requestCode==1002){
-                mActivity.saveImage(newBitmap, path, "mr.jpg");
-                patientInfo.setWoundMr(type + File.separator + "mr.jpg");
+                mActivity.saveImage(newBitmap, path, "mr_"+time+".jpg");
+                String images = mActivity.getImagePaths(patientInfo.getWoundMr(), type + File.separator + "mr_"+time+".jpg");
+                patientInfo.setWoundMr(images);
             } else if (requestCode==1003) {
-                mActivity.saveImage(newBitmap, path, "petct.jpg");
-                patientInfo.setWoundPetct(type + File.separator + "petct.jpg");
+                mActivity.saveImage(newBitmap, path, "petct_"+time+".jpg");
+                String images = mActivity.getImagePaths(patientInfo.getWoundPetct(), type + File.separator + "petct_"+time+".jpg");
+                patientInfo.setWoundPetct(images);
             }
             newBitmap.recycle();
 
@@ -169,11 +171,13 @@ public class RecordFragment7 extends Fragment {
         }
     }
 
+    /*
     private void showImage(String picPath) {
         Bitmap bitmap = BitmapFactory.decodeFile(picPath);
         ImageView imageView = mActivity.getImagePreView();
         imageView.setImageBitmap(bitmap);
         imageView.setVisibility(View.VISIBLE);
     }
+    */
 
 }

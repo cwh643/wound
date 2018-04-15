@@ -9,10 +9,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,6 +30,7 @@ import com.dnion.app.android.injuriesapp.dao.RecordDao;
 import com.dnion.app.android.injuriesapp.dao.RecordImage;
 import com.dnion.app.android.injuriesapp.dao.RecordImageDao;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
+import com.dnion.app.android.injuriesapp.ui.TouchImageView;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.ImageTools;
 import com.dnion.app.android.injuriesapp.utils.SDCardHelper;
@@ -59,13 +63,15 @@ public class MainActivity extends BaseActivity {
 
     private DeepCameraInfoDao deepCameraInfoDao;
 
-    private ImageView image_perview;
+    private ViewPager image_perview;
 
     private RelativeLayout image_perview_panel;
 
     private ImageButton btn_close_panel;
 
     private DeepCameraInfo deepCameraInfo;
+
+    private AdapterViewpager imageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +86,27 @@ public class MainActivity extends BaseActivity {
 
         settingDocTitle();
         addTopButtonEvent();
-        image_perview = (ImageView) findViewById(R.id.image_perview);
+        image_perview = (ViewPager) findViewById(R.id.image_perview);
         image_perview_panel = (RelativeLayout) findViewById(R.id.image_perview_panel);
         btn_close_panel = (ImageButton) findViewById(R.id.btn_close_panel);
         btn_close_panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image_perview.setImageBitmap(null);
+                if (imageAdapter != null) {
+                    int count = imageAdapter.mViewList.size();
+                    for (int i=0; i< count; i++) {
+                        ImageView imageView = (ImageView)imageAdapter.mViewList.get(i);
+                        Bitmap bitmap = (Bitmap)imageView.getTag();
+                        if (bitmap != null) {
+                            bitmap.recycle();
+                            imageView.setTag(null);
+                        }
+                    }
+                    imageAdapter.mViewList.clear();
+                    //imageAdapter = null;
+                    image_perview.setAdapter(null);
+                }
+                //image_perview.setImageBitmap(null);
                 image_perview_panel.setVisibility(View.GONE);
             }
         });
@@ -221,9 +241,11 @@ public class MainActivity extends BaseActivity {
         return db.getId();
     }
 
+    /*
     public ImageView getImagePreView() {
         return image_perview;
     }
+    */
 
     public String getImagePath() {
         //return SDCardHelper.getSDCardBaseDir()+"/image.jpg";
@@ -245,12 +267,24 @@ public class MainActivity extends BaseActivity {
         return path;
     }
 
-    public void showImage(String name) {
-        //String picPath = getImagePath(type) + File.separator + name;
+    public void showImage(String path) {
+        String[] picName = path.split(";");
+
+        List<View> mView = new ArrayList<View>();
+        for(int i = 0; i < picName.length; i++) {
+            TouchImageView ImageView = new TouchImageView(MainActivity.this);
+            ImageView.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
+            mView.add(ImageView);
+        }
+        imageAdapter = new AdapterViewpager(mView, picName);
+        image_perview.setAdapter(imageAdapter);
+
+        /*
         String picPath = getImagePathBase() + File.separator + name;
         Bitmap bitmap = BitmapFactory.decodeFile(picPath);
         ImageView imageView = getImagePreView();
         imageView.setImageBitmap(bitmap);
+        */
         image_perview_panel.setVisibility(View.VISIBLE);
     }
 
@@ -419,7 +453,7 @@ public class MainActivity extends BaseActivity {
             return null;
         }
         RecordImage image = imageList.get(0);
-        return image.getImagePath()+ File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.RGB_FILE_NAME;
     }
 
     public String getPdfIrImagePath(String recordId) {
@@ -429,7 +463,7 @@ public class MainActivity extends BaseActivity {
             return null;
         }
         RecordImage image = imageList.get(0);
-        return image.getImagePath()+ File.separator + DeepCameraInfoDao.PDF_IMAGE_FILE_NAME;
+        return image.getImagePath()+ File.separator + DeepCameraInfoDao.RGB_FILE_NAME;
     }
 
     // 保存MyTouchListener接口的列表
@@ -466,5 +500,63 @@ public class MainActivity extends BaseActivity {
 
     public interface MyTouchListener {
         public void onTouchEvent(MotionEvent event);
+    }
+
+
+    public String getImagePaths(String oldPath, String path) {
+        if (oldPath == null || oldPath.length() == 0) {
+            return path;
+        }
+        return oldPath+";"+path;
+    }
+
+    public class AdapterViewpager extends PagerAdapter {
+        private List<View> mViewList;
+        private String[] mPaths;
+
+        public AdapterViewpager(List<View> mViewList, String[] paths) {
+            this.mViewList = mViewList;
+            this.mPaths = paths;
+        }
+
+        @Override
+        public int getCount() {//必须实现
+            return mPaths.length;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {//必须实现
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {//必须实现，实例化
+            ImageView imageView = (ImageView)mViewList.get(position);
+            Bitmap bitmap = (Bitmap)imageView.getTag();
+            if (bitmap != null) {
+                bitmap.recycle();
+                imageView.setTag(null);
+            }
+            String picPath = getImagePathBase() + File.separator + mPaths[position];
+            bitmap = BitmapFactory.decodeFile(picPath);
+            imageView.setImageBitmap(bitmap);
+            imageView.setTag(bitmap);
+            container.addView(imageView);
+            return imageView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {//必须实现，销毁
+            if (position < mViewList.size()) {
+                ImageView imageView = (ImageView)mViewList.get(position);
+                Bitmap bitmap = (Bitmap)imageView.getTag();
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    imageView.setTag(null);
+                }
+                container.removeView(imageView);
+            }
+
+        }
     }
 }

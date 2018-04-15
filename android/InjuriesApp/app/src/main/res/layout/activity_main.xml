@@ -28,11 +28,19 @@
         android:id="@+id/image_perview_panel"
         android:background="@color/white"
         android:visibility="gone">
-        <com.dnion.app.android.injuriesapp.ui.TouchImageView
+        <android.support.v4.view.ViewPager
             android:id="@+id/image_perview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+        <!--
+        <com.dnion.app.android.injuriesapp.ui.TouchImageView
+            android:id="@+id/image_perview11"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"/>
+            -->
         <ImageButton
             android:id="@+id/btn_close_panel"
             android:layout_width="50dp"

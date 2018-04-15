@@ -135,7 +135,7 @@ public class RecordFragment6 extends Fragment {
 
         //exam
         Button btn_exam_image = (Button)rootView.findViewById(R.id.btn_exam_image);
-        btn_cta_image.setOnClickListener(new View.OnClickListener() {
+        btn_exam_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String path = patientInfo.getWoundExam();
@@ -205,15 +205,19 @@ public class RecordFragment6 extends Fragment {
             String type = "other";
             String path = mActivity.getImagePath(type);
             //Log.e("chenwh", file.getPath());
+            long time = System.currentTimeMillis();
             if(requestCode==1001){
-                mActivity.saveImage(newBitmap, path, "dpl.jpg");
-                patientInfo.setWoundDoppler(type + File.separator + "dpl.jpg");
+                mActivity.saveImage(newBitmap, path, "dpl_"+time+".jpg");
+                String images = mActivity.getImagePaths(patientInfo.getWoundDoppler(), type + File.separator + "dpl_"+time+".jpg");
+                patientInfo.setWoundDoppler(images);
             } else if (requestCode==1002) {
-                mActivity.saveImage(newBitmap, path, "cta.jpg");
-                patientInfo.setWoundCta(type + File.separator + "cta.jpg");
+                mActivity.saveImage(newBitmap, path, "cta_"+time+".jpg");
+                String images = mActivity.getImagePaths(patientInfo.getWoundCta(), type + File.separator + "cta_"+time+".jpg");
+                patientInfo.setWoundCta(images);
             } else if (requestCode==1003) {
-                mActivity.saveImage(newBitmap, path, "exam.jpg");
-                patientInfo.setWoundExam(type + File.separator + "exam.jpg");
+                mActivity.saveImage(newBitmap, path, "exam_"+time+".jpg");
+                String images = mActivity.getImagePaths(patientInfo.getWoundExam(), type + File.separator + "exam_"+time+".jpg");
+                patientInfo.setWoundExam(images);
             }
 
             newBitmap.recycle();
