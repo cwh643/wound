@@ -321,6 +321,17 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         measure_btn_save.setSelectImage(R.mipmap.measure_modify_s);
         measure_btn_save.setOnClickListener(mSaveDataListener);
 
+        MeasureButton measure_btn_edit = (MeasureButton) rootView.findViewById(R.id.measure_btn_edit);
+        measure_btn_edit.setText(getString(R.string.measure));
+        measure_btn_edit.setImage(R.mipmap.measure_edit);
+        measure_btn_edit.setSelectImage(R.mipmap.measure_edit_s);
+        measure_btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_measure_bar.callOnClick();
+            }
+        });
+
 
         measure_bar = (LinearLayout) rootView.findViewById(R.id.measure_bar);
         btn_measure_bar = (ImageButton) rootView.findViewById(R.id.btn_measure_bar);
@@ -329,7 +340,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             public void onClick(View v) {
                 Object tagValue = v.getTag();
                 float scale = getContext().getResources().getDisplayMetrics().density;
-                final float distance = 145 * scale;
+                final float distance = 213 * scale;
                 float y = measure_bar.getY();
 
                 ValueAnimator valueAnimator = null;
