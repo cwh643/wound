@@ -75,13 +75,13 @@ public class RecordFragment9 extends Fragment {
         txtPositionDesc = (TextView) rootView.findViewById(R.id.txt_position_desc);
         GridView wound_container = (GridView) rootView.findViewById(R.id.wound_container);
         imageList = new ArrayList<RecordImage>();
-        imageList.add(new RecordImage(R.mipmap.position_1, R.mipmap.position_1s, 1, "头部"));
+        imageList.add(new RecordImage(R.mipmap.position_1, R.mipmap.position_1s, 1, "足部"));
         imageList.add(new RecordImage(R.mipmap.position_2, R.mipmap.position_2s, 2, "肩部"));
         imageList.add(new RecordImage(R.mipmap.position_3, R.mipmap.position_3s, 3, "手部"));
-        imageList.add(new RecordImage(R.mipmap.position_4, R.mipmap.position_4s, 4, "脚部"));
-        imageList.add(new RecordImage(R.mipmap.position_5, R.mipmap.position_5s, 5, "腰部"));
-        imageList.add(new RecordImage(R.mipmap.position_6, R.mipmap.position_6s, 6, "腿部"));
-        imageList.add(new RecordImage(R.mipmap.position_7, R.mipmap.position_7s, 7, "背部"));
+        imageList.add(new RecordImage(R.mipmap.position_4, R.mipmap.position_4s, 4, "腿部"));
+        imageList.add(new RecordImage(R.mipmap.position_5, R.mipmap.position_5s, 5, "背部"));
+        imageList.add(new RecordImage(R.mipmap.position_6, R.mipmap.position_6s, 6, "髋部"));
+        imageList.add(new RecordImage(R.mipmap.position_7, R.mipmap.position_7s, 7, "手臂"));
 
         txtPositionDesc.setText("");
         Integer position = patientInfo.getWoundPosition();
@@ -245,9 +245,11 @@ public class RecordFragment9 extends Fragment {
                 TagObj tag = new TagObj();
                 convertView.setTag(tag);
                 tag.image_item = (ImageView) convertView.findViewById(R.id.image_item);
+                tag.title_item = (TextView) convertView.findViewById(R.id.title_item);
             }
             RecordImage image = items.get(position);
             TagObj tag = (TagObj) convertView.getTag();
+            tag.title_item.setText(image.getDescribe());
             if (image.isSelected()) {
                 tag.image_item.setImageResource(image.getSelectId());
             } else {
@@ -261,6 +263,7 @@ public class RecordFragment9 extends Fragment {
 
     private class TagObj {
         ImageView image_item;
+        TextView title_item;
     }
 
 }
