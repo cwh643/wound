@@ -152,7 +152,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_s"
                         android:drawablePadding="5dp"
                         android:text="@string/measure_area_unit"
                         android:textColor="@color/black"
@@ -171,7 +170,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
                         android:drawablePadding="5dp"
                         android:text="@string/measure_volume_unit"
                         android:textColor="@color/black"
@@ -190,7 +188,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
                         android:drawablePadding="5dp"
                         android:text="@string/measure_deep_unit"
                         android:textColor="@color/black"
@@ -209,7 +206,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_l"
                         android:drawablePadding="5dp"
                         android:text="@string/measure_length_unit"
                         android:textColor="@color/black"
@@ -228,7 +224,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_w"
                         android:drawablePadding="5dp"
                         android:text="@string/measure_width_unit"
                         android:textColor="@color/black"
@@ -309,7 +304,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/doc_title"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -317,7 +312,7 @@
                 android:drawableLeft="@mipmap/user"
                 android:text="Dr.测试医生"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp" /> -->
         </LinearLayout>
 
         <LinearLayout

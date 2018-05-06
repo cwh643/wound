@@ -2,6 +2,7 @@ package com.dnion.app.android.injuriesapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;

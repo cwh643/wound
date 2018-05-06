@@ -4,6 +4,8 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
+    <string name="save_succ">Save Succ</string>
+    <string name="save_fail">Save Fail</string>
 
     <string name="message_title_tip">Tips</string>
     <string name="message_wait">Loading, please wait a moment...</string>
@@ -151,6 +153,7 @@
     <string name="measure">Metrical</string>
     <string name="measure_back">Photo</string>
     <string name="measure_color">3D Photo</string>
+
     <string name="measure_data">Metrical Data</string>
     <string name="measure_area">Area</string>
     <string name="measure_volume">Volume</string>
@@ -172,6 +175,19 @@
     <string name="measure_red_unit">Red Tissue(%)</string>
     <string name="measure_black_unit">Black Tissue(%)</string>
     <string name="measure_yellow_unit">Yellow Tissue(%)</string>
+    <string name="measure_data_label">Data</string>
+    <string name="measure_ir_color">org</string>
+    <string name="measure_ir_temp">temp</string>
+    <string name="measure_ir_max_temp">Max Temp</string>
+    <string name="measure_ir_min_temp">Min Temp</string>
+    <string name="measure_tip_deep_no_data">No Data</string>
+    <string name="measure_tip_deep_base">Base</string>
+    <string name="measure_tip_msg_area">Please ring the edge of the wound</string>
+    <string name="measure_tip_msg_length">Please delineate the maximum length of the wound</string>
+    <string name="measure_tip_msg_width">Please delineate the maximum width of the wound</string>
+    <string name="measure_tip_msg_deep">The first is the base point, the second is the depth</string>
+    <string name="measure_tip_msg_temp">Please select the position</string>
+    <string name="measure_tip_msg_no_data">Unselected depth data</string>
 
     <string name="check_photo">Check Photo</string>
     <string name="take_photo">Capture</string>
