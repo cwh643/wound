@@ -282,7 +282,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
 
         MeasureButton measure_btn_rgb = (MeasureButton) rootView.findViewById(R.id.measure_btn_rgb);
-        measure_btn_rgb.setText(getString(R.string.measure_ir_color));
+        measure_btn_rgb.setText(getString(R.string.measure_ir_temp));
         //measure_btn_rgb.setImage(R.mipmap.measure_ok);
         //measure_btn_rgb.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_rgb.setOnClickListener(new OnClickListener() {
@@ -294,7 +294,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_depth = (MeasureButton) rootView.findViewById(R.id.measure_btn_depth);
-        measure_btn_depth.setText(getString(R.string.measure_ir_temp));
+        measure_btn_depth.setText(getString(R.string.measure_ir_color));
         //measure_btn_depth.setImage(R.mipmap.measure_delete);
         //measure_btn_depth.setSelectImage(R.mipmap.measure_delete_s);
         measure_btn_depth.setOnClickListener(new OnClickListener() {
