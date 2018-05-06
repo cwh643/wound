@@ -280,7 +280,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="数据:"
+                    android:text="@string/measure_data_label"
                     android:textColor="@color/black"
                     />
 
@@ -316,7 +316,7 @@
                 android:layout_width="170dp"
                 android:layout_height="68dp">
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/doc_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
                     android:drawableLeft="@mipmap/user"
                     android:text="Dr.测试医生"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="20sp" />-->
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

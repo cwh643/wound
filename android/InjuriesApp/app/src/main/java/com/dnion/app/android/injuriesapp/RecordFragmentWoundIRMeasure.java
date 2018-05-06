@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayView;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
+import com.dnion.app.android.injuriesapp.camera_tool.PointInfo3D;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
@@ -184,7 +185,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         areaPaint = new Paint();
         areaPaint.setColor(GlobalDef.AREA_COLOR);
         tempPointpaint = new Paint();
-        tempPointpaint.setColor(GlobalDef.DEEP_COLOR);
+        tempPointpaint.setColor(Color.WHITE);
 
         areaCanvas = new Canvas(mAreaMeasureBitmap);
         areaCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
@@ -212,7 +213,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
                 mActivity.selectMenuButton(R.id.btn_photo);
                 Fragment fragment;
                 if (deepCameraInfo.isNew()) {
-                    fragment = RecordFragmentDeepCamera.createInstance();
+                    fragment = RecordFragmentIRCamera.createInstance();
                 } else {
                     fragment = PhotoListFragment.createInstance();
                 }
@@ -281,7 +282,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
 
         MeasureButton measure_btn_rgb = (MeasureButton) rootView.findViewById(R.id.measure_btn_rgb);
-        measure_btn_rgb.setText(getString(R.string.measure_color));
+        measure_btn_rgb.setText(getString(R.string.measure_ir_temp));
         //measure_btn_rgb.setImage(R.mipmap.measure_ok);
         //measure_btn_rgb.setSelectImage(R.mipmap.measure_ok_s);
         measure_btn_rgb.setOnClickListener(new OnClickListener() {
@@ -293,7 +294,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         });
 
         MeasureButton measure_btn_depth = (MeasureButton) rootView.findViewById(R.id.measure_btn_depth);
-        measure_btn_depth.setText("温 度");
+        measure_btn_depth.setText(getString(R.string.measure_ir_color));
         //measure_btn_depth.setImage(R.mipmap.measure_delete);
         //measure_btn_depth.setSelectImage(R.mipmap.measure_delete_s);
         measure_btn_depth.setOnClickListener(new OnClickListener() {
@@ -467,8 +468,8 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         deepCameraInfo.setMaxDeep(deepCameraInfo.getMaxDeep());
         String min_format = formatDouble(tempMin);
         deepCameraInfo.setMaxDeep(deepCameraInfo.getMinDeep());
-        mMaxTempView.setText("最大温度：" + max_format + " ℃");
-        mMinTempView.setText("最小温度：" + min_format + " ℃");
+        mMaxTempView.setText(mActivity.getString(R.string.measure_ir_max_temp) + "：" + max_format + "°C");
+        mMinTempView.setText(mActivity.getString(R.string.measure_ir_min_temp) + "：" + min_format + "°C");
         if (displayMode == 2) {
             Bitmap rgb = deepCameraInfo.getRgbBitmap();
             mWoundRgbBitmap = rgb;
@@ -519,6 +520,20 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         mTempTipView.setX(e.getX());
         mTempTipView.setY(e.getY());
         mTempTipView.setVisibility(View.VISIBLE);
+
+        // 画十字
+        int text_witdh_diff = 50;
+        int text_heigth_diff = 10;
+        int tc_diff = 5;
+        float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
+        float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
+        //float bolb = tempPointpaint.getStrokeWidth();
+        //tempPointpaint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
+        //tempPointCanvas.drawText(temp, text_x, text_y, tempPointpaint);
+        tempPointCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, tempPointpaint);
+        tempPointCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, tempPointpaint);
+        //tempPointpaint.setStrokeWidth(bolb);
+        mTempMeasureView.setImageBitmap(mTempPointBitmap);
     }
 
     private void getTempOld(MotionEvent e) {
@@ -541,7 +556,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
 
         int text_witdh_diff = 50;
         int text_heigth_diff = 10;
-        int tc_diff = 20;
+        int tc_diff = 3;
         float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
         float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
         float bolb = tempPointpaint.getStrokeWidth();
@@ -561,7 +576,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 1;
-            ToastUtil.showLongToast(mActivity, "请圈选伤口边缘");
+            ToastUtil.showLongToast(mActivity, mActivity.getString(R.string.measure_tip_msg_area));
             //canvas.restoreToCount(areaLayerID);
         }
     };
@@ -570,7 +585,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 2;
-            ToastUtil.showLongToast(mActivity, "请划定伤口位置");
+            ToastUtil.showLongToast(mActivity, mActivity.getString(R.string.measure_tip_msg_temp));
             //canvas.restoreToCount(lengthLayerID);
         }
     };
@@ -586,7 +601,7 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
             Bitmap pdf = BitmapUtils.getViewBitmap(mImageFrameLayout);
             deepCameraInfo.setPdfBitmap(pdf);
             mActivity.saveIRCameraInfo();
-            ToastUtil.showShortToast(mActivity, "保存成功");
+            ToastUtil.showShortToast(mActivity, mActivity.getString(R.string.save_succ));
             AlertDialogUtil.dismissAlertDialog(mActivity);
             view.setClickable(true);
         }
@@ -753,22 +768,9 @@ public class RecordFragmentWoundIRMeasure extends Fragment {
         mMinTempTipView.setY(new Double(deepCameraInfo.getMinDeepPoint().y).floatValue() * tip_factor);
         mMinTempTipView.setVisibility(View.VISIBLE);
 
-        mMaxTempView.setText("最大温度：" + max_format + "°C");
-        mMinTempView.setText("最小温度：" + min_format + "°C");
+        mMaxTempView.setText(mActivity.getString(R.string.measure_ir_max_temp) + "：" + max_format + "°C");
+        mMinTempView.setText(mActivity.getString(R.string.measure_ir_min_temp) + "：" + min_format + "°C");
     }
-
-    private final OnClickListener mBackListener = new OnClickListener() {
-        @Override
-        public void onClick(final View view) {
-            Fragment fragment;
-            fragment = RecordFragmentWoundImage.createInstance();
-            mActivity.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_container, fragment)
-                    .commit();
-
-        }
-
-    };
 
     @Override
     public void onPause() {

@@ -4,6 +4,8 @@
     <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="close">关闭</string>
+    <string name="save_succ">保存成功</string>
+    <string name="save_fail">保存失败</string>
 
     <string name="message_title_tip">提示</string>
     <string name="message_wait">正在加载,请稍等...</string>
@@ -172,6 +174,20 @@
     <string name="measure_red_unit">红色组织(%)</string>
     <string name="measure_black_unit">黑色组织(%)</string>
     <string name="measure_yellow_unit">黄色组织(%)</string>
+    <string name="measure_data_label">数据</string>
+    <string name="measure_ir_color">原图像</string>
+    <string name="measure_ir_temp">温度</string>
+    <string name="measure_ir_max_temp">最大温度</string>
+    <string name="measure_ir_min_temp">最小温度</string>
+    <string name="measure_tip_deep_no_data">未采集</string>
+    <string name="measure_tip_deep_base">基准</string>
+    <string name="measure_tip_msg_area">请圈选伤口边缘</string>
+    <string name="measure_tip_msg_length">请划定伤口最大长度</string>
+    <string name="measure_tip_msg_width">请划定伤口最大宽度</string>
+    <string name="measure_tip_msg_deep">第一个是基准点，第二个是深度</string>
+    <string name="measure_tip_msg_temp">请选中位置</string>
+    <string name="measure_tip_msg_no_data">未选中深度数据</string>
+
 
     <string name="check_photo">查看照片</string>
     <string name="take_photo">拍照</string>

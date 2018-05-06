@@ -1064,10 +1064,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float t_x = point.x;
         float t_y = point.y;
         if (deep == 0) {
-            temp = "未采集到";
+            temp = mActivity.getString(R.string.measure_tip_deep_no_data);
         } else {
             if (is_first) {
-                temp = "基准";
+                temp = mActivity.getString(R.string.measure_tip_deep_base);
             } else {
                 temp = new DecimalFormat("#0").format(deep) + "mm";
             }
@@ -1176,7 +1176,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         Point center = deepCameraInfo.getModelCenter();
         float p_x = new Double(center.x - deepCameraInfo.getDeep_lx()).floatValue() * tip_factor;
         float p_y = new Double(center.y - deepCameraInfo.getDeep_ly()).floatValue() * tip_factor;
-        setTipView(mAreaTipView, deepCameraInfo.getWoundArea() + "",
+        setTipView(mAreaTipView, "area:" + deepCameraInfo.getWoundArea() + "",
                 p_x,
                 p_y);
 
@@ -1205,7 +1205,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         public void onClick(final View view) {
             mMeasureStat = 1;
             paint.setColor(GlobalDef.AREA_COLOR);
-            ToastUtil.showLongToastTop(mActivity, "请圈选伤口边缘");
+            ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_area));
             //canvas.restoreToCount(areaLayerID);
         }
     };
@@ -1215,7 +1215,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         public void onClick(final View view) {
             mMeasureStat = 2;
             paint.setColor(GlobalDef.LENGTH_COLOR);
-            ToastUtil.showLongToastTop(mActivity, "请划定伤口最大长度");
+            ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_length));
             //canvas.restoreToCount(lengthLayerID);
         }
     };
@@ -1225,7 +1225,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         public void onClick(final View view) {
             mMeasureStat = 3;
             paint.setColor(GlobalDef.WIDTH_COLOR);
-            ToastUtil.showLongToastTop(mActivity, "请划定伤口最大宽度");
+            ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_width));
             //canvas.restoreToCount(lengthLayerID);
         }
     };
@@ -1235,7 +1235,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         public void onClick(final View view) {
             mMeasureStat = 4;
             paint.setColor(GlobalDef.DEEP_COLOR);
-            ToastUtil.showLongToastTop(mActivity, "第一个是基准点，第二个是深度");
+            ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_deep));
             //canvas.restoreToCount(lengthLayerID);
         }
     };
@@ -1244,7 +1244,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             if (deepCameraInfo.getVertexList().size() <= 0) {
-                ToastUtil.showLongToastTop(mActivity, "未选中深度数据");
+                ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_no_data));
                 return;
             }
             AlertDialogUtil.showAlertDialogAsync(mActivity, view, mActivity.getString(R.string.message_title_tip)
