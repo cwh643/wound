@@ -163,6 +163,8 @@ public class DBHelper extends DataBaseHelper {
                 " ALTER TABLE `archives_record` ADD `wound_ache` INTEGER "
                 ,
                 " ALTER TABLE `archives_record` ADD `wound_type_desc` TEXT(32) "
+                ,
+                " ALTER TABLE `archives_record` ADD `wound_position_desc` TEXT(32) "
         };
         return sqlArray;
     }
