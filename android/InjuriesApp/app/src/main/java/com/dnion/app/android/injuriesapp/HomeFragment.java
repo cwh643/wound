@@ -2,6 +2,7 @@ package com.dnion.app.android.injuriesapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -318,21 +319,8 @@ public class HomeFragment extends Fragment {
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new PDFProcessTask().execute();
                 //uploadRecordInfo(mActivity.getPatientInfo(), mActivity.getRecordInfo());
-                try {
-                    String filePath = mActivity.getBaseDir() + "/report" + "/chapter_title.pdf";
-                    PdfViewer.createPdf(mActivity, filePath, mActivity.getPatientInfo(), mActivity.getRecordInfo());
-                    File file = new File(filePath);
-                    Intent intent = new Intent("android.intent.action.VIEW");
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.setDataAndType (Uri.fromFile(file), "application/pdf");
-                    startActivity(Intent.createChooser(intent, "请选择程序打开伤口报告"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (DocumentException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -674,6 +662,44 @@ public class HomeFragment extends Fragment {
             return success;
         }
         */
+    }
+
+    private class PDFProcessTask extends AsyncTask<String, Object, String> {
+        //private RecordImage image;
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialogUtil.showAlertDialog(mActivity,
+                    mActivity.getString(R.string.message_title_tip),
+                    mActivity.getString(R.string.message_wait));
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String filePath = mActivity.getBaseDir() + "/report" + "/chapter_title.pdf";
+            try {
+                PdfViewer.createPdf(mActivity, filePath, mActivity.getPatientInfo(), mActivity.getRecordInfo());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+            return filePath;
+        }
+
+        @Override
+        protected void onPostExecute(String filePath) {
+            AlertDialogUtil.dismissAlertDialog(mActivity);
+
+            File file = new File(filePath);
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.addCategory("android.intent.category.DEFAULT");
+            intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType (Uri.fromFile(file), "application/pdf");
+            startActivity(Intent.createChooser(intent, "请选择程序打开伤口报告"));
+
+        }
+
     }
 
 }
