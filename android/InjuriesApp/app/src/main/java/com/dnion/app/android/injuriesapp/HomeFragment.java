@@ -1,7 +1,6 @@
 package com.dnion.app.android.injuriesapp;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +26,6 @@ import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.MapUtils;
 import com.dnion.app.android.injuriesapp.utils.PdfViewer;
-import com.dnion.app.android.injuriesapp.utils.SDCardHelper;
 import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 import com.dnion.app.android.injuriesapp.utils.XZip;
@@ -690,14 +688,10 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String filePath) {
             AlertDialogUtil.dismissAlertDialog(mActivity);
-
-            File file = new File(filePath);
-            Intent intent = new Intent("android.intent.action.VIEW");
-            intent.addCategory("android.intent.category.DEFAULT");
-            intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType (Uri.fromFile(file), "application/pdf");
-            startActivity(Intent.createChooser(intent, "请选择程序打开伤口报告"));
-
+            //File file = new File(filePath);
+            Intent intent = new Intent(mActivity, PdfViewActivity.class);
+            intent.putExtra("filePath", filePath);
+            startActivityForResult(intent, 1001);
         }
 
     }

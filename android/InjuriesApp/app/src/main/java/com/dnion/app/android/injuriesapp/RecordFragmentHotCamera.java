@@ -61,7 +61,7 @@ public class RecordFragmentHotCamera extends Fragment {
     private int mColorMode = 1;
 
     private TextView rgb_param;
-
+/*
     public static RecordFragmentHotCamera createInstance() {
         RecordFragmentHotCamera fragment = new RecordFragmentHotCamera();
 
@@ -229,4 +229,5 @@ public class RecordFragmentHotCamera extends Fragment {
         newBitmap.recycle();
         mActivity.saveHotCameraInfo(path + File.separator + name);
     }
+    */
 }

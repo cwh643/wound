@@ -66,6 +66,11 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:configChanges="orientation|keyboardHidden">
         </activity>
+        <activity android:name=".PdfViewActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
         <activity android:name=".LoginActivity"
             android:alwaysRetainTaskState="true"
             android:screenOrientation="sensorLandscape"
