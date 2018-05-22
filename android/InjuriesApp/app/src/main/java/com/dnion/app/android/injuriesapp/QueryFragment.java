@@ -2,6 +2,7 @@ package com.dnion.app.android.injuriesapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
 import com.dnion.app.android.injuriesapp.utils.ToastUtil;
 import com.dnion.app.android.injuriesapp.utils.XZip;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -184,75 +186,104 @@ public class QueryFragment extends Fragment {
         });
     }
 
-    private void syncRecordInfo() {
-        //获取未同步的数据
-        List<RecordInfo> syncRecordList = recordDao.queryListBySyncStatus(0);
-        if (syncRecordList == null || syncRecordList.size() == 0) {
-            return;
+    private class RecordSyncProcessTask extends AsyncTask<String, Object, String> {
+        //private RecordImage image;
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialogUtil.showAlertDialog(mActivity,
+                    mActivity.getString(R.string.message_title_tip),
+                    mActivity.getString(R.string.message_wait));
         }
 
-        AlertDialogUtil.showAlertDialog(mActivity, mActivity.getString(R.string.message_title_tip), mActivity.getString(R.string.message_wait));
-
-        int allCnt = syncRecordList.size();
-        int successCnt = 0;
-        int failCnt = 0;
-        //同步数据
-        for (RecordInfo recordInfo : syncRecordList) {
-            boolean flag = uploadRecordInfo(recordInfo);
-            if (flag) {
-                recordDao.updateSyncFlag(recordInfo.getId());
-                successCnt++;
-            } else {
-                failCnt++;
+        @Override
+        protected String doInBackground(String... params) {
+            //获取未同步的数据
+            List<RecordInfo> syncRecordList = recordDao.queryListBySyncStatus(0);
+            if (syncRecordList == null || syncRecordList.size() == 0) {
+                return "未找到需要同步的记录！";
             }
+            int allCnt = syncRecordList.size();
+            int successCnt = 0;
+            int failCnt = 0;
+            //同步数据
+            for (RecordInfo recordInfo : syncRecordList) {
+                boolean flag = uploadRecordInfo(recordInfo);
+                if (flag) {
+                    //recordDao.updateSyncFlag(recordInfo.getId());
+                    successCnt++;
+                } else {
+                    failCnt++;
+                }
+            }
+            return "同步创伤记录总数:" + allCnt + "，成功:" + successCnt + "条，失败" + failCnt+ "条！";
         }
-        ToastUtil.showLongToast(mActivity, "同步创伤信息总数:" + allCnt + "，成功:" + successCnt + "条，失败" + failCnt+ "条！");
-        //更新记录状态
 
-        AlertDialogUtil.dismissAlertDialog(mActivity);
+        @Override
+        protected void onPostExecute(String msg) {
+            AlertDialogUtil.dismissAlertDialog(mActivity);
+            AlertDialogUtil.showAlertDialog(mActivity, mActivity.getString(R.string.message_title_tip),msg, null);
+        }
+
+    }
+
+    private void syncRecordInfo() {
+        new RecordSyncProcessTask().execute();
    };
 
-    boolean sync_flag = false;
+
     private boolean uploadRecordInfo(RecordInfo recordInfo) {
-        sync_flag = false;
+        boolean sync_flag = false;
         try {
-            final int recordId = recordInfo.getId();
-            String recordInfoJson = MapUtils.mGson.toJson(recordInfo);
-            String uuid = recordInfo.getUuid();
-            String srcFolder = mActivity.getRecordPath(uuid);
-            String zipFile = mActivity.getBaseDir() + File.separator + "recordInfo.zip";
-            XZip.ZipFolder(srcFolder, zipFile);
             final String deviceId = configDao.queryValue(CommonUtil.DEVICE_ID);
             final String remoteUrl = configDao.queryValue(CommonUtil.REMOTE_URL);
 
             //AlertDialogUtil.showAlertDialog(mActivity, mActivity.getString(R.string.message_title_tip), mActivity.getString(R.string.message_wait));
-            String url = CommonUtil.initUrl(remoteUrl, "syncRecordInfo");
-            Log.d(TAG, "同步创伤信息,url=" + url);
-            OkHttpClientManager.postAsyn(url, new OkHttpClientManager.ResultCallback<String>() {
-                        @Override
-                        public void onError(Request request, Exception e) {
-                            //AlertDialogUtil.dismissAlertDialog(mActivity);
-                            //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
-                            Log.e(TAG, "同步创伤信息失败", e);
-                        }
 
-                        @Override
-                        public void onResponse(String resultStr) {
-                            //AlertDialogUtil.dismissAlertDialog(mActivity);
-                            PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
-                            if (!res.isSuccess()) {
-                                String message = res.getMessage();
-                                //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
-                            } else {
-                                //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
-                                sync_flag = true;
-                                mActivity.updateSyncFlag(recordId);
-                            }
-                        }
-                    },new File(zipFile), "record",
-                    new OkHttpClientManager.Param("recordInfo", recordInfoJson),
-                    new OkHttpClientManager.Param("deviceId", deviceId));
-
+            final int recordId = recordInfo.getId();
+            String recordInfoJson = MapUtils.mGson.toJson(recordInfo);
+            Log.d(TAG, "sync record: " + recordInfoJson);
+            String uuid = recordInfo.getUuid();
+            String srcFolder = mActivity.getRecordPath(uuid);
+            if (new File(srcFolder).exists()) {
+                String zipFile = mActivity.getBaseDir() + File.separator + "recordInfo.zip";
+                XZip.ZipFolder(srcFolder, zipFile);
+                String url = CommonUtil.initUrl(remoteUrl, "syncRecordInfoHasFile");
+                Log.d(TAG, "syncRecordInfoHasFile,url=" + url);
+                Response response = OkHttpClientManager.post(url,new File(zipFile), "record",
+                        new OkHttpClientManager.Param("recordInfo", recordInfoJson),
+                        new OkHttpClientManager.Param("deviceId", deviceId));
+                String resultStr = response.body().string();
+                Log.d(TAG, "syncRecordInfoHasFile return: " + resultStr);
+                PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
+                if (!res.isSuccess()) {
+                    String message = res.getMessage();
+                    //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
+                } else {
+                    //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
+                    sync_flag = true;
+                    int id = Integer.parseInt(res.getMessage());
+                    mActivity.updateSyncFlag(id);
+                }
+            } else {
+                String url = CommonUtil.initUrl(remoteUrl, "syncRecordInfo");
+                Log.d(TAG, "syncRecordInfo,url=" + url);
+                Response response = OkHttpClientManager.post(url,
+                        new OkHttpClientManager.Param("recordInfo", recordInfoJson),
+                        new OkHttpClientManager.Param("deviceId", deviceId));
+                String resultStr = response.body().string();
+                Log.d(TAG, "syncRecordInfoHasFile return: " + resultStr);
+                PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
+                if (!res.isSuccess()) {
+                    String message = res.getMessage();
+                    //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
+                } else {
+                    //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
+                    sync_flag = true;
+                    int id = Integer.parseInt(res.getMessage());
+                    mActivity.updateSyncFlag(id);
+                }
+            }
         } catch (Exception e) {
             Log.e(TAG, "同步创伤信息失败", e);
             //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");

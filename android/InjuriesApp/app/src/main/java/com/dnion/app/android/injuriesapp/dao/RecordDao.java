@@ -7,6 +7,7 @@ import com.dnion.app.android.injuriesapp.InjApp;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.DBHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,9 +36,10 @@ public class RecordDao {
         return null;
     }
 
-    public void updateSyncFlag(int recordId) {
-        String sql = "update archives_record set sync_flag = 1 and sync_time = ? where id = ?";
-        String dateString = DateFormat.format("yyyy-MM-dd HH:mm:ss", Calendar.getInstance()).toString();
+    public synchronized void updateSyncFlag(int recordId) {
+        String sql = "update archives_record set sync_flag = 1, sync_time = ? where id = ?";
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = df.format(new Date());
         db.execSQL(sql, new Object[]{dateString, recordId});
     }
 
@@ -122,6 +124,7 @@ public class RecordDao {
     private RecordInfo warpRecordInfo(Map map) {
         RecordInfo recordInfo = new RecordInfo();
         recordInfo.setId((Integer)map.get("id"));
+        recordInfo.setDoctorId((Integer)map.get("doctor_id"));
         recordInfo.setInpatientNo((String)map.get("inpatient_no"));
         recordInfo.setRecordTime((String)map.get("record_time"));
         recordInfo.setIsOperation(getIntValue(map,"is_operation"));
@@ -162,6 +165,7 @@ public class RecordDao {
         recordInfo.setWoundTypeDesc((String)map.get("wound_type_desc"));
         recordInfo.setWoundExam((String)map.get("wound_exam"));
         recordInfo.setWoundAche(getIntValue(map, "wound_ache"));
+        recordInfo.setWoundPositionDesc((String)map.get("wound_position_desc"));
         return recordInfo;
     }
 

@@ -312,7 +312,7 @@ public class HomeFragment extends Fragment {
             }
         });
 */
-        //出院
+        //PDF预览
         Button btn_upload = (Button)rootView.findViewById(R.id.btn_upload);
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
