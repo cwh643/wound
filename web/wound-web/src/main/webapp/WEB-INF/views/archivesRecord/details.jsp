@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -223,7 +224,7 @@
 		            <div class="thumbnail" style="height:200px;">
 		                <a href="#">
 		                    <div class="divcss5">
-		                  	<img alt="" src="/imagebase/${img.imagePath}/list_rgb.jpeg"></img>
+		                  	<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
 		                </a>
 		                <div class="caption">
@@ -469,25 +470,38 @@
 			<div class="control-group">
 				<label class="control-label">热红外照片:</label>
 				<div class="controls">
-					<a class="btn" href="#" target="_blank">查看图片</a>
+					<!--<a class="btn" href="#" target="_blank">查看图片</a>-->
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">多普勒超声结果:</label>
 				<div class="controls">
-					<a class="btn" href="/imagebase/${record.uuid}/${record.woundDoppler}" target="_blank">查看图片</a>
+
+					<c:if test="${not empty record.woundDoppler}">
+						<c:forEach var="v" items="${fn:split(record.woundDoppler,';')}">
+							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">CT结果描述:</label>
 				<div class="controls">
-					<a class="btn" href="/imagebase/${record.uuid}/${record.woundCta}" target="_blank">查看图片</a>
+					<c:if test="${not empty record.woundCta}">
+						<c:forEach var="v" items="${fn:split(record.woundCta,';')}">
+							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">常规检查结果:</label>
 				<div class="controls">
-					<a class="btn" href="/imagebase/${record.uuid}/${record.woundExam}" target="_blank">查看图片</a>
+					<c:if test="${not empty record.woundExam}">
+						<c:forEach var="v" items="${fn:split(record.woundExam,';')}">
+							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 			<!-- 
@@ -508,13 +522,21 @@
 			<div class="control-group">
 				<label class="control-label">伤口及伤口周围组织的核磁成像:</label>
 				<div class="controls">
-					<a class="btn" href="/imagebase/${record.uuid}/${record.woundMr}" target="_blank">查看图片</a>
+					<c:if test="${not empty record.woundMr}">
+						<c:forEach var="v" items="${fn:split(record.woundMr,';')}">
+							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">伤口及伤口周围组织的葡萄糖代谢显像（PETCT）:</label>
 				<div class="controls">
-					<a class="btn" href="/imagebase/${record.uuid}/${record.woundPetct}" target="_blank">查看图片</a>
+					<c:if test="${not empty record.woundPetct}">
+						<c:forEach var="v" items="${fn:split(record.woundPetct,';')}">
+							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 			<!-- 

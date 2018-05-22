@@ -17,7 +17,7 @@
 	</appender>
 
 	<!-- project default level -->
-	<logger name="com.iteye.chenwh.wound" level="INFO" />
+	<logger name="com.iteye.chenwh.wound" level="debug" />
 
 	<!--log4jdbc -->
 	<logger name="jdbc.sqltiming" level="INFO"/>

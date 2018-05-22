@@ -308,12 +308,19 @@ public class WapController {
 		}
 		return map;
 	}
-	
-    @RequestMapping(value="/syncRecordInfo",method=RequestMethod.POST)
+
+	@RequestMapping(value="/syncRecordInfo",method=RequestMethod.POST)
+	@ResponseBody
+	private ModelMap syncRecordInfo(String recordInfo , String deviceId, HttpServletRequest request) {
+		return  syncRecordInfoHasFile(recordInfo, deviceId, null, request);
+	}
+
+		@RequestMapping(value="/syncRecordInfoHasFile",method=RequestMethod.POST)
     @ResponseBody
-    private ModelMap syncRecordInfo(String recordInfo , String deviceId, @RequestParam("record") MultipartFile file, HttpServletRequest request) { 
+    private ModelMap syncRecordInfoHasFile(String recordInfo , String deviceId, @RequestParam("record") MultipartFile file, HttpServletRequest request) {
 		ModelMap map = new ModelMap();
 		try {
+			log.debug("syncRecordInfo: " + recordInfo);
 	    	ArchivesRecord record = JSON.parseObject(recordInfo, ArchivesRecord.class);
 	    	//保存患者信息
 	    	Patient patient = record.getPatientInfo();
@@ -375,8 +382,9 @@ public class WapController {
 	        //获得物理路径webapp所在路径  
 	    	//Long recordId = record.getId();
 	    	//String path = PATH+ deviceId;
-	    	String path = PATH;
-	        if (!file.isEmpty()) {
+	    	//String path = PATH;
+			String path = request.getSession().getServletContext().getRealPath("/") + "static/" + "wound";
+	        if (file != null && !file.isEmpty()) {
 	            //获得文件类型  
 	            String contentType=file.getContentType();  
 	            //获得文件后缀名称  
@@ -400,7 +408,7 @@ public class WapController {
 	            	tofile.delete();
 	            }
 	        }
-	        map.addAttribute("message", "同步上传创伤记录信息出错");
+	        map.addAttribute("message", "" + deviceRecordId);
 			map.addAttribute("success", true);
 			return map;
 	} catch (Exception e) {
