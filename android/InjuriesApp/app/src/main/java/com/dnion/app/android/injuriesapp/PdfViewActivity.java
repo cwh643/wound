@@ -25,8 +25,8 @@ public class PdfViewActivity extends BaseActivity {
     }
 
     private void initPdfView(String filePath) {
-        com.github.barteksc.pdfviewer.PDFView pdfView = (com.github.barteksc.pdfviewer.PDFView)findViewById(R.id.pdfView);
-        pdfView.fromFile(new File(filePath)).load();
+        //com.github.barteksc.pdfviewer.PDFView pdfView = (com.github.barteksc.pdfviewer.PDFView)findViewById(R.id.pdfView);
+        //pdfView.fromFile(new File(filePath)).load();
         Toast.makeText(mActivity, "双击放大缩小", Toast.LENGTH_LONG).show();
     }
 }

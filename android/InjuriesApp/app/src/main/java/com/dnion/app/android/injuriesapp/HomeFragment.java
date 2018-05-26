@@ -1,6 +1,7 @@
 package com.dnion.app.android.injuriesapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -689,9 +690,18 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(String filePath) {
             AlertDialogUtil.dismissAlertDialog(mActivity);
             //File file = new File(filePath);
+            /* 内置PDF打开
             Intent intent = new Intent(mActivity, PdfViewActivity.class);
             intent.putExtra("filePath", filePath);
             startActivityForResult(intent, 1001);
+            */
+            //外部PDF打开
+            File file = new File(filePath);
+            Intent intent = new Intent("android.intent.action.VIEW");
+            intent.addCategory("android.intent.category.DEFAULT");
+            intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType (Uri.fromFile(file), "application/pdf");
+            startActivity(Intent.createChooser(intent, "请选择程序打开伤口报告"));
         }
 
     }
