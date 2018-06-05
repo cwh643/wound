@@ -110,6 +110,7 @@ public class QueryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.query_fragment, container, false);
+        rootView.setClickable(true);
         configView(rootView);
         return rootView;
     }
