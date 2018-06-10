@@ -803,13 +803,11 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     maxS = Math.max(maxS, val_S);
                     minV = Math.min(minV, val_V);
                     maxV = Math.max(maxV, val_V);
-                    if (val_H > 24 && val_H < 35 && val_S > 43 && val_V > 46) {
-                        mi.yellowNum++;
-                    }
-                    if (((val_H > 0 && val_H < 0) || (val_H > 156 && val_H < 180)) && val_S > 43 && val_V > 46) {
+                    if (((val_H > 0 && val_H < 4) || (val_H > 156 && val_H < 180)) && val_S > 7 && val_V > 46) {
                         mi.redNum++;
-                    }
-                    if (val_V > 0 && val_V < 46) {
+                    } else if (val_H >= 4 && val_H < 48 && val_S > 7 && val_V > 46) {
+                        mi.yellowNum++;
+                    } else if (val_V > 0 && val_V < 46) {
                         mi.blackNum++;
                     }
 
