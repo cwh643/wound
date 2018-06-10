@@ -48,7 +48,7 @@ public class RecordFragment2 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = (MainActivity)RecordFragment2.this.getActivity();
+        mActivity = (MainActivity) RecordFragment2.this.getActivity();
         //userDao = new UserDao(mActivity);
     }
 
@@ -62,60 +62,84 @@ public class RecordFragment2 extends Fragment {
     private void configView(View rootView) {
         final RecordInfo patientInfo = mActivity.getRecordInfo();
         //伤口的清洁程度
-        RadioGroup group_wound_clear = (RadioGroup)rootView.findViewById(R.id.group_wound_clear);
+        RadioGroup group_wound_clear = (RadioGroup) rootView.findViewById(R.id.group_wound_clear);
         CommonUtil.initRadioGroup(group_wound_clear, patientInfo.getWoundDescribeClean());
         group_wound_clear.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                RadioButton item = (RadioButton)group.findViewById(checkedId);
+                RadioButton item = (RadioButton) group.findViewById(checkedId);
                 patientInfo.setWoundDescribeClean(Integer.parseInt("" + item.getTag()));
             }
         });
         //感染的细菌种类,药物试验
-        EditText wound_germs = (EditText)rootView.findViewById(R.id.wound_germs);
+        EditText wound_germs = (EditText) rootView.findViewById(R.id.wound_germs);
         wound_germs.setText(patientInfo.getWoundAssessInfectDesc());
         wound_germs.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    String text = ((EditText)v).getText().toString();
+                    String text = ((EditText) v).getText().toString();
                     patientInfo.setWoundAssessInfectDesc(text);
                 }
             }
         });
         //伤口的基底颜色-红
-        EditText wound_color_red = (EditText)rootView.findViewById(R.id.wound_color_red);
+        EditText wound_color_red = (EditText) rootView.findViewById(R.id.wound_color_red);
         if (patientInfo.getWoundColorRed() != null) {
             wound_color_red.setText("" + patientInfo.getWoundColorRed());
         }
         wound_color_red.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundColorRed(Float.parseFloat(s.toString()));
+                if (s.toString() == ""){
+                    return;
+                }
+                float num = 0.0f;
+                try {
+                    num = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundColorRed(num);
             }
         });
 
         //伤口的基底颜色-黄
-        EditText wound_color_yellow = (EditText)rootView.findViewById(R.id.wound_color_yellow);
+        EditText wound_color_yellow = (EditText) rootView.findViewById(R.id.wound_color_yellow);
         if (patientInfo.getWoundColorYellow() != null) {
             wound_color_yellow.setText("" + patientInfo.getWoundColorYellow());
         }
         wound_color_yellow.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundColorYellow(Float.parseFloat(s.toString()));
+                if (s.toString() == ""){
+                    return;
+                }
+                float num = 0.0f;
+                try {
+                    num = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundColorYellow(num);
             }
         });
 
         //伤口的基底颜色-黑
-        EditText wound_color_black = (EditText)rootView.findViewById(R.id.wound_color_black);
+        EditText wound_color_black = (EditText) rootView.findViewById(R.id.wound_color_black);
         if (patientInfo.getWoundColorBlack() != null) {
             wound_color_black.setText("" + patientInfo.getWoundColorBlack());
         }
         wound_color_black.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundColorBlack(Float.parseFloat(s.toString()));
+                if (s.toString() == ""){
+                    return;
+                }
+                float num = 0.0f;
+                try {
+                    num = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundColorBlack(num);
             }
         });
 
@@ -131,7 +155,7 @@ public class RecordFragment2 extends Fragment {
             }
         });
         */
-        Spinner group_wound_skin = (Spinner)rootView.findViewById(R.id.group_wound_skin);
+        Spinner group_wound_skin = (Spinner) rootView.findViewById(R.id.group_wound_skin);
 
         if (CommonUtil.isEn(mActivity)) {
             typeAdapter = new TypeArrayAdapter(mActivity, android.R.layout.simple_spinner_item, ArchivesData.woundSkinEnDict);
@@ -147,10 +171,10 @@ public class RecordFragment2 extends Fragment {
                 TextView tv = (TextView) view;
                 //tv.setTextColor(Color.WHITE);
                 tv.setTextSize(CommonUtil.SELECT_TEXT_SIZE);
-                Pair pair = (Pair)typeAdapter.getItem(position);
+                Pair pair = (Pair) typeAdapter.getItem(position);
                 if (pair != null) {
                     //ToastUtil.showLongToast(mActivity, "" + pair.second);
-                    patientInfo.setWoundDescribeSkin((Integer)pair.first);
+                    patientInfo.setWoundDescribeSkin((Integer) pair.first);
                     return;
                 }
             }

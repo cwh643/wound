@@ -53,10 +53,10 @@ import java.util.List;
 
 public class RecordFragmentWoundMeasure extends Fragment {
     public static final String TAG = "record_fragment_camera";
-    public static final double length_factor = 2.2;
+    public static final double length_factor = 1; // 2.2
     public static final double WIDTH_PER_PIX = (Math.tan(0.5236) / 320) * 1000 / length_factor;
     public static final double HEIGHT_PER_PIX = (Math.tan(0.4014) / 240) * 1000 / length_factor;
-    public static final double AREA_PER_PIX = (Math.tan(0.5236) / 320) * (Math.tan(0.4014) / 240) * 10 / length_factor;
+    public static final double AREA_PER_PIX = WIDTH_PER_PIX * WIDTH_PER_PIX / length_factor;
     private MainActivity mActivity;
 
     private int displayMode = 1; // 1 rgb, 2 depth, 3 orgin rgb
@@ -100,7 +100,11 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private Canvas deepCanvas;
 
     private DeepCameraInfo deepCameraInfo;
-    private float displayFactor;
+    private double displayFactor;
+    private double measureDeepFactor;
+    private int deepValidWidth;
+    private int deepValidHeight;
+
     private boolean inited;
 
     private LinearLayout measure_bar;
@@ -137,7 +141,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.wound_measure_v2, container, false);
+        View rootView = inflater.inflate(R.layout.wound_measure, container, false);
         configView(rootView);
         return rootView;
     }
@@ -504,6 +508,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
         //Mat tmpMap = new Mat(mBitmap.getHeight(), mBitmap.getWidth(), CvType.CV_8UC1);
         //deepCameraInfo.getDepthMat().convertTo(tmpMap, tmpMap.type());
         Mat mDepth = deepCameraInfo.getDepthMat();
+        deepValidWidth = deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx();
+        deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
+        measureDeepFactor = deepValidWidth / new Double(mAreaMeasureBitmap.getWidth());
         // 在此加入中值滤波器，
         mFilterDepth = new Mat(mDepth.rows(), mDepth.cols(), mDepth.type());
         Imgproc.medianBlur(mDepth, mFilterDepth, GlobalDef.MODEL_DEEP_CENTER_DIS);
@@ -768,7 +775,54 @@ public class RecordFragmentWoundMeasure extends Fragment {
         return deep;//* 0.5;
     }
 
-    private void clacColorRate(int color, ModelPointinfo mi) {
+    private void clacColorRate(Bitmap rgbBitmap, ModelPointinfo mi) {
+        Mat srcRgbMat = new Mat(rgbBitmap.getHeight(), rgbBitmap.getWidth(), CvType.CV_8UC3);
+        Mat dstRgbMat = new Mat(rgbBitmap.getHeight(), rgbBitmap.getWidth(), CvType.CV_8UC3);
+        Utils.bitmapToMat(rgbBitmap, srcRgbMat);
+        Imgproc.cvtColor(srcRgbMat, dstRgbMat, Imgproc.COLOR_RGB2HSV);
+        Bitmap dstBitmap = Bitmap.createBitmap(rgbBitmap);
+        Utils.matToBitmap(dstRgbMat, dstBitmap);
+        //mWoundOrgRgbView.setImageBitmap(dstBitmap);
+        double minH = Integer.MAX_VALUE;
+        double maxH = 0;
+        double minS = Integer.MAX_VALUE;
+        double maxS = 0;
+        double minV = Integer.MAX_VALUE;
+        double maxV = 0;
+        for (int i = 0; i < dstRgbMat.cols(); i++) {
+            for (int j = 0; j < dstRgbMat.rows(); j++) {
+                double[] color = dstRgbMat.get(j, i);
+                if (color[0] != 0 && color[1] != 0 && color[2] != 0) {
+                    mi.pixSize++;
+                    double val_H = color[0];
+                    double val_S = color[1];
+                    double val_V = color[2];
+                    minH = Math.min(minH, val_H);
+                    maxH = Math.max(maxH, val_H);
+                    minS = Math.min(minS, val_S);
+                    maxS = Math.max(maxS, val_S);
+                    minV = Math.min(minV, val_V);
+                    maxV = Math.max(maxV, val_V);
+                    if (val_H > 24 && val_H < 35 && val_S > 43 && val_V > 46) {
+                        mi.yellowNum++;
+                    }
+                    if (((val_H > 0 && val_H < 0) || (val_H > 156 && val_H < 180)) && val_S > 43 && val_V > 46) {
+                        mi.redNum++;
+                    }
+                    if (val_V > 0 && val_V < 46) {
+                        mi.blackNum++;
+                    }
+
+                }
+            }
+        }
+
+        Log.i(TAG, "HSV minH:" + minH + "maxH:" + maxH);
+        Log.i(TAG, "HSV minS:" + minS + "maxS:" + maxS);
+        Log.i(TAG, "HSV minV:" + minV + "maxV:" + maxV);
+    }
+
+    private void clacColorRateBak(int color, ModelPointinfo mi) {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -791,12 +845,12 @@ public class RecordFragmentWoundMeasure extends Fragment {
         Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
         vertexList.clear();
         colorList.clear();
-        int calcWidth = deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx();
-        int calcHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
-        Bitmap tmpBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
-                mAreaMeasureBitmap.getHeight(), calcWidth, calcHeight);
-        int width = tmpBitmap.getWidth();
-        int height = tmpBitmap.getHeight();
+        deepValidWidth = deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx();
+        deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
+        Bitmap areaMeasureBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
+                mAreaMeasureBitmap.getHeight(), deepValidWidth, deepValidHeight);
+        int width = areaMeasureBitmap.getWidth();
+        int height = areaMeasureBitmap.getHeight();
         // 缩放比例
         float rgbFactor = (float) rgbBitmap.getWidth() / mDepth.cols();
         // 存放每个轴上面最大和最小值
@@ -820,11 +874,12 @@ public class RecordFragmentWoundMeasure extends Fragment {
         mi.yellowNum = 0;
         mi.blackNum = 0;
         mi.pixSize = 1;
+        Bitmap areaBitmap = Bitmap.createBitmap(rgbBitmap.getWidth(), rgbBitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         for (int i = 0; i < width; i++) {
             mi.last_deep = 0;
             for (int j = 0; j < height; j++) {
-                if (tmpBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
+                if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;
                     int depth_i = i + lx;
                     mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);
@@ -864,10 +919,12 @@ public class RecordFragmentWoundMeasure extends Fragment {
                         int rgb_j = new Float(rgbFactor * depth_j).intValue();
                         int color = rgbBitmap.getPixel(rgb_i, rgb_j);
                         // testBm.setPixel(depth_i, depth_j, color);
+                        areaBitmap.setPixel(rgb_i, rgb_j, color);
                         int red = Color.red(color);
                         int green = Color.green(color);
                         int blue = Color.blue(color);
-                        clacColorRate(color, mi);
+
+
                         colorList.add((float) red);
                         colorList.add((float) green);
                         colorList.add((float) blue);
@@ -891,6 +948,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCameraInfo.setMinDeepPoint(min_deep);
         deepCameraInfo.setMaxDeepPoint(max_deep);
 
+        clacColorRate(areaBitmap, mi);
+
         //  中间点
         int test = 1;
         Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
@@ -901,7 +960,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
             int x = new Float(vertexList.get(i - 2)).intValue() - lx;
             int y = new Float(vertexList.get(i - 1)).intValue() - ly;
             int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
-            double area_per = avgDeep * AREA_PER_PIX / camera_size_factor / camera_size_factor;
+            // 先计算长和宽，所以需要乘以两次deep，而deep的比例是以米为单位，所以要除以2次1000
+            double area_per = avgDeep * avgDeep * AREA_PER_PIX / 1000000/ camera_size_factor / camera_size_factor;
             area += area_per;
             double volum_per = (deep - avgDeep) / 10 * area_per;
             volume += volum_per;
@@ -911,7 +971,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         }
         volume = volume < 0 ? -volume : volume;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
-        String format_area = new DecimalFormat("#.00").format(area);
+        String format_area = new DecimalFormat("#.00").format(area / 100);
         String format_volume = new DecimalFormat("#.00").format(volume);
         String format_red = new DecimalFormat("#.00").format((float) mi.redNum / mi.pixSize * 100);
         String format_yellow = new DecimalFormat("#.00").format((float) mi.yellowNum / mi.pixSize * 100);
@@ -1014,8 +1074,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float x = Math.round(e.getX() * displayFactor);
         float y = Math.round(e.getY() * displayFactor);
         deepCameraInfo.getWidthPointList().add(new Point(x, y));
-        fillWidth();
         clacWidth();
+        fillWidth();
         setWidth();
     }
 
@@ -1145,28 +1205,79 @@ public class RecordFragmentWoundMeasure extends Fragment {
         canvas.drawLine(lx, ly, rx, ry, paint);
     }
 
-    private double calcDistince(Point lp, Point rp) {
-        int lx = new Double(lp.x).intValue();
-        int ly = new Double(lp.y).intValue();
-        int rx = new Double(rp.x).intValue();
-        int ry = new Double(rp.y).intValue();
+    private Point3[] getValidLinePoint(Mat depth, Point lp_org, Point rp_org) {
+        // 需要先校准深度数据的参数，包括边界起点和缩放比例，以640为基准
+        int deep_lx = deepCameraInfo.getDeep_lx();
+        int deep_ly = deepCameraInfo.getDeep_ly();
+        Point lp = lp_org;
+        Point rp = rp_org;
+        if (lp_org.x > rp_org.x) {
+            rp = lp_org;
+            lp = rp_org;
+        }
+        double lx = lp.x * measureDeepFactor + deep_lx;
+        double ly = lp.y * measureDeepFactor + deep_ly;
+        double rx = rp.x * measureDeepFactor + deep_lx;
+        double ry = rp.y * measureDeepFactor + deep_ly;
+        double lineRate = new Double(ry - ly) / (rx - lx);
         double default_deep = (deepCameraInfo.getDeep_far() + deepCameraInfo.getDeep_near()) / 2;
-        double ldeep = default_deep;
-        double rdeep = default_deep;
+        double[] ldeeps = null;
+        Point3[] ret = new Point3[2];
+        ret[0] = new Point3();
+        ret[1] = new Point3();
+
+        ret[0].x = rx;
+        ret[0].y = ry;
+        ret[0].z = default_deep;
+        ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+        for (; lx < rx; lx++) {
+            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                ret[0].x = lx;
+                ret[0].y = ly;
+                ret[0].z = ldeeps[0];
+                break;
+            }
+            ly += lineRate;
+            ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+        }
+
+        ret[1].x = rx;
+        ret[1].y = ry;
+        ret[1].z = default_deep;
+        ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+        for (; rx > lx; rx--) {
+            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                ret[1].x = rx;
+                ret[1].y = ry;
+                ret[1].z = ldeeps[0];
+                break;
+            }
+            ry -= lineRate;
+            ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+        }
+        // 更新最开始的lp和rp
+        lp.x = (lx - deep_lx) / measureDeepFactor;
+        lp.y = (ly - deep_ly) / measureDeepFactor;
+        rp.x = (rx - deep_lx) / measureDeepFactor;
+        rp.y = (ry - deep_ly) / measureDeepFactor;
+        return ret;
+    }
+
+    private double calcDistince(Point lp, Point rp) {
         Mat depth = deepCameraInfo.getDepthMat();
-        double[] ldeeps = depth.get(ly, lx);
-        if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
-            ldeep = ldeeps[0];
-        }
-        double[] rdeeps = depth.get(ry, rx);
-        if (rdeeps != null && rdeeps.length > 0 && rdeeps[0] > 0) {
-            rdeep = rdeeps[0];
-        }
-        double first_deep = Math.min(ldeep, rdeep);
-        double d_with = (rx - lx) * WIDTH_PER_PIX;
-        double d_height = (ry - ly) * HEIGHT_PER_PIX;
-        double d_deep = (rdeep - ldeep);
-        double length = Math.sqrt(Math.pow(d_with, 2) + Math.pow(d_height, 2)) * first_deep / 1000;
+        Point3[] validPoints = getValidLinePoint(depth, lp, rp);
+        Point3 v_lp = validPoints[0];
+        Point3 v_rp = validPoints[1];
+
+        double pre_deep = Math.min(v_lp.z, v_rp.z);
+        double after_deep = Math.max(v_lp.z, v_rp.z);
+        float camera_size_factor = deepCameraInfo.getCamera_size_factor();
+        double d_with = (v_rp.x - v_lp.x) * WIDTH_PER_PIX / camera_size_factor;
+        double d_height = (v_rp.y - v_lp.y) * WIDTH_PER_PIX / camera_size_factor;
+        double d_deep = (after_deep - pre_deep);
+        double pre_length = Math.sqrt(Math.pow(d_with, 2) + Math.pow(d_height, 2)) * pre_deep / 1000;
+        double after_length = Math.sqrt(Math.pow(d_with, 2) + Math.pow(d_height, 2)) * after_deep / 1000;
+        double length = (pre_length + after_length) / 2;
         double line = Math.sqrt(Math.pow(length, 2) + Math.pow(d_deep, 2));
         return line;
     }
@@ -1176,7 +1287,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         Point center = deepCameraInfo.getModelCenter();
         float p_x = new Double(center.x - deepCameraInfo.getDeep_lx()).floatValue() * tip_factor;
         float p_y = new Double(center.y - deepCameraInfo.getDeep_ly()).floatValue() * tip_factor;
-        setTipView(mAreaTipView, "area:" + deepCameraInfo.getWoundArea() + "",
+        setTipView(mAreaTipView, "area:" + deepCameraInfo.getWoundArea() + "cm²",
                 p_x,
                 p_y);
 
@@ -1184,8 +1295,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         mVolumeView.setText(deepCameraInfo.getWoundVolume() + "");
         mDeepView.setText(deepCameraInfo.getWoundDeep() + "");
         mColorRedView.setText(deepCameraInfo.getWoundRedRate() + "");
-        mColorBlackView.setText(deepCameraInfo.getWoundYellowRate() + "");
-        mColorYellowView.setText(deepCameraInfo.getWoundBlackRate() + "");
+        mColorBlackView.setText(deepCameraInfo.getWoundBlackRate() + "");
+        mColorYellowView.setText(deepCameraInfo.getWoundYellowRate() + "");
     }
 
     private void setLength() {

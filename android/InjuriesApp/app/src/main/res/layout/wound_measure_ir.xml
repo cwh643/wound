@@ -204,7 +204,7 @@
                 android:background="@null"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
                 android:src="@mipmap/measure_sd"
-                android:text="@string/measure_area" />
+                android:text="@string/measure_ir_area" />
 
             <Button
                 android:id="@+id/measure_btn_temp"

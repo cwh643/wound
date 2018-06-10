@@ -84,11 +84,13 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
 
     for( int i = 0; i < frame.validCount; i++ ){
         // get & show depth image
+        LOGD("=== frame id %d", frame.image[i].componentID);
         if(frame.image[i].componentID == TY_COMPONENT_DEPTH_CAM){
             cv::Mat depth(frame.image[i].height, frame.image[i].width
                     , CV_16U, frame.image[i].buffer);
             int nl = depth.rows;  
             int nc = depth.cols * depth.channels();  
+
             //LOGD("     depth mat create %d, %d, %d", *(int *)frame.image[i].buffer, nl,nc);
             LOGD("     dept width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
 			dt = (cv::Mat*)deptMat;
@@ -588,7 +590,7 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
 	LOGD("Fetch Data");
     //exit_main = false;
     TY_FRAME_DATA frame;
-    int err = TYFetchFrame(hDevice, &frame, (uint64_t)100000);
+    int err = TYFetchFrame(hDevice, &frame, -1);
     LOGD("err = %d", err);
     if( err != TY_STATUS_OK ){
         //LOGD("... Drop one frame");

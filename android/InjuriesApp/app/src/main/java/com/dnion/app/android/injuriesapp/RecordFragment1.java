@@ -192,7 +192,12 @@ public class RecordFragment1 extends Fragment {
         wound_width.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundWidth(Float.parseFloat(s.toString()));
+                float val = 0.0f;
+                try {
+                    val = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundWidth(val);
             }
         });
 
@@ -204,7 +209,12 @@ public class RecordFragment1 extends Fragment {
         wound_height.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundHeight(Float.parseFloat(s.toString()));
+                float val = 0.0f;
+                try {
+                    val = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundHeight(val);
             }
         });
 
@@ -216,7 +226,12 @@ public class RecordFragment1 extends Fragment {
         wound_deep.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundDeep(Float.parseFloat(s.toString()));
+                float val = 0.0f;
+                try {
+                    val = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundDeep(val);
             }
         });
 
@@ -228,7 +243,12 @@ public class RecordFragment1 extends Fragment {
         wound_area.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundArea(Float.parseFloat(s.toString()));
+                float val = 0.0f;
+                try {
+                    val = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundArea(val);
             }
         });
 
@@ -240,7 +260,12 @@ public class RecordFragment1 extends Fragment {
         wound_volume.addTextChangedListener(new BaseTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
-                patientInfo.setWoundVolume(Float.parseFloat(s.toString()));
+                float val = 0.0f;
+                try {
+                    val = Float.parseFloat(s.toString());
+                } catch (Exception e) {
+                }
+                patientInfo.setWoundVolume(val);
             }
         });
 
