@@ -222,8 +222,8 @@
 		      </c:if>
 			  <li class="span3">
 		            <div class="thumbnail" style="height:200px;">
-		                <a href="#">
-		                    <div class="divcss5">
+		                <a href="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg" target="_blank">
+		                    <div class="divcss5" style="margin-top: 30px">
 		                  	<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
 		                </a>
