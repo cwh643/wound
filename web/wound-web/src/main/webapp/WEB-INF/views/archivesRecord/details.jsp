@@ -47,7 +47,7 @@
 	}
 	
 	.bs-docs-sidenav.affix {
-	    top: 40px;
+	    top: 65px;
 	}
 	
 	.bs-docs-sidenav > li > a:hover {
