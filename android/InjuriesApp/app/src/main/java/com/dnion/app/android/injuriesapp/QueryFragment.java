@@ -207,9 +207,10 @@ public class QueryFragment extends Fragment {
             int allCnt = syncRecordList.size();
             int successCnt = 0;
             int failCnt = 0;
+            StringBuilder err = new StringBuilder();
             //同步数据
             for (RecordInfo recordInfo : syncRecordList) {
-                boolean flag = uploadRecordInfo(recordInfo);
+                boolean flag = uploadRecordInfo(recordInfo, err);
                 if (flag) {
                     //recordDao.updateSyncFlag(recordInfo.getId());
                     successCnt++;
@@ -217,7 +218,7 @@ public class QueryFragment extends Fragment {
                     failCnt++;
                 }
             }
-            return "同步创伤记录总数:" + allCnt + "，成功:" + successCnt + "条，失败" + failCnt+ "条！";
+            return "同步创伤记录总数:" + allCnt + "，成功:" + successCnt + "条，失败" + failCnt+ "条！\n" + err;
         }
 
         @Override
@@ -233,7 +234,7 @@ public class QueryFragment extends Fragment {
    };
 
 
-    private boolean uploadRecordInfo(RecordInfo recordInfo) {
+    private boolean uploadRecordInfo(RecordInfo recordInfo, StringBuilder msg) {
         boolean sync_flag = false;
         try {
             final String deviceId = configDao.queryValue(CommonUtil.DEVICE_ID);
@@ -259,6 +260,7 @@ public class QueryFragment extends Fragment {
                 PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
                 if (!res.isSuccess()) {
                     String message = res.getMessage();
+                    msg.append("fail on " + uuid + " by " + message + "\n");
                     //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
                 } else {
                     //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
@@ -277,6 +279,7 @@ public class QueryFragment extends Fragment {
                 PatientResponse res = MapUtils.mGson.fromJson(resultStr, PatientResponse.class);
                 if (!res.isSuccess()) {
                     String message = res.getMessage();
+                    msg.append("fail on " + uuid + " by " + message + "\n");
                     //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！原因是：" + message);
                 } else {
                     //ToastUtil.showLongToast(mActivity, "同步创伤信息成功！");
@@ -287,6 +290,7 @@ public class QueryFragment extends Fragment {
             }
         } catch (Exception e) {
             Log.e(TAG, "同步创伤信息失败", e);
+            msg.append("Error by " + e.getMessage() + "\n");
             //ToastUtil.showLongToast(mActivity, "同步创伤信息失败！");
         }
         return sync_flag;

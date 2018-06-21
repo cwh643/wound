@@ -2,6 +2,8 @@ package com.dnion.app.android.injuriesapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -31,6 +33,7 @@ import com.dnion.app.android.injuriesapp.dao.RecordDao;
 import com.dnion.app.android.injuriesapp.dao.RecordImage;
 import com.dnion.app.android.injuriesapp.dao.RecordImageDao;
 import com.dnion.app.android.injuriesapp.dao.RecordInfo;
+import com.dnion.app.android.injuriesapp.ui.HomeWatcher;
 import com.dnion.app.android.injuriesapp.ui.TouchImageView;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.ImageTools;
@@ -45,7 +48,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePressedListener {
     public static final String TAG = "main_activty";
 
     private PatientInfo patientInfo = new PatientInfo();
@@ -73,6 +76,8 @@ public class MainActivity extends BaseActivity {
     private DeepCameraInfo deepCameraInfo;
 
     private AdapterViewpager imageAdapter;
+
+    private HomeWatcher mHomeWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,11 +147,23 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        mHomeWatcher = new HomeWatcher(this);
+        mHomeWatcher.setOnHomePressedListener(this);
+        // 注册广播
+        mHomeWatcher.startWatch();
         if (OpenCVLoader.initDebug()) { //默认加载opencv_java.so库
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
             //加载依赖opencv_java.so的jni库
             System.loadLibrary("opencv_java");
         }
+    }
+
+    @Override
+    protected void onPause() {
+        mHomeWatcher.setOnHomePressedListener(null);
+        // 注销广播
+        mHomeWatcher.stopWatch();
+        super.onPause();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -360,8 +377,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            quit();
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                || keyCode == KeyEvent.KEYCODE_HOME) {
+            return true;
+            //quit();
         }
         return false;
     }
@@ -497,6 +516,28 @@ public class MainActivity extends BaseActivity {
             listener.onTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public void onHomePressed() {
+        ///*
+        for(int j=0;j<10;j++){
+            Intent intent=new Intent(this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(this, 0, intent, 0);
+            try {
+                pendingIntent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }
+        //*/
+    }
+
+    @Override
+    public void onHomeLongPressed() {
+
     }
 
     public interface MyTouchListener {
