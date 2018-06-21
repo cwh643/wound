@@ -23,7 +23,11 @@
         padding-bottom: 40px;
         background: url(${ctx}/static/images/login_bg.png) no-repeat top scroll;
       }
-
+	  .navbar-inverse .navbar-inner {
+		  background: url(${ctx}/static/images/nav-top.jpg) no-repeat;
+		  -moz-background-size: 100% 100%;
+		  background-size: 100% 100%;
+	  }
       .form-signin {
         max-width: 300px;
         padding: 19px 29px 29px;

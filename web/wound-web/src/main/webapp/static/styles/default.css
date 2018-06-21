@@ -31,3 +31,9 @@
 .active {
     border-bottom: 3px solid #f4645f !important;
 }
+
+.navbar-inverse .navbar-inner {
+	background: url('../images/nav-top.jpg') no-repeat;
+	-moz-background-size: 100% 100%;
+	background-size: 100% 100%;
+}
