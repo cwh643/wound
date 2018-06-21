@@ -171,11 +171,12 @@
     <string name="measure_volume_unit">Volume(cm3)</string>
     <string name="measure_length_unit">Length(cm)</string>
     <string name="measure_width_unit">Width(cm)</string>
-    <string name="measure_deep_unit">Depth(cm)</string>
+    <string name="measure_deep_unit">Depth(mm)</string>
     <string name="measure_red_unit">Red Tissue(%)</string>
     <string name="measure_black_unit">Black Tissue(%)</string>
     <string name="measure_yellow_unit">Yellow Tissue(%)</string>
     <string name="measure_data_label">Data</string>
+    <string name="measure_ir_area">range</string>
     <string name="measure_ir_color">org</string>
     <string name="measure_ir_temp">temp</string>
     <string name="measure_ir_max_temp">Max Temp</string>

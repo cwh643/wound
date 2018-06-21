@@ -22,20 +22,19 @@
         android:id="@+id/image_frame_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="60dp">
+        android:layout_marginLeft="0dp">
 
         <ImageView
             android:id="@+id/wound_rgb_image"
             android:layout_width="@dimen/image_measure_width"
-            android:layout_height="@dimen/image_measure_heigth"
-            />
+            android:layout_height="@dimen/image_measure_heigth" />
 
         <ImageView
             android:id="@+id/area_image"
             android:layout_width="@dimen/image_measure_width"
             android:layout_height="@dimen/image_measure_heigth"
-            android:background="#00000000"
-            android:alpha="0.5"/>
+            android:alpha="0.5"
+            android:background="#00000000" />
 
         <ImageView
             android:id="@+id/length_image"
@@ -48,6 +47,7 @@
             android:layout_width="@dimen/image_measure_width"
             android:layout_height="@dimen/image_measure_heigth"
             android:background="#00000000" />
+
         <ImageView
             android:id="@+id/deep_image"
             android:layout_width="@dimen/image_measure_width"
@@ -56,68 +56,264 @@
 
         <ImageView
             android:id="@+id/org_rgb_image"
-            android:visibility="invisible"
             android:layout_width="@dimen/image_measure_width"
             android:layout_height="@dimen/image_measure_heigth"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/measure_tip_area"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/measure_tip_bar_bg"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:text="2.5cm"
             android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/measure_tip_bar_bg"
-            />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/measure_tip_length"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/measure_tip_bar_bg"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:text="2.5cm"
             android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/measure_tip_bar_bg"
-            />
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/measure_tip_width"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/measure_tip_bar_bg"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:text="2.5cm"
             android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/measure_tip_bar_bg"
-            />
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/measure_tip_deep"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/measure_tip_bar_bg"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:text="2.5cm"
             android:textSize="16sp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/measure_tip_bar_bg"
-            />
+            android:visibility="gone" />
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="85dp"
+            android:background="@mipmap/measure_button_bg"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!--<TextView-->
+            <!--android:id="@+id/measure_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:text="@string/measure_data"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:textSize="20sp" />-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_area_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/area_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_volume_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/volume_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_deep_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/wound_deep_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_length_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/length_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_width_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/width_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cy"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_yellow_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_yellow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cr"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_red_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableLeft="@mipmap/measure_cb"
+                        android:drawablePadding="5dp"
+                        android:text="@string/measure_black_unit"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_label_size" />
+
+                    <TextView
+                        android:id="@+id/color_rate_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/image_measure_text_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--<TextView
+                android:id="@+id/doc_title"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawableLeft="@mipmap/user"
+                android:text="Dr.测试医生"
+                android:textColor="@color/white"
+                android:textSize="20sp" /> -->
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/menu_bar"
@@ -171,9 +367,10 @@
             android:id="@+id/btn_save_mbi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|left"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
             android:background="@mipmap/btn_save_bg"
             android:text="@string/back"
             android:textColor="@color/white"
@@ -253,8 +450,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@mipmap/measure_ld"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:src="@mipmap/measure_ld"
                 android:text="@string/measure_width" />
 
             <Button
@@ -263,8 +460,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@mipmap/measure_ld"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:src="@mipmap/measure_ld"
                 android:text="@string/measure_deep" />
 
             <Button
@@ -273,8 +470,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:src="@mipmap/measure_wd"
                 android:drawableBottom="@mipmap/measure_right_btn_bg"
+                android:src="@mipmap/measure_wd"
                 android:text="@string/measure_model" />
 
             <ImageButton
@@ -322,129 +519,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:layout_alignParentBottom="true"
-            android:background="@mipmap/measure_button_bg"
-            android:orientation="horizontal"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/measure_title"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/measure_data"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/area_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_s"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_area"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/volume_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_volume"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/wound_deep_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_v"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_deep"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/length_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_l"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_length"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/width_view"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_w"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_width"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/color_rate_yellow"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cy"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_yellow"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
-                    <TextView
-                        android:id="@+id/color_rate_red"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cr"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_red"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"/>
-                    <TextView
-                        android:id="@+id/color_rate_black"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:drawableLeft="@mipmap/measure_cb"
-                        android:drawablePadding="5dp"
-                        android:text="@string/measure_black"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"/>
-                </LinearLayout>
-            </LinearLayout>
-            <TextView
-                android:id="@+id/doc_title"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:drawableLeft="@mipmap/user"
-                android:text="Dr.测试医生"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-        </LinearLayout>
+
     </RelativeLayout>
 
     <!--

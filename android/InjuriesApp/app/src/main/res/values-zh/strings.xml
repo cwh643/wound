@@ -170,11 +170,12 @@
     <string name="measure_volume_unit">容积(cm3)</string>
     <string name="measure_length_unit">长度(cm)</string>
     <string name="measure_width_unit">宽度(cm)</string>
-    <string name="measure_deep_unit">深度(cm)</string>
+    <string name="measure_deep_unit">深度(mm)</string>
     <string name="measure_red_unit">红色组织(%)</string>
     <string name="measure_black_unit">黑色组织(%)</string>
     <string name="measure_yellow_unit">黄色组织(%)</string>
     <string name="measure_data_label">数据</string>
+    <string name="measure_ir_area">范围</string>
     <string name="measure_ir_color">原图像</string>
     <string name="measure_ir_temp">温度</string>
     <string name="measure_ir_max_temp">最大温度</string>
