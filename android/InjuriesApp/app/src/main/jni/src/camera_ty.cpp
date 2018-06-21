@@ -30,6 +30,8 @@ struct CallbackData {
     DepthRender*    render;
     cv::Mat         colorM;
     cv::Mat         colorD;
+    TY_CAMERA_DISTORTION color_dist;
+    TY_CAMERA_INTRINSIC color_intri;
 };
 
 static int n;
@@ -41,6 +43,27 @@ static CallbackData cb_data;
 static char* frameBuffer[2];
 static cv::Mat *dt;
 static cv::Mat *pColor;
+
+void undistort_rgb(CallbackData &pData, cv::Mat &color, cv::Mat &dst_color) {
+    cv::Mat undistort_result(color.size(), CV_8UC3);
+    TY_IMAGE_DATA dst;
+    dst.width = color.cols;
+    dst.height = color.rows;
+    dst.size = undistort_result.size().area() * 3;
+    dst.buffer = undistort_result.data;
+    dst.pixelFormat = TY_PIXEL_FORMAT_RGB;
+    TY_IMAGE_DATA src;
+    src.width = color.cols;
+    src.height = color.rows;
+    src.size = color.size().area() * 3;
+    src.pixelFormat = TY_PIXEL_FORMAT_RGB;
+    src.buffer = color.data;
+    //undistort camera image 
+    //TYUndistortImage accept TY_IMAGE_DATA from TY_FRAME_DATA , pixel format RGB888 or MONO8
+    //you can also use opencv API cv::undistort to do this job.
+    ASSERT_OK(TYUndistortImage(&pData.color_intri, &pData.color_dist, NULL, &src, &dst));
+    dst_color = undistort_result;
+}
 
 int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbMat, JNIEnv* env, jobject &obj)
 {
@@ -176,14 +199,13 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             int nc = pColor->cols;  
             int nn = pColor->channels();  
             LOGD("     RGB mat create %d, %d, %d, %d", *(int *)frame.image[i].buffer, nl, nc, nn);
+            // 使用图样api
+            // undistort_rgb(*pData, color, *pColor);
             if(!pData->colorM.empty()){
+                LOGD("     RGB mat undistortImage");
+                // 直接使用opencv的畸变方式
                 cv::undistort(color, *pColor, pData->colorM, pData->colorD, pData->colorM);
-                // cv::fisheye::undistortImage(color, color, pData->colorM, pData->colorD, pData->colorM, color.size());
             }
-            LOGD("     RGB mat undistortImage");
-            // cv::Mat resizedColor;
-            // cv::resize(color, resizedColor, depth.size(), 0, 0, CV_INTER_LINEAR);
-            // cv::imshow("color", resizedColor);
         }
         // get & show left ir image
         if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
@@ -409,9 +431,9 @@ int frameHandler(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbM
     ASSERT_OK( TYEnqueueBuffer(pData->hDevice, frame.userBuffer, frame.bufferSize) );
 }
 
-void trans_width_and_log(int i, float &value, int factor) {
-    LOGD("=== index:%d, value:%f", i, (float)value);
-    value = value / factor;
+void trans_width_and_log(int i, float &value, float &factor) {
+    LOGD("=== index:%d, value:%f, factor:%f", i, value, factor);
+    value = value * factor;
 }
 
 int OpenDevice(jint width, jint heigth) {
@@ -439,12 +461,64 @@ int OpenDevice(jint width, jint heigth) {
         TY_IMAGE_MODE_LIST image_size = TY_IMAGE_MODE_640x480;
         if (width == 1280) {
             image_size = TY_IMAGE_MODE_1280x960;
+        } else if (width == 2592) {
+            image_size = TY_IMAGE_MODE_2592x1944;
+        } else if (width == 320) {
+            image_size = TY_IMAGE_MODE_320x240;
+        } else if (width == 160) {
+            image_size = TY_IMAGE_MODE_160x120;
         }
         int err;
 	    int32_t allComps;
 	    ASSERT_OK( TYGetComponentIDs(hDevice, &allComps) );
 	    if(allComps & TY_COMPONENT_RGB_CAM){
-	        LOGD("=== Has RGB camera, open RGB cam");
+            // 先读取硬件参数，再进行初始化，默认使用1280大小的参数
+            LOGD("=== Read color rectify matrix");
+            // 先将图片的大小设置为1280，获取参数
+            err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_1280x960);
+            LOGD("err = %d", err);
+            ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+            // 读取参数
+            TY_CAMERA_DISTORTION color_dist;
+            TY_CAMERA_INTRINSIC color_intri;
+            TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
+            ret |= TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_INTRINSIC, &color_intri, sizeof(color_intri));
+            if (ret == TY_STATUS_OK)
+            {
+                LOGD("=== Read color rectify matrix succ");
+                                cb_data.color_intri = color_intri;
+                cb_data.color_dist = color_dist;
+                float param_factor = width / 1280.0f;
+                // 根据图片尺寸转换畸变参数
+                trans_width_and_log(0, cb_data.color_intri.data[0], param_factor);
+                trans_width_and_log(2, cb_data.color_intri.data[2], param_factor);
+                trans_width_and_log(4, cb_data.color_intri.data[4], param_factor);
+                trans_width_and_log(5, cb_data.color_intri.data[5], param_factor);
+
+                int intri_length = sizeof(cb_data.color_intri.data) / sizeof(float);
+                int dist_length = sizeof(cb_data.color_dist.data) / sizeof(float);
+                for (int i = 0; i < intri_length; i++) {
+                    LOGD("color param intri: %.f", cb_data.color_intri.data[i]);
+                }
+                for (int i = 0; i < dist_length; i++) {
+                    LOGD("color param dist: %.f", cb_data.color_dist.data[i]);
+                }
+
+                cb_data.colorM.create(3, 3, CV_32FC1);
+                cb_data.colorD.create(12, 1, CV_32FC1);
+                memcpy(cb_data.colorM.data, cb_data.color_intri.data, sizeof(cb_data.color_intri.data));
+                memcpy(cb_data.colorD.data, cb_data.color_dist.data, sizeof(cb_data.color_dist.data));
+            } else {//let's try  to load from file...
+                LOGD("=== Read color rectify matrix failed, use default");
+                memset(cb_data.colorD.data, 0, 12 * sizeof(float));
+                memset(cb_data.colorM.data, 0, 9 * sizeof(float));
+                cb_data.colorM.data[0] = 1117.0f;
+                cb_data.colorM.data[4] = 1120.0f;
+                cb_data.colorM.data[2] = 654.0f;
+                cb_data.colorM.data[5] = 496.0f;
+                cb_data.colorD.data[2] = 1.0f;
+            }
+            LOGD("=== Has RGB camera, open RGB cam");
 	        ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
             err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
             LOGD("err = %d", err);
@@ -464,8 +538,8 @@ int OpenDevice(jint width, jint heigth) {
 		LOGD("err = %d", err);
 	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
 
-        // LOGD("=== Enable rgb undistort");
-        // TYSetBool(hDevice, TY_COMPONENT_RGB_CAM, TY_BOOL_UNDISTORTION, true);
+        //LOGD("=== Enable rgb undistort");
+        //TYSetBool(hDevice, TY_COMPONENT_RGB_CAM, TY_BOOL_UNDISTORTION, true);
 	    LOGD("=== Prepare image buffer");
 	    int32_t frameSize;
 	    ASSERT_OK( TYGetFrameBufferSize(hDevice, &frameSize) );
@@ -491,45 +565,91 @@ int OpenDevice(jint width, jint heigth) {
 	    cb_data.hDevice = hDevice;
 	    cb_data.render = &render;
         
-        if(allComps & TY_COMPONENT_RGB_CAM) {
-            LOGD("=== Read color rectify matrix");
-            TY_CAMERA_DISTORTION color_dist;
-            TY_CAMERA_INTRINSIC color_intri;
-            TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
-            ret |= TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_INTRINSIC, &color_intri, sizeof(color_intri));
-            if (ret == TY_STATUS_OK)
-            {
-                LOGD("=== Read color rectify matrix succ");
-                cb_data.colorM.create(3, 3, CV_32FC1);
-                cb_data.colorD.create(5, 1, CV_32FC1);
-                memcpy(cb_data.colorM.data, color_intri.data, sizeof(color_intri.data));
-                memcpy(cb_data.colorD.data, color_dist.data, sizeof(float)*cb_data.colorD.rows);
-                if (image_size == TY_IMAGE_MODE_640x480) {
-                    // for640
-                    trans_width_and_log(0, cb_data.colorM.at<float>(0, 0), 2);
-                    trans_width_and_log(2, cb_data.colorM.at<float>(0, 2), 2);
-                    trans_width_and_log(4, cb_data.colorM.at<float>(1, 1), 2);
-                    trans_width_and_log(5, cb_data.colorM.at<float>(1, 2), 2);
-                }
-            }
-            else
-            {//let's try  to load from file...
-                LOGD("=== Read color rectify matrix failed, use default");
-                memset(cb_data.colorD.data, 0, 12 * sizeof(float));
-                memset(cb_data.colorM.data, 0, 9 * sizeof(float));
-                cb_data.colorM.data[0] = 1000.f;
-                cb_data.colorM.data[4] = 1000.f;
-                cb_data.colorM.data[2] = 600.f;
-                cb_data.colorM.data[5] = 450.f;
-                // cv::FileStorage fs("color_intri.xml", cv::FileStorage::READ);
-                // if (fs.isOpened())
-                // {
-                //     fs["M"] >> cb_data.colorM;
-                //     fs["D"] >> cb_data.colorD;
-                //     cb_data.colorD = cb_data.colorD.colRange(0, 8);
-                // }
-            }
-        }
+        // if(allComps & TY_COMPONENT_RGB_CAM) {
+        //     LOGD("=== Read color rectify matrix");
+        //     TY_CAMERA_DISTORTION color_dist;
+        //     TY_CAMERA_INTRINSIC color_intri;
+        //     TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
+        //     ret |= TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_INTRINSIC, &color_intri, sizeof(color_intri));
+        //     if (ret == TY_STATUS_OK)
+        //     {
+        //         LOGD("=== Read color rectify matrix succ");
+        //         cb_data.color_intri = color_intri;
+        //         cb_data.color_dist = color_dist;
+        //         // if (image_size == TY_IMAGE_MODE_640x480) {
+        //         //     // for640
+        //         //     trans_width_and_log(0, cb_data.color_intri.data[0], 2);
+        //         //     trans_width_and_log(2, cb_data.color_intri.data[2], 2);
+        //         //     trans_width_and_log(4, cb_data.color_intri.data[4], 2);
+        //         //     trans_width_and_log(5, cb_data.color_intri.data[5], 2);
+        //         // }
+
+        //         int intri_length = sizeof(cb_data.color_intri.data) / sizeof(float);
+        //         int dist_length = sizeof(cb_data.color_dist.data) / sizeof(float);
+        //         for (int i = 0; i < intri_length; i++) {
+        //             LOGD("color param intri: %.f", cb_data.color_intri.data[i]);
+        //         }
+        //         for (int i = 0; i < dist_length; i++) {
+        //             LOGD("color param dist: %.f", cb_data.color_dist.data[i]);
+        //         }
+
+        //         cb_data.colorM.create(3, 3, CV_32FC1);
+        //         cb_data.colorD.create(12, 1, CV_32FC1);
+        //         memcpy(cb_data.colorM.data, color_intri.data, sizeof(color_intri.data));
+        //         memcpy(cb_data.colorD.data, color_dist.data, sizeof(float)*cb_data.colorD.rows);
+        //         // if (image_size == TY_IMAGE_MODE_640x480) {
+        //         //     // for640
+        //         //     trans_width_and_log(0, cb_data.colorM.at<float>(0, 0), 2);
+        //         //     trans_width_and_log(2, cb_data.colorM.at<float>(0, 2), 2);
+        //         //     trans_width_and_log(4, cb_data.colorM.at<float>(1, 1), 2);
+        //         //     trans_width_and_log(5, cb_data.colorM.at<float>(1, 2), 2);
+        //         // }
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 0));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 1));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 2));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 0));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 1));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 2));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 0));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 1));
+        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 2));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(0, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(1, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(2, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(3, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(4, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(5, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(6, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(7, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(8, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(9, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(10, 0));
+        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(11, 0));
+        //     }
+        //     else
+        //     {//let's try  to load from file...
+        //         LOGD("=== Read color rectify matrix failed, use default");
+        //         memset(cb_data.colorD.data, 0, 12 * sizeof(float));
+        //         memset(cb_data.colorM.data, 0, 9 * sizeof(float));
+        //         cb_data.colorM.data[0] = 1117.0f;
+        //         cb_data.colorM.data[4] = 1120.0f;
+        //         cb_data.colorM.data[2] = 654.0f;
+        //         cb_data.colorM.data[5] = 496.0f;
+        //         cb_data.colorD.data[2] = 1.0f;
+        //         // cv::FileStorage fs("color_intri.xml", cv::FileStorage::READ);
+        //         // if (fs.isOpened())
+        //         // {
+        //         //     fs["M"] >> cb_data.colorM;
+        //         //     fs["D"] >> cb_data.colorD;
+        //         //     cb_data.colorD = cb_data.colorD.colRange(0, 8);
+        //         // }
+        //     }
+        //     LOGD("=== Has RGB camera, open RGB cam");
+	    //     ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
+        //     err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
+        //     LOGD("err = %d", err);
+        //     ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+        // }
         // ASSERT_OK( TYRegisterCallback(hDevice, frameHandler, &cb_data) );
 
 	    LOGD("=== Disable trigger mode");

@@ -59,8 +59,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         if (OpenCVLoader.initDebug()) { //默认加载opencv_java.so库
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
             //加载依赖opencv_java.so的jni库
-            System.loadLibrary("opencv_java");
-            //System.loadLibrary("mixed_sample");
+            System.loadLibrary("opencv_java3");
         }
         // OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
     }
