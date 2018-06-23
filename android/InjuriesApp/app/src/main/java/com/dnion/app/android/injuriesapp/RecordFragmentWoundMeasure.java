@@ -668,11 +668,25 @@ public class RecordFragmentWoundMeasure extends Fragment {
         setArea();
     }
 
+    private List<Point3> mAreaEdgePointList;
+
+    private void extractPonitByPath(List<Point3> areaEdgePointList) {
+        for (int i = 0; i < mAreaMeasureBitmap.getWidth(); i++) {
+            for (int j = 0; j < mAreaMeasureBitmap.getHeight(); j++) {
+                if (mAreaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
+                    areaEdgePointList.add(new Point3(i, j, 0));
+                }
+            }
+        }
+    }
+
     private void fillArea() {
         List<Point> areaPointList = deepCameraInfo.getAreaPointList();
         if (areaPointList.size() <= 0) {
             return;
         }
+        // 存放边缘点的list
+        mAreaEdgePointList = new ArrayList<>();
         Path path = new Path();
         Point p = areaPointList.get(areaPointList.size() - 1);
         path.moveTo((float) p.x, (float) p.y);
@@ -681,6 +695,15 @@ public class RecordFragmentWoundMeasure extends Fragment {
             path.lineTo((float) p.x, (float) p.y);
         }
         path.close();
+        // 先画出轮廓
+        paint.setColor(GlobalDef.AREA_EDGE_COLOR);
+        paint.setStyle(Paint.Style.STROKE);
+        areaCanvas.drawPath(path, paint);
+        mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+        // 提取轮廓的点
+        //extractPonitByPath(mAreaEdgePointList);
+        // 填充面积
+        paint.setColor(GlobalDef.AREA_COLOR);
         paint.setStyle(Paint.Style.FILL);
         areaCanvas.drawPath(path, paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
@@ -848,10 +871,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
         Bitmap areaMeasureBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
                 mAreaMeasureBitmap.getHeight(), deepValidWidth, deepValidHeight);
-        //float measureToDepthWidthFactor = mAreaMeasureBitmap.getWidth()
+        // 测量页面与depth的缩放比例，用于还原测量点的坐标
         int width = areaMeasureBitmap.getWidth();
         int height = areaMeasureBitmap.getHeight();
-        // 缩放比例
+        // rgb和depth的缩放比例
         float rgbFactor = (float) rgbBitmap.getWidth() / mDepth.cols();
         // 存放每个轴上面最大和最小值
         double[][] lengthMap = new double[width][2];
@@ -879,6 +902,14 @@ public class RecordFragmentWoundMeasure extends Fragment {
         for (int i = 0; i < width; i++) {
             mi.last_deep = 0;
             for (int j = 0; j < height; j++) {
+                if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_EDGE_COLOR) {
+                    int depth_j = j + ly;
+                    int depth_i = i + lx;
+                    mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);
+                    if (mi.last_deep != 0) {
+                        mAreaEdgePointList.add(new Point3(depth_i, depth_j, mi.last_deep));
+                    }
+                }
                 if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;
                     int depth_i = i + lx;
@@ -952,16 +983,19 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         // 计算拟合平面
         float[] plane = new float[4];
-        calcPlane(vertexList, plane);
+        calcPlane(mAreaEdgePointList, plane);
         // 计算平面和 z = 0 平面的夹角cos值
         float[] zPlane = new float[]{0, 0, 1, 0};
         double cosAngle = getCosAngle(zPlane, plane);
+        double tanAngle = Math.tan(Math.acos(cosAngle));
+        double triangleHeight = AREA_PER_PIX * tanAngle;
 
         //  中间点
         int test = 1;
         Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
         deepCameraInfo.setModelCenter(center_p);
         float camera_size_factor = deepCameraInfo.getCamera_size_factor();
+
         for (int i = vertexList.size() - 1; i >= 0; i -= 3) {
             float deep = vertexList.get(i);
             int x = new Float(vertexList.get(i - 2)).intValue();
@@ -972,12 +1006,15 @@ public class RecordFragmentWoundMeasure extends Fragment {
             double zArea = planDeep * planDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
             // 根据平面夹余弦值算出最终的面积
             double areaPlane = zArea / cosAngle;
-            //int x = new Float(vertexList.get(i - 2)).intValue() - lx;
-            //int y = new Float(vertexList.get(i - 1)).intValue() - ly;
-            //int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
-            // double areaPlane = avgDeep * avgDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
             area += areaPlane;
-            double volum_per = zArea;
+            // 深度先计算平行z轴的体积，再加上因为平面倾斜少计算的体积
+            // 因为z轴是发散的，所以是个梯形，计算梯形的面积
+            double upArea = zArea;
+            double downArea = deep * deep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            double rectVolum = Math.abs((upArea + downArea) * (deep - planDeep) / 2);
+            double triangleVolumn = triangleHeight * upArea / 2;
+
+            double volum_per = rectVolum + triangleVolumn;
             //double volum_per = (deep - planDeep) / 10 * areaPlane;
             volume += volum_per;
             if (volum_per > 0) {
@@ -1001,12 +1038,13 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCameraInfo.setWoundDeep(new Float(format_deep));
     }
 
-    private void calcPlane(List<Float> vertexList, float[] plane) {
-        Mat points = new Mat(vertexList.size() / 3, 3, CvType.CV_32FC1);
-        for (int i = 0; i < vertexList.size(); i += 3) {
-            points.put(i / 3, 0, vertexList.get(i));
-            points.put(i / 3, 1, vertexList.get(i + 1));
-            points.put(i / 3, 2, vertexList.get(i + 2));
+    private void calcPlane(List<Point3> vertexList, float[] plane) {
+        Mat points = new Mat(vertexList.size(), 3, CvType.CV_32FC1);
+        for (int i = 0; i < vertexList.size(); i++) {
+            Point3 p = vertexList.get(i);
+            points.put(i, 0, p.x);
+            points.put(i, 1, p.y);
+            points.put(i, 2, p.z);
         }
         Mat planeMat = new Mat(1, 4, CvType.CV_32FC1);
         CommonNativeUtils.cvFitPlane(points.getNativeObjAddr(), planeMat.getNativeObjAddr());
@@ -1022,6 +1060,15 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float c = plane[2];
         float d = plane[3];
         return (d - (a * x) - (b * y)) / c;
+    }
+
+    private double getPointPlaneDistance(Point3 point, float[] plane) {
+        // ax + by + cz = d
+        float a = plane[0];
+        float b = plane[1];
+        float c = plane[2];
+        float d = plane[3];
+        return Math.abs(a * point.x + b * point.y + c * point.z - d) / Math.sqrt(a * a + b * b + c * c);
     }
 
     private double getCosAngle(float[] plane1, float[] plane2) {

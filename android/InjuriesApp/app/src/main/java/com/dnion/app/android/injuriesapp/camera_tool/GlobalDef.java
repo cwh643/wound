@@ -37,6 +37,7 @@ public class GlobalDef {
     public static final int DEPTH_CENTER_DIS = 3;
 
     public static final int AREA_COLOR = 0xFF1BB2B1;
+    public static final int AREA_EDGE_COLOR = 0xFF1BB2B2;
     public static final int LENGTH_COLOR = Color.GREEN;
     public static final int WIDTH_COLOR = Color.BLUE;
     public static final int DEEP_COLOR = Color.RED;
