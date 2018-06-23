@@ -668,8 +668,6 @@ public class RecordFragmentWoundMeasure extends Fragment {
         setArea();
     }
 
-    private List<Point3> mAreaEdgePointList;
-
     private void extractPonitByPath(List<Point3> areaEdgePointList) {
         for (int i = 0; i < mAreaMeasureBitmap.getWidth(); i++) {
             for (int j = 0; j < mAreaMeasureBitmap.getHeight(); j++) {
@@ -686,7 +684,6 @@ public class RecordFragmentWoundMeasure extends Fragment {
             return;
         }
         // 存放边缘点的list
-        mAreaEdgePointList = new ArrayList<>();
         Path path = new Path();
         Point p = areaPointList.get(areaPointList.size() - 1);
         path.moveTo((float) p.x, (float) p.y);
@@ -700,8 +697,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         paint.setStyle(Paint.Style.STROKE);
         areaCanvas.drawPath(path, paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
-        // 提取轮廓的点
-        //extractPonitByPath(mAreaEdgePointList);
+
         // 填充面积
         paint.setColor(GlobalDef.AREA_COLOR);
         paint.setStyle(Paint.Style.FILL);
@@ -862,6 +858,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void calcArea() {
         List<Float> vertexList = deepCameraInfo.getVertexList();
         List<Float> colorList = deepCameraInfo.getColorList();
+        List<Point3> areaEdgePointList = new ArrayList<>();
         Mat mDepth = deepCameraInfo.getDepthMat();
         //Mat mDepth = mFilterDepth;
         Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
@@ -907,7 +904,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     int depth_i = i + lx;
                     mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);
                     if (mi.last_deep != 0) {
-                        mAreaEdgePointList.add(new Point3(depth_i, depth_j, mi.last_deep));
+                        areaEdgePointList.add(new Point3(depth_i, depth_j, mi.last_deep));
                     }
                 }
                 if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
@@ -983,7 +980,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         // 计算拟合平面
         float[] plane = new float[4];
-        calcPlane(mAreaEdgePointList, plane);
+        calcPlane(areaEdgePointList, plane);
         // 计算平面和 z = 0 平面的夹角cos值
         float[] zPlane = new float[]{0, 0, 1, 0};
         double cosAngle = getCosAngle(zPlane, plane);
