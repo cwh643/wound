@@ -105,20 +105,25 @@ public class RecordFragmentDeepCamera extends Fragment {
     FocusParam focusParam;
 
     public static void init_camera_param(String src, String size) {
-        switch (src) {
-            case "ty4x":
-                camera_src = 0;
-                break;
-            case "ty8x":
-                camera_src = 1;
-                break;
-            case "ab":
-                camera_src = 2;
-                break;
-            default:
-                camera_src = 2;
+        if (src != null) {
+            switch (src) {
+                case "ty4x":
+                    camera_src = 0;
+                    break;
+                case "ty8x":
+                    camera_src = 1;
+                    break;
+                case "ab":
+                    camera_src = 2;
+                    break;
+                default:
+                    camera_src = 1;
+            }
+            camera_size = size;
+        } else {
+            camera_src = 1;
+            camera_size = "640x480";
         }
-        camera_size = size;
     }
 
     public static RecordFragmentDeepCamera createInstance() {

@@ -29,6 +29,7 @@ import com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayView;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
 import com.dnion.app.android.injuriesapp.camera_tool.PointInfo3D;
+import com.dnion.app.android.injuriesapp.camera_tool.native_utils.CommonNativeUtils;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
@@ -847,6 +848,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
         Bitmap areaMeasureBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
                 mAreaMeasureBitmap.getHeight(), deepValidWidth, deepValidHeight);
+        //float measureToDepthWidthFactor = mAreaMeasureBitmap.getWidth()
         int width = areaMeasureBitmap.getWidth();
         int height = areaMeasureBitmap.getHeight();
         // 缩放比例
@@ -948,6 +950,13 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         clacColorRate(areaBitmap, mi);
 
+        // 计算拟合平面
+        float[] plane = new float[4];
+        calcPlane(vertexList, plane);
+        // 计算平面和 z = 0 平面的夹角cos值
+        float[] zPlane = new float[]{0, 0, 1, 0};
+        double cosAngle = getCosAngle(zPlane, plane);
+
         //  中间点
         int test = 1;
         Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
@@ -955,13 +964,21 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float camera_size_factor = deepCameraInfo.getCamera_size_factor();
         for (int i = vertexList.size() - 1; i >= 0; i -= 3) {
             float deep = vertexList.get(i);
-            int x = new Float(vertexList.get(i - 2)).intValue() - lx;
-            int y = new Float(vertexList.get(i - 1)).intValue() - ly;
-            int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
+            int x = new Float(vertexList.get(i - 2)).intValue();
+            int y = new Float(vertexList.get(i - 1)).intValue();
+            float planDeep = getPlaneDeep(x, y, plane);
+
             // 先计算长和宽，所以需要乘以两次deep，而deep的比例是以米为单位，所以要除以2次1000
-            double area_per = avgDeep * avgDeep * AREA_PER_PIX / 1000000/ camera_size_factor / camera_size_factor;
-            area += area_per;
-            double volum_per = (deep - avgDeep) / 10 * area_per;
+            double zArea = planDeep * planDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            // 根据平面夹余弦值算出最终的面积
+            double areaPlane = zArea / cosAngle;
+            //int x = new Float(vertexList.get(i - 2)).intValue() - lx;
+            //int y = new Float(vertexList.get(i - 1)).intValue() - ly;
+            //int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
+            // double areaPlane = avgDeep * avgDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            area += areaPlane;
+            double volum_per = zArea;
+            //double volum_per = (deep - planDeep) / 10 * areaPlane;
             volume += volum_per;
             if (volum_per > 0) {
                 test = 1;
@@ -982,6 +999,41 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCameraInfo.setWoundYellowRate(new Float(format_yellow));
         deepCameraInfo.setWoundBlackRate(new Float(format_black));
         deepCameraInfo.setWoundDeep(new Float(format_deep));
+    }
+
+    private void calcPlane(List<Float> vertexList, float[] plane) {
+        Mat points = new Mat(vertexList.size() / 3, 3, CvType.CV_32FC1);
+        for (int i = 0; i < vertexList.size(); i += 3) {
+            points.put(i / 3, 0, vertexList.get(i));
+            points.put(i / 3, 1, vertexList.get(i + 1));
+            points.put(i / 3, 2, vertexList.get(i + 2));
+        }
+        Mat planeMat = new Mat(1, 4, CvType.CV_32FC1);
+        CommonNativeUtils.cvFitPlane(points.getNativeObjAddr(), planeMat.getNativeObjAddr());
+        plane[0] = new Double(planeMat.get(0, 0)[0]).floatValue();
+        plane[1] = new Double(planeMat.get(0, 1)[0]).floatValue();
+        plane[2] = new Double(planeMat.get(0, 2)[0]).floatValue();
+        plane[3] = new Double(planeMat.get(0, 3)[0]).floatValue();
+    }
+
+    private float getPlaneDeep(float x, float y, float[] plane) {
+        float a = plane[0];
+        float b = plane[1];
+        float c = plane[2];
+        float d = plane[3];
+        return (d - (a * x) - (b * y)) / c;
+    }
+
+    private double getCosAngle(float[] plane1, float[] plane2) {
+        float a1 = plane1[0];
+        float b1 = plane1[1];
+        float c1 = plane1[2];
+        float d1 = plane1[3];
+        float a2 = plane2[0];
+        float b2 = plane2[1];
+        float c2 = plane2[2];
+        float d2 = plane2[3];
+        return Math.abs((a1 * a2 + b1 * b2 + c1 * c2) / (Math.sqrt(a1 * a1 + b1 * b1 + c1 * c1) * Math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)));
     }
 
     private void downLength(MotionEvent e) {

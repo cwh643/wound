@@ -123,6 +123,8 @@ public class IRCameraHelper extends AbstractCameraHelper {
         return ret;
     }
 
+
+
     public void onStop() {
         if (mInit_Ok) {
             irHandle.unregister();

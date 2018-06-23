@@ -70,6 +70,20 @@ public class BitmapUtils {
         return sb.toString();
     }
 
+    private Bitmap adjustPhotoRotation(Bitmap bm, final int orientationDegree) {
+
+        Matrix m = new Matrix();
+        m.setRotate(orientationDegree, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        try {
+            Bitmap bm1 = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
+
+            return bm1;
+
+        } catch (OutOfMemoryError ex) {
+        }
+        return null;
+    }
+
     public static List<Point> get_path_from_string(String str) {
         return new ArrayList<Point>();
     }

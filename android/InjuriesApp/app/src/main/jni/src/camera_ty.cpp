@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.hpp"
-
+#include "utils.cpp"
 
 #define LOG_TAG "rooxin_jni"
 #include <android/log.h>
@@ -521,6 +521,7 @@ int OpenDevice(jint width, jint heigth) {
             LOGD("=== Has RGB camera, open RGB cam");
 	        ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
             err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
+            //err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_1280x960);
             LOGD("err = %d", err);
             ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
         }
@@ -565,94 +566,7 @@ int OpenDevice(jint width, jint heigth) {
 	    cb_data.hDevice = hDevice;
 	    cb_data.render = &render;
         
-        // if(allComps & TY_COMPONENT_RGB_CAM) {
-        //     LOGD("=== Read color rectify matrix");
-        //     TY_CAMERA_DISTORTION color_dist;
-        //     TY_CAMERA_INTRINSIC color_intri;
-        //     TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
-        //     ret |= TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_INTRINSIC, &color_intri, sizeof(color_intri));
-        //     if (ret == TY_STATUS_OK)
-        //     {
-        //         LOGD("=== Read color rectify matrix succ");
-        //         cb_data.color_intri = color_intri;
-        //         cb_data.color_dist = color_dist;
-        //         // if (image_size == TY_IMAGE_MODE_640x480) {
-        //         //     // for640
-        //         //     trans_width_and_log(0, cb_data.color_intri.data[0], 2);
-        //         //     trans_width_and_log(2, cb_data.color_intri.data[2], 2);
-        //         //     trans_width_and_log(4, cb_data.color_intri.data[4], 2);
-        //         //     trans_width_and_log(5, cb_data.color_intri.data[5], 2);
-        //         // }
-
-        //         int intri_length = sizeof(cb_data.color_intri.data) / sizeof(float);
-        //         int dist_length = sizeof(cb_data.color_dist.data) / sizeof(float);
-        //         for (int i = 0; i < intri_length; i++) {
-        //             LOGD("color param intri: %.f", cb_data.color_intri.data[i]);
-        //         }
-        //         for (int i = 0; i < dist_length; i++) {
-        //             LOGD("color param dist: %.f", cb_data.color_dist.data[i]);
-        //         }
-
-        //         cb_data.colorM.create(3, 3, CV_32FC1);
-        //         cb_data.colorD.create(12, 1, CV_32FC1);
-        //         memcpy(cb_data.colorM.data, color_intri.data, sizeof(color_intri.data));
-        //         memcpy(cb_data.colorD.data, color_dist.data, sizeof(float)*cb_data.colorD.rows);
-        //         // if (image_size == TY_IMAGE_MODE_640x480) {
-        //         //     // for640
-        //         //     trans_width_and_log(0, cb_data.colorM.at<float>(0, 0), 2);
-        //         //     trans_width_and_log(2, cb_data.colorM.at<float>(0, 2), 2);
-        //         //     trans_width_and_log(4, cb_data.colorM.at<float>(1, 1), 2);
-        //         //     trans_width_and_log(5, cb_data.colorM.at<float>(1, 2), 2);
-        //         // }
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 0));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 1));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(0, 2));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 0));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 1));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(1, 2));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 0));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 1));
-        //         LOGD("color param intri: %.f", cb_data.colorM.at<float>(2, 2));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(0, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(1, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(2, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(3, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(4, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(5, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(6, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(7, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(8, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(9, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(10, 0));
-        //         LOGD("color param dist: %.f", cb_data.colorD.at<float>(11, 0));
-        //     }
-        //     else
-        //     {//let's try  to load from file...
-        //         LOGD("=== Read color rectify matrix failed, use default");
-        //         memset(cb_data.colorD.data, 0, 12 * sizeof(float));
-        //         memset(cb_data.colorM.data, 0, 9 * sizeof(float));
-        //         cb_data.colorM.data[0] = 1117.0f;
-        //         cb_data.colorM.data[4] = 1120.0f;
-        //         cb_data.colorM.data[2] = 654.0f;
-        //         cb_data.colorM.data[5] = 496.0f;
-        //         cb_data.colorD.data[2] = 1.0f;
-        //         // cv::FileStorage fs("color_intri.xml", cv::FileStorage::READ);
-        //         // if (fs.isOpened())
-        //         // {
-        //         //     fs["M"] >> cb_data.colorM;
-        //         //     fs["D"] >> cb_data.colorD;
-        //         //     cb_data.colorD = cb_data.colorD.colRange(0, 8);
-        //         // }
-        //     }
-        //     LOGD("=== Has RGB camera, open RGB cam");
-	    //     ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
-        //     err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
-        //     LOGD("err = %d", err);
-        //     ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
-        // }
-        // ASSERT_OK( TYRegisterCallback(hDevice, frameHandler, &cb_data) );
-
-	    LOGD("=== Disable trigger mode");
+        LOGD("=== Disable trigger mode");
 	    ASSERT_OK( TYSetBool(hDevice, TY_COMPONENT_DEVICE, TY_BOOL_TRIGGER_MODE, false) );
 
 	    LOGD("=== Start capture");
