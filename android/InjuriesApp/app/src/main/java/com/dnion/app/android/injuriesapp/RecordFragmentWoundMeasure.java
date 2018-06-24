@@ -985,7 +985,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float[] zPlane = new float[]{0, 0, 1, 0};
         double cosAngle = getCosAngle(zPlane, plane);
         double tanAngle = Math.tan(Math.acos(cosAngle));
-        double triangleHeight = AREA_PER_PIX * tanAngle;
+        double triangleHeight = WIDTH_PER_PIX * tanAngle;
 
         //  中间点
         int test = 1;
@@ -1000,16 +1000,17 @@ public class RecordFragmentWoundMeasure extends Fragment {
             float planDeep = getPlaneDeep(x, y, plane);
 
             // 先计算长和宽，所以需要乘以两次deep，而deep的比例是以米为单位，所以要除以2次1000
-            double zArea = planDeep * planDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            double upArea = planDeep * planDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
             // 根据平面夹余弦值算出最终的面积
-            double areaPlane = zArea / cosAngle;
+            double areaPlane = upArea / cosAngle;
             area += areaPlane;
             // 深度先计算平行z轴的体积，再加上因为平面倾斜少计算的体积
             // 因为z轴是发散的，所以是个梯形，计算梯形的面积
-            double upArea = zArea;
             double downArea = deep * deep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
-            double rectVolum = Math.abs((upArea + downArea) * (deep - planDeep) / 2);
-            double triangleVolumn = triangleHeight * upArea / 2;
+            double deep_dis = Math.abs(deep - planDeep);
+            deep_dis = deep_dis > 2 ? deep_dis : 0;
+            double rectVolum = (upArea + downArea) * deep_dis / 2;
+            double triangleVolumn = triangleHeight * upArea * deep_dis / 2;
 
             double volum_per = rectVolum + triangleVolumn;
             //double volum_per = (deep - planDeep) / 10 * areaPlane;
@@ -1018,7 +1019,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                 test = 1;
             }
         }
-        volume = volume < 0 ? -volume : volume;
+        volume = Math.abs(volume) / 1000;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
         String format_area = new DecimalFormat("#.00").format(area / 100);
         String format_volume = new DecimalFormat("#.00").format(volume);
