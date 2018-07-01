@@ -1306,15 +1306,34 @@ public class RecordFragmentWoundMeasure extends Fragment {
         int deep_ly = deepCameraInfo.getDeep_ly();
         Point lp = lp_org;
         Point rp = rp_org;
-        if (lp_org.x > rp_org.x) {
-            rp = lp_org;
-            lp = rp_org;
+        boolean transAxis = false;
+        double lineRate = 0;
+        double dx = rp.x - lp.x;
+        double dy = rp.y - lp.y;
+        if (dx == 0 || Math.abs(dy) > Math.abs(dx)) {
+            // x轴差距为0, 或者y轴斜率大于1，反转坐标系
+            transAxis = true;
         }
+
+        if (transAxis) {
+            if (lp_org.y > rp_org.y) {
+                rp = lp_org;
+                lp = rp_org;
+            }
+            lineRate = dx / dy;
+        } else {
+            if (lp_org.x > rp_org.x) {
+                rp = lp_org;
+                lp = rp_org;
+            }
+            lineRate = dy / dx;
+        }
+
         double lx = lp.x * measureDeepFactor + deep_lx;
         double ly = lp.y * measureDeepFactor + deep_ly;
         double rx = rp.x * measureDeepFactor + deep_lx;
         double ry = rp.y * measureDeepFactor + deep_ly;
-        double lineRate = new Double(ry - ly) / (rx - lx);
+
         double default_deep = (deepCameraInfo.getDeep_far() + deepCameraInfo.getDeep_near()) / 2;
         double[] ldeeps = null;
         Point3[] ret = new Point3[2];
@@ -1325,30 +1344,56 @@ public class RecordFragmentWoundMeasure extends Fragment {
         ret[0].y = ry;
         ret[0].z = default_deep;
         ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
-        for (; lx < rx; lx++) {
-            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
-                ret[0].x = lx;
-                ret[0].y = ly;
-                ret[0].z = ldeeps[0];
-                break;
+        if (transAxis) {
+            for (; ly < ry; ly++) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[0].x = lx;
+                    ret[0].y = ly;
+                    ret[0].z = ldeeps[0];
+                    break;
+                }
+                lx += lineRate;
+                ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
             }
-            ly += lineRate;
-            ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+        } else {
+            for (; lx < rx; lx++) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[0].x = lx;
+                    ret[0].y = ly;
+                    ret[0].z = ldeeps[0];
+                    break;
+                }
+                ly += lineRate;
+                ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+            }
         }
 
         ret[1].x = rx;
         ret[1].y = ry;
         ret[1].z = default_deep;
         ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
-        for (; rx > lx; rx--) {
-            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
-                ret[1].x = rx;
-                ret[1].y = ry;
-                ret[1].z = ldeeps[0];
-                break;
+        if (transAxis) {
+            for (; ry > ly; ry--) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[1].x = rx;
+                    ret[1].y = ry;
+                    ret[1].z = ldeeps[0];
+                    break;
+                }
+                rx -= lineRate;
+                ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
             }
-            ry -= lineRate;
-            ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+        } else {
+            for (; rx > lx; rx--) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[1].x = rx;
+                    ret[1].y = ry;
+                    ret[1].z = ldeeps[0];
+                    break;
+                }
+                ry -= lineRate;
+                ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+            }
         }
         // 更新最开始的lp和rp
         lp.x = (lx - deep_lx) / measureDeepFactor;
