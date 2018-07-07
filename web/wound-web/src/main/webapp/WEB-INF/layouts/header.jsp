@@ -10,7 +10,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="/" class="brand nav-block"><img src="${ctx}/static/images/ic_launcher.png" alt="榕创医疗"><span>榕创医疗</span></a>
+          <a href="/" class="brand nav-block"><img src="${ctx}/static/images/ic_launcher.png" alt="榕创医疗" style="margin-right: 10px;"><span>榕创医疗</span></a>
           <!-- <a class="brand" href="${ctx}">榕创医疗</a> -->
           <div class="nav-collapse collapse">
             <ul class="nav">

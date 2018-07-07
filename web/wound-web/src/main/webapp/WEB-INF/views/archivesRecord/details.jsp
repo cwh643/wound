@@ -101,9 +101,11 @@
 	}
 	
 	.title1 {
-	    height:60px;
+		height: 40px;
+		margin-bottom: 20px;
 	    width:100%;
-		background: url(${ctx}/static/images/title_bar.png) no-repeat top left;
+		/*background: url(${ctx}/static/images/title_bar.png) no-repeat top left;*/
+		background-color:#C9C9C9;
 	}
 	
 	.title1 > span {
@@ -147,7 +149,7 @@
           <li ><a href="#record8"><i class="icon-chevron-right"></i> 骨髓炎</a></li>
           <li ><a href="#record9"><i class="icon-chevron-right"></i> 伤口换药</a></li>
         </ul>
-        <a class="btn  btn-primary affix" id="back_btn" style="top:520px;" href="javascript:history.back();">返回</a>
+        <a class="affix save_button" id="back_btn" style="top: 520px; width: 50px; height: 50px;line-height: 50px;" href="javascript:history.back();">返回</a>
     </div>
     <div class="span9">
 	    <div class="bs-docs-example"  id="baseinfo">

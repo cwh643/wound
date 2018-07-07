@@ -40,8 +40,8 @@
 			<tr>
 				<td><a href="${ctx}/archivesRecord/details?inpatientNo=${v[0]}&recordTime=${v[2]}">${v[2]}</a></td>
 				<td>${v[1]}</td>
-				<td>${v[3]}</td>
 				<td>${v[4]}</td>
+				<td><c:if test="${v[5]==1}">男</c:if><c:if test="${v[5]==2}">女</c:if></td>
 				<td><c:if test="${v[6]==0}">否</c:if><c:if test="${v[6]==1}">是</c:if></td>
 			</tr>
 		</c:forEach>

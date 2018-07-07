@@ -16,18 +16,20 @@
 <link type="image/x-icon" href="${ctx}/static/images/favicon.ico" rel="shortcut icon">
 <link href="${ctx}/static/bootstrap/2.3.2/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <link href="${ctx}/static/jquery-validation/1.11.1/validate.css" type="text/css" rel="stylesheet" />
-
+	<link href="${ctx}/static/styles/default.css" type="text/css" rel="stylesheet" />
   <style type="text/css">
       body {
         padding-top: 40px;
         padding-bottom: 40px;
         background: url(${ctx}/static/images/login_bg.png) no-repeat top scroll;
       }
+	  /*
 	  .navbar-inverse .navbar-inner {
 		  background: url(${ctx}/static/images/nav-top.jpg) no-repeat;
 		  -moz-background-size: 100% 100%;
 		  background-size: 100% 100%;
 	  }
+	  */
       .form-signin {
         max-width: 300px;
         padding: 19px 29px 29px;
@@ -85,7 +87,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="/" class="brand nav-block"><img src="${ctx}/static/images/ic_launcher.png" alt="榕创医疗"><span>榕创医疗</span></a>
+          <a href="/" class="brand nav-block"><img src="${ctx}/static/images/ic_launcher.png" alt="榕创医疗" style="margin-right: 10px;"><span>榕创医疗</span></a>
         </div>
       </div>
     </div>
