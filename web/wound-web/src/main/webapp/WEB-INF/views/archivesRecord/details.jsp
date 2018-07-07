@@ -109,7 +109,7 @@
 	}
 	
 	.title1 > span {
-	    color: #ffffff;
+	    color: #000;
 	    font-size: 16px;
 	    line-height: 40px;
 	    height: 40px;
@@ -224,7 +224,7 @@
 		      </c:if>
 			  <li class="span3">
 		            <div class="thumbnail" style="height:200px;">
-		                <a href="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg" target="_blank">
+		                <a href="${ctx}/static/wound/${img.imagePath}/rgb.jpeg" target="_blank">
 		                    <div class="divcss5" style="margin-top: 30px">
 		                  	<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
@@ -562,7 +562,7 @@
 					<tags:dictSelect name="woundDressingType" dicmeta="${dict_wound_dressing_type}" value="${record.woundDressingType}"  />
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" style="margin: 0px;">
 			  <div class="control-group span5">
 				<label class="control-label">敷料名称:</label>
 				<div class="controls">

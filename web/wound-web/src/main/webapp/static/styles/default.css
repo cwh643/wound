@@ -74,6 +74,22 @@
 	text-align: center;
 }
 
+.nav-list li {
+	background-color: #A0A0A0;
+}
+
+.nav-list li a {
+	color: #fff;
+}
+
+.nav-list li a:hover {
+	color: #000;
+}
+
+.radio.inline+.radio.inline, .checkbox.inline+.checkbox.inline {
+	 margin-left: 0px;
+}
+
 /*
 .navbar-inverse .navbar-inner {
 	background: url('../images/nav-top.jpg') no-repeat;

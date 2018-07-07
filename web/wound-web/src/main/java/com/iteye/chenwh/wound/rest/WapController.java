@@ -370,6 +370,7 @@ public class WapController {
 	    			String path = image.getImagePath();
 	    			if (path != null) {
 	    				path = path.replace("/storage/emulated/0/wound/", "");
+						path = path.replace("/mnt/internal_sd/wound/", "");
 	    				image.setImagePath(path);
 	    			}
 	    			recordImageService.save(image);
