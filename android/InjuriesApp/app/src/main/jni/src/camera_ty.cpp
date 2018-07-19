@@ -35,7 +35,7 @@ struct CallbackData {
 };
 
 static int n;
-static char buffer[1024*1024];
+static char buffer[1024*1024 * 20];
 static volatile bool exit_main;
 static TY_DEV_HANDLE hDevice;
 static DepthRender render;
@@ -65,7 +65,7 @@ void undistort_rgb(CallbackData &pData, cv::Mat &color, cv::Mat &dst_color) {
     dst_color = undistort_result;
 }
 
-int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbMat, JNIEnv* env, jobject &obj)
+int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbMat, jlong pointMat, JNIEnv* env, jobject &obj)
 {
     CallbackData* pData = (CallbackData*) userdata;
     LOGD("=== Get frame %d", ++pData->index);
@@ -105,19 +105,154 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
     jint center_dis = env->GetIntField(obj , nameFieldId);
     // int ry = (jry - jly) / factor + jly + y_diff;
 
+    cv::Size depth_size = (*((cv::Mat*) pointMat)).size();
     for( int i = 0; i < frame.validCount; i++ ){
         // get & show depth image
         LOGD("=== frame id %d", frame.image[i].componentID);
         if(frame.image[i].componentID == TY_COMPONENT_DEPTH_CAM){
-            cv::Mat depth(frame.image[i].height, frame.image[i].width
-                    , CV_16U, frame.image[i].buffer);
-            int nl = depth.rows;  
+            // cv::Mat depth(frame.image[i].height, frame.image[i].width
+            //         , CV_16U, frame.image[i].buffer);
+            // int nl = depth.rows;  
+            // int nc = depth.cols * depth.channels();  
+
+            // //LOGD("     depth mat create %d, %d, %d", *(int *)frame.image[i].buffer, nl,nc);
+            // LOGD("     dept width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+			// dt = (cv::Mat*)deptMat;
+            // // depth.copyTo(*dt);
+            // // trunk data
+            // int nr=depth.rows;
+            // int no=depth.cols;
+            // int min = 0;
+            // int min_count = 0;
+            // // calc offser
+            // int lx = jlx + x_diff;
+            // int rx = jrx + x_diff;
+            // int ly = jly + y_diff;
+            // int ry = jry + y_diff;
+            // 
+            // int center_lx = (rx - lx) / 2 + lx - center_dis;
+            // int center_ly = (ry - ly) / 2 + ly - center_dis;
+            // int center_rx = center_lx + center_dis * 2;
+            // int center_ry = center_ly + center_dis * 2;
+            // for(int i = ly; i < ry; i++)
+            // {
+            //     for(int j = lx; j < rx; j++) {
+            //         short &value = depth.at<short>(i, j);
+            //         
+            //         // LOGD("     get value %d, %d, %d, %d", j, i, value, min);
+            //         
+            //         int fi = i - y_diff;
+            //         int fj = j - x_diff;
+            //         if (value < near || value > far) {
+            //             dt->at<short>(fi, fj) = 0;
+            //             continue;
+            //         }
+            //         if (fi >= center_ly && fi < center_ry
+            //             && fj >= center_lx && fj < center_rx) {
+            //             min += value;
+            //             min_count++;
+            //         }
+            //         dt->at<short>(fi, fj) = value;
+            //     }
+            // }
+            // nameFieldId = env->GetFieldID(cls , "deep_center_deep" , "I"); //获得属性句柄 
+            // if (min_count == 0) {
+            //     min_count = 1;
+            // }
+            // int center_deep = min/min_count;
+            // LOGD("     get center deep  %d", center_deep);
+            // env->SetIntField(obj, nameFieldId, center_deep);
+            // depth_size = dt->size();
+        }
+        
+        // get & show RGB
+        if(frame.image[i].componentID == TY_COMPONENT_RGB_CAM){
+            // LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
+            LOGD("     RGB image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+            // cv::Mat &color =  *((cv::Mat*)rgbMat);
+            cv::Mat color;
+            pColor = (cv::Mat*)rgbMat;
+            // get BGR
+            if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU){
+                LOGD("RGB YVYU");
+                cv::Mat yuv(pColor->rows, pColor->cols
+                        , CV_8UC2, frame.image[i].buffer);
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YVYU);
+            }
+            else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YUYV){
+                LOGD("RGB YUYV");
+                cv::Mat yuv(pColor->rows, pColor->cols
+                        , CV_8UC2, frame.image[i].buffer);
+                // 注意 这里是转换为RGB，源代码中是BGR，是sdk的bug还是demo写错了需要确认
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2RGB_YUYV);
+            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
+                LOGD("RGB RGB");
+                cv::Mat rgb(pColor->rows, pColor->cols
+                        , CV_8UC3, frame.image[i].buffer);
+                cv::cvtColor(rgb, color, cv::COLOR_RGB2BGR);
+            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_MONO){
+                LOGD("RGB MONO");
+                cv::Mat gray(pColor->rows, pColor->cols
+                        , CV_8U, frame.image[i].buffer);
+                cv::cvtColor(gray, color, cv::COLOR_GRAY2BGR);
+            }
+            int nl = pColor->rows;  
+            int nc = pColor->cols;  
+            int nn = pColor->channels();  
+            LOGD("     RGB mat create %d, %d, %d, %d", *(int *)frame.image[i].buffer, nl, nc, nn);
+            // 使用图样api
+            // undistort_rgb(*pData, color, *pColor);
+            cv::Mat undistort_color;
+            if(!pData->colorM.empty()){
+                LOGD("     RGB mat undistortImage");
+                // 直接使用opencv的畸变方式
+                cv::undistort(color, undistort_color, pData->colorM, pData->colorD, pData->colorM);
+            }
+            cv::resize(undistort_color, *pColor, depth_size);
+        }
+        // get & show left ir image
+        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
+            LOGD("     dept IR_LEFT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+            //cv::Mat leftIR(frame.image[i].height, frame.image[i].width
+            //        , CV_8U, frame.image[i].buffer);
+            //cv::imshow("LeftIR", leftIR);
+        }
+        // get & show right ir image
+        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_RIGHT){
+            LOGD("     dept IR_RIGHT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+            //cv::Mat rightIR(frame.image[i].height, frame.image[i].width
+            //       , CV_8U, frame.image[i].buffer);
+            //cv::imshow("RightIR", rightIR);
+        }
+        // get point3D
+        if(frame.image[i].componentID == TY_COMPONENT_POINT3D_CAM){
+            LOGD("     dept 3D_POINT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
+            //*pPoints = cv::Mat(frame.image[i].height, frame.image[i].width
+            //        , CV_32FC3, frame.image[i].buffer);
+			
+			cv::Mat point3D(frame.image[i].height, frame.image[i].width
+                    , CV_32FC3, frame.image[i].buffer);
+
+            cv::Mat* point = (cv::Mat*) pointMat;
+            LOGD("color rows:%d, cols:%d", point3D.rows, point3D.cols);
+			ASSERT_OK( TYRegisterWorldToColor(pData->hDevice, (TY_VECT_3F*)point3D.data, 0
+						, point3D.cols * point3D.rows, (uint16_t*)buffer, sizeof(buffer)
+						));
+			cv::Mat depth = cv::Mat(point->rows, point->cols, CV_16U, (uint16_t*)buffer);
+			cv::Mat temp;
+			//you may want to use median filter to fill holes in projected depth image or do something else here
+			cv::medianBlur(depth,temp,5);
+			depth = temp;
+			//resize to the same size for display
+		    cv::resize(depth, depth, depth_size, 0, 0, 0);
+
+            // newDepth.copyTo(*point);
+			int nl = depth.rows;  
             int nc = depth.cols * depth.channels();  
 
             //LOGD("     depth mat create %d, %d, %d", *(int *)frame.image[i].buffer, nl,nc);
             LOGD("     dept width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-			dt = (cv::Mat*)deptMat;
-            cv::Mat* rgb = (cv::Mat*)rgbMat;
+			dt = (cv::Mat*)pointMat;
             // depth.copyTo(*dt);
             // trunk data
             int nr=depth.rows;
@@ -162,271 +297,10 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             int center_deep = min/min_count;
             LOGD("     get center deep  %d", center_deep);
             env->SetIntField(obj, nameFieldId, center_deep);
+            //depth_size = dt->size();
+
         }
-        
-        // get & show RGB
-        if(frame.image[i].componentID == TY_COMPONENT_RGB_CAM){
-            // LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
-            LOGD("     RGB image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            // cv::Mat &color =  *((cv::Mat*)rgbMat);
-            cv::Mat color;
-            pColor = (cv::Mat*)rgbMat;
-            // get BGR
-            if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU){
-                LOGD("RGB YVYU");
-                cv::Mat yuv(pColor->rows, pColor->cols
-                        , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YVYU);
-            }
-            else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YUYV){
-                LOGD("RGB YUYV");
-                cv::Mat yuv(pColor->rows, pColor->cols
-                        , CV_8UC2, frame.image[i].buffer);
-                // 注意 这里是转换为RGB，源代码中是BGR，是sdk的bug还是demo写错了需要确认
-                cv::cvtColor(yuv, color, cv::COLOR_YUV2RGB_YUYV);
-            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
-                LOGD("RGB RGB");
-                cv::Mat rgb(pColor->rows, pColor->cols
-                        , CV_8UC3, frame.image[i].buffer);
-                cv::cvtColor(rgb, color, cv::COLOR_RGB2BGR);
-            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_MONO){
-                LOGD("RGB MONO");
-                cv::Mat gray(pColor->rows, pColor->cols
-                        , CV_8U, frame.image[i].buffer);
-                cv::cvtColor(gray, color, cv::COLOR_GRAY2BGR);
-            }
-            int nl = pColor->rows;  
-            int nc = pColor->cols;  
-            int nn = pColor->channels();  
-            LOGD("     RGB mat create %d, %d, %d, %d", *(int *)frame.image[i].buffer, nl, nc, nn);
-            // 使用图样api
-            // undistort_rgb(*pData, color, *pColor);
-            if(!pData->colorM.empty()){
-                LOGD("     RGB mat undistortImage");
-                // 直接使用opencv的畸变方式
-                cv::undistort(color, *pColor, pData->colorM, pData->colorD, pData->colorM);
-            }
-        }
-        // get & show left ir image
-        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
-            LOGD("     dept IR_LEFT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat leftIR(frame.image[i].height, frame.image[i].width
-            //        , CV_8U, frame.image[i].buffer);
-            //cv::imshow("LeftIR", leftIR);
-        }
-        // get & show right ir image
-        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_RIGHT){
-            LOGD("     dept IR_RIGHT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat rightIR(frame.image[i].height, frame.image[i].width
-            //       , CV_8U, frame.image[i].buffer);
-            //cv::imshow("RightIR", rightIR);
-        }
-        // get point3D
-        if(frame.image[i].componentID == TY_COMPONENT_POINT3D_CAM){
-            LOGD("     dept 3D_POINT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat point3D(frame.image[i].height, frame.image[i].width
-            //        , CV_32FC3, frame.image[i].buffer);
-        }
-        
     }
-
-    /*
-    int key = cv::waitKey(1);
-    switch(key){
-        case -1:
-            break;
-        case 'q': case 1048576 + 'q':
-            exit_main = true;
-            break;
-        default:
-            LOGD("Pressed key %d", key);
-    }
-    */
-    // LOGD("=== Callback: Re-enqueue buffer(%p, %d)", frame.userBuffer, frame.bufferSize);
-    ASSERT_OK( TYEnqueueBuffer(pData->hDevice, frame.userBuffer, frame.bufferSize) );
-}
-
-int frameHandler(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbMat, JNIEnv* env, jobject &obj)
-{
-    CallbackData* pData = (CallbackData*) userdata;
-    LOGD("=== Get frame %d", ++pData->index);
-
-    jfieldID  nameFieldId ;  
-    jclass cls = env->GetObjectClass(obj);  //获得Java层该对象实例的类引用，即HelloJNI类引用  
-    // lx
-    nameFieldId = env->GetFieldID(cls , "deep_lx" , "I"); //获得属性句柄 
-    jint jlx = env->GetIntField(obj , nameFieldId);
-    //LOGD("     get lx  %d", (int)lx);
-    // ly
-    nameFieldId = env->GetFieldID(cls , "deep_ly" , "I"); //获得属性句柄 
-    jint jly = env->GetIntField(obj , nameFieldId);
-    //LOGD("     get ly  %d", (int)ly);
-    // rx
-    nameFieldId = env->GetFieldID(cls , "deep_rx" , "I"); //获得属性句柄 
-    jint jrx = env->GetIntField(obj , nameFieldId);
-    //LOGD("     get rx  %d", (int)rx);
-    // ry
-    nameFieldId = env->GetFieldID(cls , "deep_ry" , "I"); //获得属性句柄 
-    jint jry = env->GetIntField(obj , nameFieldId);
-    //LOGD("     get ry  %d", (int)ry);
-    // near
-    nameFieldId = env->GetFieldID(cls , "deep_near" , "I"); //获得属性句柄 
-    jint near = env->GetIntField(obj , nameFieldId);
-    // far
-    nameFieldId = env->GetFieldID(cls , "deep_far" , "I"); //获得属性句柄 
-    jint far = env->GetIntField(obj , nameFieldId);
-    // deep_x_diff
-    nameFieldId = env->GetFieldID(cls , "deep_x_diff" , "I"); //获得属性句柄 
-    jint x_diff = env->GetIntField(obj , nameFieldId);
-    // deep_y_diff
-    nameFieldId = env->GetFieldID(cls , "deep_y_diff" , "I"); //获得属性句柄 
-    jint y_diff = env->GetIntField(obj , nameFieldId);
-    // factor
-    // LOGD(" get factor start ");
-    // nameFieldId = env->GetFieldID(cls , "dept_factor" , "I"); //获得属性句柄 
-    // jint factor_int = env->GetIntField(obj , nameFieldId);
-    // float factor = factor_int / 100.0f;
-    // LOGD(" get factor %f", factor);
-    //LOGD("     get lx=%d,ly=%d,rx=%d,ry=%d,near=%d,far=%d", (int)lx, (int)ly, (int)rx, (int)ry, (int)near, (int)far);
-    int min = 1000000;
-    int lx = jlx + x_diff;
-    int rx = jrx + x_diff;
-    // int rx = (jrx  - jlx) / factor + jlx + x_diff;
-    int ly = jly + y_diff;
-    int ry = jry + y_diff;
-    // int ry = (jry - jly) / factor + jly + y_diff;
-
-    for( int i = 0; i < frame.validCount; i++ ){
-        // get & show depth image
-        if(frame.image[i].componentID == TY_COMPONENT_DEPTH_CAM){
-            cv::Mat depth(frame.image[i].height, frame.image[i].width
-                    , CV_16U, frame.image[i].buffer);
-            int nl = depth.rows;  
-            int nc = depth.cols * depth.channels();  
-            //LOGD("     depth mat create %d, %d, %d", *(int *)frame.image[i].buffer, nl,nc);
-            LOGD("     dept image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-			dt = (cv::Mat*)deptMat;
-            cv::Mat* rgb = (cv::Mat*)rgbMat;
-            // depth.copyTo(*dt);
-            // trunk data
-            int nr=depth.rows;
-            int no=depth.cols;
-            for(int i = ly; i < ry; i++)
-            {
-                for(int j = lx; j < rx; j++) {
-                    short &value = depth.at<short>(i, j);
-                    
-                    // LOGD("     get value  %d, %d", (int)value, min);
-                    min = min > value && value > 400 ? value : min;
-                    // int fi = i * factor + (1 - factor) * ly - y_diff;
-                    // int fj = j * factor + (1 - factor) * lx - x_diff;
-                    int fi = i - y_diff;
-                    int fj = j - x_diff;
-                    if (value < near || value > far) {
-                        dt->at<short>(fi, fj) = 0;
-                        //cv::Vec3b &rgb_vec = rgb->at<cv::Vec3b>(fi, fj);
-                        //rgb_vec[0] = 255;
-                        //rgb_vec[1] = 255;
-                        //rgb_vec[2] = 255;
-                        continue;
-                    }
-                    dt->at<short>(fi, fj) = value;
-                    // cv::Vec3b &rgb_vec = rgb->at<cv::Vec3b>(fi, fj);
-                    // rgb_vec[0] = 0xf0;
-                    // rgb_vec[1] = 0x80;
-                    // rgb_vec[2] = 0x80;
-                }
-            }
-
-            LOGD("     get min  %d", min);
-            nameFieldId = env->GetFieldID(cls , "deep_min_deep" , "I"); //获得属性句柄 
-            env->SetIntField(obj, nameFieldId, min); 
-            //LOGD("     get min  %d", min);
-            // short* ptr = depth.ptr<short>();
-            // short* dest_ptr = dt->ptr<short>();
-
-            // for (int i = depth.size().area(); i != 0; i--) {
-            //     // LOGD("   deep %d" , (int)*ptr);
-            //     if (*ptr <= far && *ptr >= near) {
-            //         // LOGD("   filte deep %d" , (int)*ptr);
-            //         *dest_ptr = *ptr;
-            //     } else {
-            //         *dest_ptr = 0;
-            //     }
-            //     ptr++;
-            //     dest_ptr++;
-            // }
-        }
-        
-        // get & show RGB
-        if(frame.image[i].componentID == TY_COMPONENT_RGB_CAM){
-            continue;
-            LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
-            LOGD("     RGB image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            pColor = (cv::Mat*)rgbMat;
-            // get BGR
-            if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU){
-                LOGD("RGB YVYU");
-                cv::Mat yuv(pColor->rows, pColor->cols
-                        , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YVYU);
-            }
-            else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YUYV){
-                LOGD("RGB YUYV");
-                cv::Mat yuv(pColor->rows, pColor->cols
-                        , CV_8UC2, frame.image[i].buffer);
-                cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YUYV);
-            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
-                LOGD("RGB RGB");
-                cv::Mat rgb(pColor->rows, pColor->cols
-                        , CV_8UC3, frame.image[i].buffer);
-                cv::cvtColor(rgb, *pColor, cv::COLOR_RGB2BGR);
-            } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_MONO){
-                LOGD("RGB MONO");
-                cv::Mat gray(pColor->rows, pColor->cols
-                        , CV_8U, frame.image[i].buffer);
-                cv::cvtColor(gray, *pColor, cv::COLOR_GRAY2BGR);
-            }
-            int nl = pColor->rows;  
-            int nc = pColor->cols;  
-            int nn = pColor->channels();  
-            LOGD("     RGB mat create %d, %d, %d, %d", *(int *)frame.image[i].buffer, nl, nc, nn);
-        }
-        // get & show left ir image
-        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
-            LOGD("     dept IR_LEFT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat leftIR(frame.image[i].height, frame.image[i].width
-            //        , CV_8U, frame.image[i].buffer);
-            //cv::imshow("LeftIR", leftIR);
-        }
-        // get & show right ir image
-        if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_RIGHT){
-            LOGD("     dept IR_RIGHT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat rightIR(frame.image[i].height, frame.image[i].width
-            //       , CV_8U, frame.image[i].buffer);
-            //cv::imshow("RightIR", rightIR);
-        }
-        // get point3D
-        if(frame.image[i].componentID == TY_COMPONENT_POINT3D_CAM){
-            LOGD("     dept 3D_POINT width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            //cv::Mat point3D(frame.image[i].height, frame.image[i].width
-            //        , CV_32FC3, frame.image[i].buffer);
-        }
-        
-    }
-
-    /*
-    int key = cv::waitKey(1);
-    switch(key){
-        case -1:
-            break;
-        case 'q': case 1048576 + 'q':
-            exit_main = true;
-            break;
-        default:
-            LOGD("Pressed key %d", key);
-    }
-    */
     // LOGD("=== Callback: Re-enqueue buffer(%p, %d)", frame.userBuffer, frame.bufferSize);
     ASSERT_OK( TYEnqueueBuffer(pData->hDevice, frame.userBuffer, frame.bufferSize) );
 }
@@ -488,7 +362,7 @@ int OpenDevice(jint width, jint heigth) {
                 LOGD("=== Read color rectify matrix succ");
                                 cb_data.color_intri = color_intri;
                 cb_data.color_dist = color_dist;
-                float param_factor = width / 1280.0f;
+                float param_factor = 1;//width / 1280.0f;
                 // 根据图片尺寸转换畸变参数
                 trans_width_and_log(0, cb_data.color_intri.data[0], param_factor);
                 trans_width_and_log(2, cb_data.color_intri.data[2], param_factor);
@@ -521,21 +395,25 @@ int OpenDevice(jint width, jint heigth) {
             LOGD("=== Has RGB camera, open RGB cam");
 	        ASSERT_OK( TYEnableComponents(hDevice, TY_COMPONENT_RGB_CAM) );
             err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, image_size);
-            //err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_1280x960);
+            // err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_1280x960);
             LOGD("err = %d", err);
             ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
         }
 
 	    LOGD("=== Configure components, open depth cam");
 	    // int32_t componentIDs = TY_COMPONENT_DEPTH_CAM | TY_COMPONENT_IR_CAM_LEFT;
-	    int32_t componentIDs = TY_COMPONENT_DEPTH_CAM;
+	    int32_t componentIDs = TY_COMPONENT_POINT3D_CAM;// |TY_COMPONENT_DEPTH_CAM;
 	    ASSERT_OK( TYEnableComponents(hDevice, componentIDs) );
 
-	    LOGD("=== Configure feature, set resolution to 640x480.");
+	    LOGD("=== Configure feature, set resolution to %dx%d.", width, heigth);
 	    LOGD("Note: DM460 resolution feature is in component TY_COMPONENT_DEVICE,");
 	    LOGD("      other device may lays in some other components.");
 
-	    err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
+	    // err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
+		// LOGD("err = %d", err);
+	    // ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+
+	    err = TYSetEnum(hDevice, TY_COMPONENT_POINT3D_CAM, TY_ENUM_IMAGE_MODE, image_size);
 		LOGD("err = %d", err);
 	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
 
@@ -595,7 +473,7 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr);
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr);
 }
 
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
@@ -619,7 +497,7 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
     return TYStopCapture(hDevice);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr)
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr)
 {
 	LOGD("Fetch Data");
     //exit_main = false;
@@ -630,6 +508,6 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
         //LOGD("... Drop one frame");
         return err;
     }
-    return frameHandler8X(frame, &cb_data, depthMatAddr, rgbMatAddr, env, thiz);
+    return frameHandler8X(frame, &cb_data, depthMatAddr, rgbMatAddr, pointMatAddr, env, thiz);
 }
 

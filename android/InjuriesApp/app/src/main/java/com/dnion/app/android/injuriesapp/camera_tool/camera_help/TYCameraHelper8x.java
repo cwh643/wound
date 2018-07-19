@@ -16,6 +16,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +30,8 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
     boolean mInit_Ok = false;
     protected TyNativeUtils nativeUtils;
 
+    private Mat mPointMat;
+
     @Override
     public void init(Context context, String size) {
         super.init(context, size);
@@ -39,12 +42,12 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         nativeUtils.deep_ry = param.deep_ry;
         nativeUtils.deep_near = GlobalDef.CALC_MIN_DEEP;
         nativeUtils.deep_far = GlobalDef.CALC_MAX_DEEP;
-        nativeUtils.deep_x_diff = transIntParam(-20);
-        nativeUtils.deep_y_diff = transIntParam(45);
-        //nativeUtils.deep_x_diff = transIntParam(0);
-        //nativeUtils.deep_y_diff = transIntParam(0);
+        //nativeUtils.deep_x_diff = transIntParam(-20);
+        //nativeUtils.deep_y_diff = transIntParam(45);
+        nativeUtils.deep_x_diff = transIntParam(0);
+        nativeUtils.deep_y_diff = transIntParam(0);
         nativeUtils.deep_center_dis = transIntParam(GlobalDef.DEPTH_CENTER_DIS);
-
+        mPointMat = new Mat(mHeight, mWidth, CvType.CV_16UC1);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         }
         Log.d(TAG, "fatch data....");
 
-        nativeUtils.FetchData(depthMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr());
+        nativeUtils.FetchData(mPointMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr(), depthMat.getNativeObjAddr() );
         Utils.matToBitmap(mRgbMat, rgbBitmap);
         centerDeep = nativeUtils.deep_center_deep;
         Log.d(TAG, "fatch data....0");
