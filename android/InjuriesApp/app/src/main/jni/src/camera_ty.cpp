@@ -239,10 +239,10 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
 						, point3D.cols * point3D.rows, (uint16_t*)buffer, sizeof(buffer)
 						));
 			cv::Mat depth = cv::Mat(point->rows, point->cols, CV_16U, (uint16_t*)buffer);
-			cv::Mat temp;
+			//cv::Mat temp;
 			//you may want to use median filter to fill holes in projected depth image or do something else here
-			cv::medianBlur(depth,temp,5);
-			depth = temp;
+			//cv::medianBlur(depth,temp,5);
+			//depth = temp;
 			//resize to the same size for display
 		    cv::resize(depth, depth, depth_size, 0, 0, 0);
 
@@ -250,8 +250,6 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
 			int nl = depth.rows;  
             int nc = depth.cols * depth.channels();  
 
-            //LOGD("     depth mat create %d, %d, %d", *(int *)frame.image[i].buffer, nl,nc);
-            LOGD("     dept width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
 			dt = (cv::Mat*)pointMat;
             // depth.copyTo(*dt);
             // trunk data
@@ -362,7 +360,7 @@ int OpenDevice(jint width, jint heigth) {
                 LOGD("=== Read color rectify matrix succ");
                                 cb_data.color_intri = color_intri;
                 cb_data.color_dist = color_dist;
-                float param_factor = 1;//width / 1280.0f;
+                float param_factor = width / 1280.0f;
                 // 根据图片尺寸转换畸变参数
                 trans_width_and_log(0, cb_data.color_intri.data[0], param_factor);
                 trans_width_and_log(2, cb_data.color_intri.data[2], param_factor);
