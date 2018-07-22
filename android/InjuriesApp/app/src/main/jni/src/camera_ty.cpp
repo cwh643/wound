@@ -233,26 +233,18 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
 			cv::Mat point3D(frame.image[i].height, frame.image[i].width
                     , CV_32FC3, frame.image[i].buffer);
 
-            cv::Mat* point = (cv::Mat*) pointMat;
+			dt = (cv::Mat*)pointMat;
             LOGD("color rows:%d, cols:%d", point3D.rows, point3D.cols);
 			ASSERT_OK( TYRegisterWorldToColor(pData->hDevice, (TY_VECT_3F*)point3D.data, 0
 						, point3D.cols * point3D.rows, (uint16_t*)buffer, sizeof(buffer)
 						));
-			cv::Mat depth = cv::Mat(point->rows, point->cols, CV_16U, (uint16_t*)buffer);
-			//cv::Mat temp;
+			cv::Mat depth = cv::Mat(dt->rows, dt->cols, CV_16U, (uint16_t*)buffer);
 			//you may want to use median filter to fill holes in projected depth image or do something else here
-			//cv::medianBlur(depth,temp,5);
-			//depth = temp;
 			//resize to the same size for display
-		    cv::resize(depth, depth, depth_size, 0, 0, 0);
+		    //cv::resize(depth, depth, depth_size, 0, 0, 0);
 
-            // newDepth.copyTo(*point);
 			int nl = depth.rows;  
             int nc = depth.cols * depth.channels();  
-
-			dt = (cv::Mat*)pointMat;
-            // depth.copyTo(*dt);
-            // trunk data
             int nr=depth.rows;
             int no=depth.cols;
             int min = 0;
