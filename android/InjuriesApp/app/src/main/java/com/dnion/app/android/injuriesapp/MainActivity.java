@@ -82,7 +82,11 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //隐藏虚拟键
+        View main = getLayoutInflater().from(this).inflate(R.layout.activity_main, null);
+        main.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        setContentView(main);
+
         mainActivity = this;
         recordDao = new RecordDao(this);
         patientDao = new PatientDao(this);

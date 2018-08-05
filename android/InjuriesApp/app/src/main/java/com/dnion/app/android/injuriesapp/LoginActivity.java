@@ -54,7 +54,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        //隐藏虚拟键
+        View main = getLayoutInflater().from(this).inflate(R.layout.activity_login , null);
+        main.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        setContentView(main);
+        //setContentView(R.layout.activity_login);
         mActivity = this;
 
         //6.0以上需要权限申请
