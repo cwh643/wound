@@ -6,7 +6,7 @@ package com.dnion.app.android.injuriesapp.camera_tool;
 
 public class FocusParam {
     public int line_length = 20;
-    public int text_length = 55;
+    public int text_length = 70;
     public int text_height = 5;
     public int center_x;
     public int center_y;

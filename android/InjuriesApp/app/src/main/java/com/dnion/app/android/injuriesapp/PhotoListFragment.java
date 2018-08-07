@@ -81,6 +81,11 @@ public class PhotoListFragment extends Fragment {
     private void configView(View rootView) {
         GridView photo_container = (GridView) rootView.findViewById(R.id.photo_container);
         List<RecordImage> imageList = recordImageDao.queryRecordImage("" + mActivity.getRecordId(), "'deep','ir'");
+        for (RecordImage image : imageList) {
+            if (!image.getImagePath().startsWith(mActivity.getBaseDir())) {
+                image.setImagePath(mActivity.getBaseDir() + File.separator + image.getImagePath());
+            }
+        }
         adapter = new PhotoListAdapter(imageList);
         photo_container.setAdapter(adapter);
         photo_container.setOnItemClickListener(mItemClickListener);

@@ -105,20 +105,25 @@ public class RecordFragmentDeepCamera extends Fragment {
     FocusParam focusParam;
 
     public static void init_camera_param(String src, String size) {
-        switch (src) {
-            case "ty4x":
-                camera_src = 0;
-                break;
-            case "ty8x":
-                camera_src = 1;
-                break;
-            case "ab":
-                camera_src = 2;
-                break;
-            default:
-                camera_src = 2;
+        if (src != null) {
+            switch (src) {
+                case "ty4x":
+                    camera_src = 0;
+                    break;
+                case "ty8x":
+                    camera_src = 1;
+                    break;
+                case "ab":
+                    camera_src = 2;
+                    break;
+                default:
+                    camera_src = 1;
+            }
+            camera_size = size;
+        } else {
+            camera_src = 1;
+            camera_size = "640x480";
         }
-        camera_size = size;
     }
 
     public static RecordFragmentDeepCamera createInstance() {
@@ -217,7 +222,8 @@ public class RecordFragmentDeepCamera extends Fragment {
         focusParam.text_x = focusParam.center_x - param.transIntParam(focusParam.text_length);
         focusParam.text_y = focusParam.center_y - param.transIntParam(focusParam.text_height);
         focusParam.line_length = param.transIntParam(focusParam.line_length);
-        //focusPaint.setTextSize(param.transFloatParam(focusPaint.getTextSize()));
+        // 这里设置无效
+        //focusPaint.setTextSize(param.transIntParam(40));
         focusBackCanvas = new Canvas(mDepthBitmap);
         focusCanvas = new Canvas(mFocusBm);
     }
@@ -246,6 +252,7 @@ public class RecordFragmentDeepCamera extends Fragment {
             }
         }
         focusPaint.setStrokeWidth(param.transIntParam(1));
+        focusPaint.setTextSize(param.transIntParam(20));
         focusCanvas.drawText(text, focusParam.text_x, focusParam.text_y, focusPaint);
         focusPaint.setStrokeWidth(param.transIntParam(4));
         focusCanvas.drawLine(focusParam.center_x - focusParam.line_length, focusParam.center_y,

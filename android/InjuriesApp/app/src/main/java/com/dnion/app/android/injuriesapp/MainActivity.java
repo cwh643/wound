@@ -335,11 +335,12 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
     public void saveDeepCameraInfo() {
         String path = deepCameraInfo.getFilepath();
         deepCameraInfoDao.save(deepCameraInfo);
+        String absPath = path.substring(getBaseDir().length() + 1);
         if (deepCameraInfo.isNew()) {
             RecordImage ri = new RecordImage();
             ri.setRecordId(getRecordId());
             ri.setImageType("deep");
-            ri.setImagePath(path);
+            ri.setImagePath(absPath);
             recordImageDao.insertRecordImage(ri);
             deepCameraInfo.setNew(false);
         }
@@ -347,26 +348,17 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
 
     public void saveIRCameraInfo() {
         String path = deepCameraInfo.getFilepath();
+        // 不同设备硬件路径都不一样，所以存进去之前取相对路径，取的时候再拼上sd的路径
+        String absPath = path.substring(getBaseDir().length() + 1);
         deepCameraInfoDao.save(deepCameraInfo);
         if (deepCameraInfo.isNew()) {
             RecordImage ri = new RecordImage();
             ri.setRecordId(getRecordId());
             ri.setImageType("ir");
-            ri.setImagePath(path);
+            ri.setImagePath(absPath);
             recordImageDao.insertRecordImage(ri);
             deepCameraInfo.setNew(false);
         }
-    }
-
-    public void saveHotCameraInfo(String path) {
-        if (path == null) {
-            return;
-        }
-        RecordImage ri = new RecordImage();
-        ri.setRecordId(getRecordId());
-        ri.setImageType("hot");
-        ri.setImagePath(path);
-        recordImageDao.insertRecordImage(ri);
     }
 
     public DeepCameraInfo queryDeepCameraInfo(String path) {

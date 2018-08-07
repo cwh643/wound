@@ -29,6 +29,7 @@ import com.dnion.app.android.injuriesapp.camera_tool.DeepModelDisplayView;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 import com.dnion.app.android.injuriesapp.camera_tool.ModelPointinfo;
 import com.dnion.app.android.injuriesapp.camera_tool.PointInfo3D;
+import com.dnion.app.android.injuriesapp.camera_tool.native_utils.CommonNativeUtils;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.ui.MeasureButton;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
@@ -667,11 +668,22 @@ public class RecordFragmentWoundMeasure extends Fragment {
         setArea();
     }
 
+    private void extractPonitByPath(List<Point3> areaEdgePointList) {
+        for (int i = 0; i < mAreaMeasureBitmap.getWidth(); i++) {
+            for (int j = 0; j < mAreaMeasureBitmap.getHeight(); j++) {
+                if (mAreaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
+                    areaEdgePointList.add(new Point3(i, j, 0));
+                }
+            }
+        }
+    }
+
     private void fillArea() {
         List<Point> areaPointList = deepCameraInfo.getAreaPointList();
         if (areaPointList.size() <= 0) {
             return;
         }
+        // 存放边缘点的list
         Path path = new Path();
         Point p = areaPointList.get(areaPointList.size() - 1);
         path.moveTo((float) p.x, (float) p.y);
@@ -680,6 +692,14 @@ public class RecordFragmentWoundMeasure extends Fragment {
             path.lineTo((float) p.x, (float) p.y);
         }
         path.close();
+        // 先画出轮廓
+        paint.setColor(GlobalDef.AREA_EDGE_COLOR);
+        paint.setStyle(Paint.Style.STROKE);
+        areaCanvas.drawPath(path, paint);
+        mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
+
+        // 填充面积
+        paint.setColor(GlobalDef.AREA_COLOR);
         paint.setStyle(Paint.Style.FILL);
         areaCanvas.drawPath(path, paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
@@ -838,6 +858,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void calcArea() {
         List<Float> vertexList = deepCameraInfo.getVertexList();
         List<Float> colorList = deepCameraInfo.getColorList();
+        List<Point3> areaEdgePointList = new ArrayList<>();
         Mat mDepth = deepCameraInfo.getDepthMat();
         //Mat mDepth = mFilterDepth;
         Bitmap rgbBitmap = deepCameraInfo.getRgbBitmap();
@@ -847,9 +868,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
         Bitmap areaMeasureBitmap = BitmapUtils.scale_image(mAreaMeasureBitmap, 0, 0, mAreaMeasureBitmap.getWidth(),
                 mAreaMeasureBitmap.getHeight(), deepValidWidth, deepValidHeight);
+        // 测量页面与depth的缩放比例，用于还原测量点的坐标
         int width = areaMeasureBitmap.getWidth();
         int height = areaMeasureBitmap.getHeight();
-        // 缩放比例
+        // rgb和depth的缩放比例
         float rgbFactor = (float) rgbBitmap.getWidth() / mDepth.cols();
         // 存放每个轴上面最大和最小值
         double[][] lengthMap = new double[width][2];
@@ -877,6 +899,14 @@ public class RecordFragmentWoundMeasure extends Fragment {
         for (int i = 0; i < width; i++) {
             mi.last_deep = 0;
             for (int j = 0; j < height; j++) {
+                if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_EDGE_COLOR) {
+                    int depth_j = j + ly;
+                    int depth_i = i + lx;
+                    mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);
+                    if (mi.last_deep != 0) {
+                        areaEdgePointList.add(new Point3(depth_i, depth_j, mi.last_deep));
+                    }
+                }
                 if (areaMeasureBitmap.getPixel(i, j) == GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;
                     int depth_i = i + lx;
@@ -948,26 +978,48 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         clacColorRate(areaBitmap, mi);
 
+        // 计算拟合平面
+        float[] plane = new float[4];
+        calcPlane(areaEdgePointList, plane);
+        // 计算平面和 z = 0 平面的夹角cos值
+        float[] zPlane = new float[]{0, 0, 1, 0};
+        double cosAngle = getCosAngle(zPlane, plane);
+        double tanAngle = Math.tan(Math.acos(cosAngle));
+        double triangleHeight = WIDTH_PER_PIX * tanAngle;
+
         //  中间点
         int test = 1;
         Point center_p = new Point((mi.left_x + mi.right_x) / 2, (mi.top_y + mi.bottom_y) / 2);
         deepCameraInfo.setModelCenter(center_p);
         float camera_size_factor = deepCameraInfo.getCamera_size_factor();
+
         for (int i = vertexList.size() - 1; i >= 0; i -= 3) {
             float deep = vertexList.get(i);
-            int x = new Float(vertexList.get(i - 2)).intValue() - lx;
-            int y = new Float(vertexList.get(i - 1)).intValue() - ly;
-            int avgDeep = new Double((lengthMap[x][0] + lengthMap[x][1] + widthMap[y][0] + widthMap[y][1]) / 4).intValue();
+            int x = new Float(vertexList.get(i - 2)).intValue();
+            int y = new Float(vertexList.get(i - 1)).intValue();
+            float planDeep = getPlaneDeep(x, y, plane);
+
             // 先计算长和宽，所以需要乘以两次deep，而deep的比例是以米为单位，所以要除以2次1000
-            double area_per = avgDeep * avgDeep * AREA_PER_PIX / 1000000/ camera_size_factor / camera_size_factor;
-            area += area_per;
-            double volum_per = (deep - avgDeep) / 10 * area_per;
+            double upArea = planDeep * planDeep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            // 根据平面夹余弦值算出最终的面积
+            double areaPlane = upArea / cosAngle;
+            area += areaPlane;
+            // 深度先计算平行z轴的体积，再加上因为平面倾斜少计算的体积
+            // 因为z轴是发散的，所以是个梯形，计算梯形的面积
+            double downArea = deep * deep * AREA_PER_PIX / 1000000 / camera_size_factor / camera_size_factor;
+            double deep_dis = Math.abs(deep - planDeep);
+            deep_dis = deep_dis > 2 ? deep_dis : 0;
+            double rectVolum = (upArea + downArea) * deep_dis / 2;
+            double triangleVolumn = triangleHeight * upArea * deep_dis / 2;
+
+            double volum_per = rectVolum + triangleVolumn;
+            //double volum_per = (deep - planDeep) / 10 * areaPlane;
             volume += volum_per;
             if (volum_per > 0) {
                 test = 1;
             }
         }
-        volume = volume < 0 ? -volume : volume;
+        volume = Math.abs(volume) / 1000;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
         String format_area = new DecimalFormat("#.00").format(area / 100);
         String format_volume = new DecimalFormat("#.00").format(volume);
@@ -982,6 +1034,51 @@ public class RecordFragmentWoundMeasure extends Fragment {
         deepCameraInfo.setWoundYellowRate(new Float(format_yellow));
         deepCameraInfo.setWoundBlackRate(new Float(format_black));
         deepCameraInfo.setWoundDeep(new Float(format_deep));
+    }
+
+    private void calcPlane(List<Point3> vertexList, float[] plane) {
+        Mat points = new Mat(vertexList.size(), 3, CvType.CV_32FC1);
+        for (int i = 0; i < vertexList.size(); i++) {
+            Point3 p = vertexList.get(i);
+            points.put(i, 0, p.x);
+            points.put(i, 1, p.y);
+            points.put(i, 2, p.z);
+        }
+        Mat planeMat = new Mat(1, 4, CvType.CV_32FC1);
+        CommonNativeUtils.cvFitPlane(points.getNativeObjAddr(), planeMat.getNativeObjAddr());
+        plane[0] = new Double(planeMat.get(0, 0)[0]).floatValue();
+        plane[1] = new Double(planeMat.get(0, 1)[0]).floatValue();
+        plane[2] = new Double(planeMat.get(0, 2)[0]).floatValue();
+        plane[3] = new Double(planeMat.get(0, 3)[0]).floatValue();
+    }
+
+    private float getPlaneDeep(float x, float y, float[] plane) {
+        float a = plane[0];
+        float b = plane[1];
+        float c = plane[2];
+        float d = plane[3];
+        return (d - (a * x) - (b * y)) / c;
+    }
+
+    private double getPointPlaneDistance(Point3 point, float[] plane) {
+        // ax + by + cz = d
+        float a = plane[0];
+        float b = plane[1];
+        float c = plane[2];
+        float d = plane[3];
+        return Math.abs(a * point.x + b * point.y + c * point.z - d) / Math.sqrt(a * a + b * b + c * c);
+    }
+
+    private double getCosAngle(float[] plane1, float[] plane2) {
+        float a1 = plane1[0];
+        float b1 = plane1[1];
+        float c1 = plane1[2];
+        float d1 = plane1[3];
+        float a2 = plane2[0];
+        float b2 = plane2[1];
+        float c2 = plane2[2];
+        float d2 = plane2[3];
+        return Math.abs((a1 * a2 + b1 * b2 + c1 * c2) / (Math.sqrt(a1 * a1 + b1 * b1 + c1 * c1) * Math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)));
     }
 
     private void downLength(MotionEvent e) {
@@ -1209,15 +1306,34 @@ public class RecordFragmentWoundMeasure extends Fragment {
         int deep_ly = deepCameraInfo.getDeep_ly();
         Point lp = lp_org;
         Point rp = rp_org;
-        if (lp_org.x > rp_org.x) {
-            rp = lp_org;
-            lp = rp_org;
+        boolean transAxis = false;
+        double lineRate = 0;
+        double dx = rp.x - lp.x;
+        double dy = rp.y - lp.y;
+        if (dx == 0 || Math.abs(dy) > Math.abs(dx)) {
+            // x轴差距为0, 或者y轴斜率大于1，反转坐标系
+            transAxis = true;
         }
+
+        if (transAxis) {
+            if (lp_org.y > rp_org.y) {
+                rp = lp_org;
+                lp = rp_org;
+            }
+            lineRate = dx / dy;
+        } else {
+            if (lp_org.x > rp_org.x) {
+                rp = lp_org;
+                lp = rp_org;
+            }
+            lineRate = dy / dx;
+        }
+
         double lx = lp.x * measureDeepFactor + deep_lx;
         double ly = lp.y * measureDeepFactor + deep_ly;
         double rx = rp.x * measureDeepFactor + deep_lx;
         double ry = rp.y * measureDeepFactor + deep_ly;
-        double lineRate = new Double(ry - ly) / (rx - lx);
+
         double default_deep = (deepCameraInfo.getDeep_far() + deepCameraInfo.getDeep_near()) / 2;
         double[] ldeeps = null;
         Point3[] ret = new Point3[2];
@@ -1228,30 +1344,56 @@ public class RecordFragmentWoundMeasure extends Fragment {
         ret[0].y = ry;
         ret[0].z = default_deep;
         ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
-        for (; lx < rx; lx++) {
-            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
-                ret[0].x = lx;
-                ret[0].y = ly;
-                ret[0].z = ldeeps[0];
-                break;
+        if (transAxis) {
+            for (; ly < ry; ly++) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[0].x = lx;
+                    ret[0].y = ly;
+                    ret[0].z = ldeeps[0];
+                    break;
+                }
+                lx += lineRate;
+                ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
             }
-            ly += lineRate;
-            ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+        } else {
+            for (; lx < rx; lx++) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[0].x = lx;
+                    ret[0].y = ly;
+                    ret[0].z = ldeeps[0];
+                    break;
+                }
+                ly += lineRate;
+                ldeeps = depth.get(new Double(ly).intValue(), new Double(lx).intValue());
+            }
         }
 
         ret[1].x = rx;
         ret[1].y = ry;
         ret[1].z = default_deep;
         ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
-        for (; rx > lx; rx--) {
-            if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
-                ret[1].x = rx;
-                ret[1].y = ry;
-                ret[1].z = ldeeps[0];
-                break;
+        if (transAxis) {
+            for (; ry > ly; ry--) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[1].x = rx;
+                    ret[1].y = ry;
+                    ret[1].z = ldeeps[0];
+                    break;
+                }
+                rx -= lineRate;
+                ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
             }
-            ry -= lineRate;
-            ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+        } else {
+            for (; rx > lx; rx--) {
+                if (ldeeps != null && ldeeps.length > 0 && ldeeps[0] > 0) {
+                    ret[1].x = rx;
+                    ret[1].y = ry;
+                    ret[1].z = ldeeps[0];
+                    break;
+                }
+                ry -= lineRate;
+                ldeeps = depth.get(new Double(ry).intValue(), new Double(rx).intValue());
+            }
         }
         // 更新最开始的lp和rp
         lp.x = (lx - deep_lx) / measureDeepFactor;
