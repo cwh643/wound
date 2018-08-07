@@ -79,6 +79,8 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
 
     private HomeWatcher mHomeWatcher;
 
+    private KeyEventHandledInterface mEventHandled;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +145,10 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_container, fragment)
                 .commit();
+    }
+
+    public void setEventHandled(KeyEventHandledInterface eventHandled) {
+        this.mEventHandled = eventHandled;
     }
 
     /**
@@ -381,12 +387,29 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                || keyCode == KeyEvent.KEYCODE_HOME) {
-            return true;
-            //quit();
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                //音量+
+                if (mEventHandled != null) {
+                    return mEventHandled.onVolumeDown(keyCode, event);
+                }
+                return false;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                //音量-
+                if (mEventHandled != null) {
+                    return mEventHandled.onVolumeDown(keyCode, event);
+                }
+                return false;
+            case KeyEvent.KEYCODE_BACK:
+                //back建
+                return true;
+            case KeyEvent.KEYCODE_HOME:
+                //home建
+                return true;
+            default:
+                break;
         }
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
     public void setPatientInfo(PatientInfo patientInfo) {

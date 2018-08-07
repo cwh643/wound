@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -44,7 +45,7 @@ import java.util.Date;
  * Created by yuanyuan on 2017/6/18.
  */
 
-public class RecordFragmentIRCamera extends Fragment implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class RecordFragmentIRCamera extends Fragment implements CameraBridgeViewBase.CvCameraViewListener2, KeyEventHandledInterface {
     public static final String TAG = "record_fragment_camera";
     public static final int DEFAULT_PREVIEW_WIDTH = 460;
     public static final int DEFAULT_PREVIEW_HEIGHT = 345;
@@ -115,7 +116,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
         super.onCreate(savedInstanceState);
 
         mActivity = (MainActivity) RecordFragmentIRCamera.this.getActivity();
-
+        mActivity.setEventHandled(this);
         //theHandler.postDelayed(mRefreshThread, 1000);
         //userDao = new UserDao(mActivity);
     }
@@ -327,6 +328,18 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
         }
     };
 
+    /**
+     * 音量+/-
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onVolumeDown(int keyCode, KeyEvent event) {
+        new ProcessTask(null).execute();
+        return true;
+    }
+
     private class ProcessTask extends AsyncTask<String, Object, Long> {
 
         private View view;
@@ -340,7 +353,8 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
             AlertDialogUtil.showAlertDialog(mActivity,
                     mActivity.getString(R.string.message_title_tip),
                     mActivity.getString(R.string.message_wait_save));
-            view.setClickable(false);
+            if (view != null)
+                view.setClickable(false);
         }
 
         @Override
@@ -356,7 +370,8 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
 
         @Override
         protected void onPostExecute(Long aLong) {
-            view.setClickable(true);
+            if (view != null)
+                view.setClickable(true);
             AlertDialogUtil.dismissAlertDialog(mActivity);
         }
     }
