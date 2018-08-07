@@ -3,6 +3,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="uploadCtx" value="/upload/wound"/>
 <html>
 <head>
 	<title>榕创医疗</title>
@@ -212,8 +213,8 @@
 			</form>
 	    </div>
     
-     <div class="bs-docs-example"  id="photo">
-      <div class="title1"><span>照片</span></div>
+     <div class="bs-docs-example"  id="photo" style="min-height: 300px;">
+      <div class="title1"><span>照片</span><i id="take_photo_btn" style="cursor:pointer;"></i></div>
 		<div class="row-fluid">
 		  <c:forEach items="${images}" var="img" varStatus="status">
 		      <c:if test="${status.index % 4 == 0}">
@@ -224,9 +225,10 @@
 		      </c:if>
 			  <li class="span3">
 		            <div class="thumbnail" style="height:200px;">
-		                <a href="${ctx}/static/wound/${img.imagePath}/rgb.jpeg" target="_blank">
+		                <a href="${uploadCtx}/${img.imagePath}/rgb.jpeg" target="_blank">
 		                    <div class="divcss5" style="margin-top: 30px">
-		                  	<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>
+		                  		<!--<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>-->
+								<img alt="" src="${uploadCtx}/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
 		                </a>
 		                <div class="caption">
@@ -481,7 +483,7 @@
 
 					<c:if test="${not empty record.woundDoppler}">
 						<c:forEach var="v" items="${fn:split(record.woundDoppler,';')}">
-							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+							<a class="btn" href="${uploadCtx}/${record.uuid}/${v}" target="_blank">查看图片</a>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -491,7 +493,7 @@
 				<div class="controls">
 					<c:if test="${not empty record.woundCta}">
 						<c:forEach var="v" items="${fn:split(record.woundCta,';')}">
-							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+							<a class="btn" href="${uploadCtx}/${record.uuid}/${v}" target="_blank">查看图片</a>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -501,7 +503,7 @@
 				<div class="controls">
 					<c:if test="${not empty record.woundExam}">
 						<c:forEach var="v" items="${fn:split(record.woundExam,';')}">
-							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+							<a class="btn" href="${uploadCtx}/${record.uuid}/${v}" target="_blank">查看图片</a>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -526,7 +528,7 @@
 				<div class="controls">
 					<c:if test="${not empty record.woundMr}">
 						<c:forEach var="v" items="${fn:split(record.woundMr,';')}">
-							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+							<a class="btn" href="${uploadCtx}/${record.uuid}/${v}" target="_blank">查看图片</a>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -536,7 +538,7 @@
 				<div class="controls">
 					<c:if test="${not empty record.woundPetct}">
 						<c:forEach var="v" items="${fn:split(record.woundPetct,';')}">
-							<a class="btn" href="${ctx}/static/wound/${record.uuid}/${v}" target="_blank">查看图片</a>
+							<a class="btn" href="${uploadCtx}/${record.uuid}/${v}" target="_blank">查看图片</a>
 						</c:forEach>
 					</c:if>
 				</div>
@@ -652,12 +654,18 @@
 			$("#record4_btn").on("click", submitRecord4);
 			$("#record5_btn").on("click", submitRecord5);
 			$("#record8_btn").on("click", submitRecord8);
+
+            $("#take_photo_btn").on("click", onTakePhoto);
 			
 			$("select[name='woundDressingType']").on("change", onWoundDressingTypeChange);
 			woundDressingTypeChange($("select[name='woundDressingType']").val());
 			
 			loadHistoryData();
 		});
+		
+		function onTakePhoto() {
+			window.open("${ctx}/archivesRecord/takePhoto");
+        }
 		
 		function woundDressingTypeChange(val) {
 			if (val) {

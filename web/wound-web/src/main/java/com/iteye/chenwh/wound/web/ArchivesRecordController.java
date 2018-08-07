@@ -176,6 +176,14 @@ public class ArchivesRecordController {
 		}
 		return f.doubleValue();
 	}
+
+	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
+	public String takePhoto(String inPatientNo, Model model) {
+		//Patient patient = patientService.findPatient(query.getInpatientNo());
+		//model.addAttribute("patient", patient);
+		model.addAttribute("dict_wound_dressing_type", CommonUtils.dict_wound_dressing_type);
+		return "archivesRecord/takePhoto";
+	}
 	
 	@RequestMapping(value = "updatePatient", method = RequestMethod.POST)
 	@ResponseBody

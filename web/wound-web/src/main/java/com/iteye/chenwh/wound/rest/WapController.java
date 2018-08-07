@@ -384,7 +384,10 @@ public class WapController {
 	    	//Long recordId = record.getId();
 	    	//String path = PATH+ deviceId;
 	    	//String path = PATH;
-			String path = request.getSession().getServletContext().getRealPath("/") + "static/" + "wound";
+			//String path = request.getSession().getServletContext().getRealPath("/") + "static/" + "wound";
+			String path = request.getSession().getServletContext().getRealPath("/");
+			File webRoot = new File(path).getParentFile();
+			path = webRoot.getPath() + "/upload/wound";
 	        if (file != null && !file.isEmpty()) {
 	            //获得文件类型  
 	            String contentType=file.getContentType();  
