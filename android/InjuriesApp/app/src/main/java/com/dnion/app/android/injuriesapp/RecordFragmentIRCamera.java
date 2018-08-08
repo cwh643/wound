@@ -411,6 +411,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
     public void onStop() {
         super.onStop();
         stopDeepCamera();
+        mActivity.setEventHandled(null);
     }
 
     boolean getLastPicture = false;
