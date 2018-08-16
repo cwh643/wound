@@ -17,57 +17,201 @@
 		#hacker {
 			display: none;
 		}
+		.operation-btn {
+			width: 120px;
+			clear: both;
+			display: block;
+			margin-top: 20px;
+		}
 	</style>
 
 </head>
 <body>
 <div style="position: static">
-	<canvas id="canvas" width="600" height="300">
-		<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
-	</canvas>
-	<img id="hacker" src="${ctx}/static/images/hacker.jpg">
+	<div class="row">
+		<div class="span12" style="padding: 5px;">
+			<div class="btn-group" id="measureGroup">
+				<button id="btnLength" class="btn btn-primary">长度</button>
+				<button id="btnWidth" class="btn">宽度</button>
+				<button id="btnArea" class="btn">面积</button>
+				<button id="btnSave" class="btn">保存</button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span9">
+			<canvas id="canvas" width="600" height="300">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<!--<img id="hacker" src="${ctx}/static/images/hacker.jpg">-->
+			<img id="hacker" src="${imageUrl}">
+		</div>
+		<div class="span3">
+			<!--
+			<button class="btn operation-btn">长度</button>
+			<button class="btn operation-btn">宽度</button>
+			<button class="btn operation-btn">面积</button>
+			<button class="btn operation-btn ">保存</button>
+			-->
+		</div>
+	</div>
+
 </div>
-<button id="save">保存</button>
+
 <div id="result"></div>
 
 	<script>
-        window.onload =function() {
-            //alert('aa');
-            var hacker = document.querySelector( "#hacker" );
-            var oCanvas = document.querySelector( "#canvas" ),
-                oGc = oCanvas.getContext( '2d' );
+        var oGc;
+        var oCanvas;
 
-            ///*
-            var save = document.querySelector( "#save" );
-            save.onclick = function () {
-                var img = convertCanvasToImage(oCanvas);
-                document.querySelector( "#result" ).appendChild(img);
-        	};
-        	//*/
+		$(function() {
+		    configPage();
+		});
 
-			oCanvas.width = hacker.width;
+		function configPage() {
+            var hacker = $("#hacker")[0];
+            oCanvas = $("#canvas")[0];
+            oGc = oCanvas.getContext( '2d' );
+
+            oCanvas.width = hacker.width;
             oCanvas.height = hacker.height;
             oGc.drawImage(hacker, 0, 0);
             hacker.display ='none';
+            //drawArea();
 
-/*
-            oGc.beginPath();
-            oGc.strokeStyle = 'red';
-            oGc.moveTo( 50, 50 );
-            oGc.lineTo( 250, 50 );
-            oGc.lineTo( 250, 150 );
-            oGc.lineTo( 50, 50 );
-            oGc.stroke();
-*/
+            $("#btnLength").on('click', onLength);
+            $("#btnWidth").on('click', onWidth);
+            $("#btnArea").on('click', onArea);
+            $("#btnSave").on('click', onSave);
 
+            defaultLine();
+		}
+
+        function defaultLine() {
+            oGc.strokeStyle = 'green';
+            oGc.fillStyle = 'green';//填充颜色
+            oGc.lineWidth = 3;
+            drawLine();
+        }
+
+		function onLength() {
+            selectBtn(this);
+            oGc.strokeStyle = 'green';
+            oGc.fillStyle = 'green';//填充颜色
+            oGc.lineWidth = 3;
+            drawLine();
+        }
+
+        function onWidth() {
+            selectBtn(this);
+            oGc.strokeStyle = 'blue';
+            oGc.fillStyle = 'blue';
+            oGc.lineWidth = 3;
+            drawLine();
+        }
+
+        function onArea() {
+            selectBtn(this);
+            oGc.lineWidth = 3;
+            drawArea();
+        }
+
+        function onSave() {
+            selectBtn(this);
+            var img = convertCanvasToImage(oCanvas);
+            $("#result").append($(img));
+        }
+
+        function selectBtn(el) {
+            $("#measureGroup button").removeClass('btn-primary');
+            $(el).addClass('btn-primary')
+		}
+
+        function drawLine() {
+            var beginX = 0, beginY=0, endX = 0, endY=0;
+            var isDrag = false;
+            var restore;
+            oCanvas.onmousedown = function(ev) {
+                var ev = ev || window.event;
+                beginX = ev.clientX-oCanvas.offsetLeft;
+                beginY = ev.clientY-oCanvas.offsetTop;
+                isDrag = true;
+                restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+                //console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
+                //drawPoint(oGc, beginX, beginY); //鼠标在当前画布上X,Y坐标
+                //oGc.lineTo(beginX, beginY);
+            }
+            oCanvas.onmousemove = function(ev) {
+                var ev = ev || window.event;//获取event对象
+                //oGc.clearRect(0, 0, oCanvas.width, oCanvas.height);
+                endX = ev.clientX-oCanvas.offsetLeft;
+                endY = ev.clientY-oCanvas.offsetTop;
+				if (isDrag) {
+                    oGc.putImageData(restore, 0, 0);
+                    oGc.beginPath();
+                    drawPoint(oGc, beginX, beginY)
+                    oGc.moveTo(beginX, beginY);
+                    oGc.lineTo(endX, endY);
+                    oGc.stroke();
+                    drawPoint(oGc, endX, endY);
+				}
+
+            };
+
+            oCanvas.onmouseup = function(ev) {
+                oCanvas.onmousemove = null;
+                oCanvas.onmousedown = null;
+                oCanvas.onmouseup = null;
+                isDrag = false;
+                //drawTips(oGc, endX + 10, endY, endX + 30, endY + 10, '23.3cm');
+                drawTips(oGc, endX + 25, endY - 15, 40, 30, '23.3cm');
+                //var ev = ev || window.event;//获取event对象
+                //oGc.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
+                //oGc.stroke();
+            };
+        }
+
+        function drawPoint(ctx, x, y) {
+            //oGc.beginPath();
+            //ctx.fillStyle = 'yellow';//填充颜色
+            ctx.arc(x,y,5, 0, Math.PI * 2, true);
+            ctx.stroke();
+            ctx.fill();//填充图形
+        }
+
+        function drawTips(ctx, x1, y1, w, h, txt) {
+		    var r = h / 2;
+		    var lx = x1, ly = y1 + r;
+            var rx = x1 + w, ry = y1 + r;
+            var cx = x1 + w / 2, cy = y1 + r;
+            ctx.strokeStyle = '#FFFFFFB2';//画笔颜色
+            ctx.fillStyle = '#FFFFFF80';//填充颜色
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+
+            ctx.moveTo(x1,y1);
+            ctx.lineTo(x1 + w,y1);
+            ctx.arc(rx,ry,r, Math.PI * 1.5, Math.PI * 0.5, false);
+            ctx.lineTo(x1,y1 + h);
+            ctx.arc(lx,ly,r, Math.PI * 0.5, Math.PI * 1.5, false);
+            ctx.stroke();
+            ctx.fill();//填充图形
+
+            ctx.fillStyle = '#000000';
+            ctx.font="12px Georgia";
+            var tw = ctx.measureText(txt).width;
+            ctx.fillText(txt,cx - tw / 2,cy + 3);
+        }
+
+        function drawArea() {
             oGc.beginPath();
-            oGc.strokeStyle = 'yellow';
+            oGc.strokeStyle = '#FF1BB2B2';//画笔颜色
             var beginX = 0, beginY=0;
             oCanvas.onmousedown = function(ev) {
                 var ev = ev || window.event;
                 beginX = ev.clientX-oCanvas.offsetLeft;
                 beginY = ev.clientY-oCanvas.offsetTop;
-                console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
+                //console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
                 oGc.moveTo(beginX, beginY); //鼠标在当前画布上X,Y坐标
 
                 document.onmousemove = function(ev) {
@@ -77,13 +221,14 @@
                 };
                 oCanvas.onmouseup = function() {
                     document.onmousemove = null;
-                    document.onmouseup = null;
+                    oCanvas.onmousedown = null;
+                    oCanvas.onmouseup = null;
                     //oGc.lineTo(beginX, beginY);
                     //oGc.stroke();
                     oGc.closePath();//封闭一个图形
                     oGc.stroke();
 
-                    oGc.fillStyle = 'yellow';
+                    oGc.fillStyle = '#FF1BB2B1';//填充颜色
                     oGc.fill();//填充图形
                 };
             };

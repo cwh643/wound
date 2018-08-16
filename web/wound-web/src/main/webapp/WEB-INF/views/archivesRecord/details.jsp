@@ -214,7 +214,7 @@
 	    </div>
     
      <div class="bs-docs-example"  id="photo" style="min-height: 300px;">
-      <div class="title1"><span>照片</span><i id="take_photo_btn" style="cursor:pointer;"></i></div>
+      <div class="title1"><span>照片</span></div>
 		<div class="row-fluid">
 		  <c:forEach items="${images}" var="img" varStatus="status">
 		      <c:if test="${status.index % 4 == 0}">
@@ -225,12 +225,12 @@
 		      </c:if>
 			  <li class="span3">
 		            <div class="thumbnail" style="height:200px;">
-		                <a href="${uploadCtx}/${img.imagePath}/rgb.jpeg" target="_blank">
+						<!--<a href="${uploadCtx}/${img.imagePath}/rgb.jpeg" target="_blank">-->
 		                    <div class="divcss5" style="margin-top: 30px">
 		                  		<!--<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>-->
-								<img alt="" src="${uploadCtx}/${img.imagePath}/list_rgb.jpeg"></img>
+								<img alt="" data-url = '${uploadCtx}/${img.imagePath}/rgb.jpeg' class="deep-image" src="${uploadCtx}/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
-		                </a>
+						<!--</a>-->
 		                <div class="caption">
 		                    <div><h5 style="display: inline-block;"></h5></div>
 		                  </div>
@@ -655,16 +655,19 @@
 			$("#record5_btn").on("click", submitRecord5);
 			$("#record8_btn").on("click", submitRecord8);
 
-            $("#take_photo_btn").on("click", onTakePhoto);
+            //$("#take_photo_btn").on("click", onTakePhoto);
 			
 			$("select[name='woundDressingType']").on("change", onWoundDressingTypeChange);
 			woundDressingTypeChange($("select[name='woundDressingType']").val());
 			
 			loadHistoryData();
+
+			$('.deep-image').on('click', onTakePhoto);
 		});
 		
 		function onTakePhoto() {
-			window.open("${ctx}/archivesRecord/takePhoto");
+		    var imageUrl = $(this).data('url');
+			window.open("${ctx}/archivesRecord/takePhoto?imageUrl="+encodeURI(imageUrl));
         }
 		
 		function woundDressingTypeChange(val) {

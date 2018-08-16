@@ -178,10 +178,10 @@ public class ArchivesRecordController {
 	}
 
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
-	public String takePhoto(String inPatientNo, Model model) {
+	public String takePhoto(String imageUrl, Model model) {
 		//Patient patient = patientService.findPatient(query.getInpatientNo());
 		//model.addAttribute("patient", patient);
-		model.addAttribute("dict_wound_dressing_type", CommonUtils.dict_wound_dressing_type);
+		model.addAttribute("imageUrl", imageUrl);
 		return "archivesRecord/takePhoto";
 	}
 	
