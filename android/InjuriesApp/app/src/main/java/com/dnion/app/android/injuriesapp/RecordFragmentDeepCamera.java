@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -15,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -28,10 +28,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dnion.app.android.injuriesapp.camera_tool.CameraParam;
-import com.dnion.app.android.injuriesapp.camera_tool.FocusParam;
-import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.CameraSurfaceView;
+import com.dnion.app.android.injuriesapp.camera_tool.FocusParam;
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
@@ -53,7 +53,7 @@ import java.util.Date;
  * Created by yy on 2017/6/18.
  */
 
-public class RecordFragmentDeepCamera extends Fragment {
+public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandledInterface {
     public static final String TAG = "record_fragment_camera";
     public static final int DEFAULT_PREVIEW_WIDTH = 460;
     public static final int DEFAULT_PREVIEW_HEIGHT = 345;
@@ -141,6 +141,7 @@ public class RecordFragmentDeepCamera extends Fragment {
         super.onCreate(savedInstanceState);
 
         mActivity = (MainActivity) RecordFragmentDeepCamera.this.getActivity();
+        mActivity.setEventHandled(this);
         //userDao = new UserDao(mActivity);
     }
 
@@ -484,6 +485,18 @@ public class RecordFragmentDeepCamera extends Fragment {
             view.setClickable(true);
             AlertDialogUtil.dismissAlertDialog(mActivity);
         }
+    }
+
+    /**
+     * 音量+/-
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onVolumeDown(int keyCode, KeyEvent event) {
+        mShotButton.callOnClick();
+        return true;
     }
 
     @Override

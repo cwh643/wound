@@ -239,9 +239,8 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
 						, point3D.cols * point3D.rows, (uint16_t*)buffer, sizeof(buffer)
 						));
 			cv::Mat depth = cv::Mat(dt->rows, dt->cols, CV_16U, (uint16_t*)buffer);
-			//you may want to use median filter to fill holes in projected depth image or do something else here
-			//resize to the same size for display
-		    //cv::resize(depth, depth, depth_size, 0, 0, 0);
+            //*dt = point3D;
+			//*dt = cv::Mat(dt->rows, dt->cols, CV_16U, (uint16_t*)buffer);
 
 			int nl = depth.rows;  
             int nc = depth.cols * depth.channels();  
@@ -287,8 +286,6 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             int center_deep = min/min_count;
             LOGD("     get center deep  %d", center_deep);
             env->SetIntField(obj, nameFieldId, center_deep);
-            //depth_size = dt->size();
-
         }
     }
     // LOGD("=== Callback: Re-enqueue buffer(%p, %d)", frame.userBuffer, frame.bufferSize);
@@ -342,7 +339,22 @@ int OpenDevice(jint width, jint heigth) {
             err = TYSetEnum(hDevice, TY_COMPONENT_RGB_CAM, TY_ENUM_IMAGE_MODE, TY_IMAGE_MODE_1280x960);
             LOGD("err = %d", err);
             ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
-            // 读取参数
+            // 读取depth参数
+  			TY_CAMERA_DISTORTION point_dist;
+            TY_CAMERA_INTRINSIC point_intri;
+            int intri_length_point = sizeof(point_intri.data) / sizeof(float);
+            int dist_length_point = sizeof(point_dist.data) / sizeof(float);
+
+            TY_STATUS ret_depth = TYGetStruct(hDevice, TY_COMPONENT_POINT3D_CAM, TY_STRUCT_CAM_DISTORTION, &point_dist, sizeof(point_dist));
+            ret_depth |= TYGetStruct(hDevice, TY_COMPONENT_POINT3D_CAM, TY_STRUCT_CAM_INTRINSIC, &point_intri, sizeof(point_intri));
+			for (int i = 0; i < intri_length_point; i++) {
+				LOGD("point param intri: %.f", point_intri.data[i]);
+			}
+			for (int i = 0; i < dist_length_point; i++) {
+				LOGD("point param dist: %.f", point_dist.data[i]);
+			}
+
+            // 读取RGB参数
             TY_CAMERA_DISTORTION color_dist;
             TY_CAMERA_INTRINSIC color_intri;
             TY_STATUS ret = TYGetStruct(hDevice, TY_COMPONENT_RGB_CAM, TY_STRUCT_CAM_DISTORTION, &color_dist, sizeof(color_dist));
