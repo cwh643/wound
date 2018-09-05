@@ -280,6 +280,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- opencv -->
+		<dependency>
+			<groupId>com.acts</groupId>
+			<artifactId>opencv</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
 		<!-- selenium 2.0 -->
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>

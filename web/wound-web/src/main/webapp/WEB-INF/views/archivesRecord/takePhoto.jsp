@@ -47,6 +47,38 @@
 			<img id="hacker" src="${imageUrl}">
 		</div>
 		<div class="span3">
+			<div class="input-prepend">
+				<span class="add-on">面积（cm2）</span>
+				<input id="measure-area" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">容积（cm3）</span>
+				<input id="measure-volume" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">深度（cm）</span>
+				<input id="measure-deep" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">长度（cm）</span>
+				<input id="measure-length" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">宽度（cm）</span>
+				<input id="measure-width" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">黄色组织（%）</span>
+				<input id="measure-yellow" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">红色组织（%）</span>
+				<input id="measure-red" type="text" style="width: auto;">
+			</div>
+			<div class="input-prepend">
+				<span class="add-on">黑色组织（%）</span>
+				<input id="measure-black" type="text" style="width: auto;">
+			</div>
 			<!--
 			<button class="btn operation-btn">长度</button>
 			<button class="btn operation-btn">宽度</button>
@@ -99,7 +131,7 @@
             oGc.strokeStyle = 'green';
             oGc.fillStyle = 'green';//填充颜色
             oGc.lineWidth = 3;
-            drawLine();
+            drawLine('L');
         }
 
         function onWidth() {
@@ -107,7 +139,7 @@
             oGc.strokeStyle = 'blue';
             oGc.fillStyle = 'blue';
             oGc.lineWidth = 3;
-            drawLine();
+            drawLine('W');
         }
 
         function onArea() {
@@ -127,7 +159,7 @@
             $(el).addClass('btn-primary')
 		}
 
-        function drawLine() {
+        function drawLine(type) {
             var beginX = 0, beginY=0, endX = 0, endY=0;
             var isDrag = false;
             var restore;
@@ -164,7 +196,25 @@
                 oCanvas.onmouseup = null;
                 isDrag = false;
                 //drawTips(oGc, endX + 10, endY, endX + 30, endY + 10, '23.3cm');
-                drawTips(oGc, endX + 25, endY - 15, 40, 30, '23.3cm');
+				var url = '${ctx}/archivesRecord/computerLength';
+                $.post(url,{
+                    uuid: '64a9b96201bb4312b27ef163cbc2f177',
+					date: '20180701172557',
+					points: ''+ beginX + ','+ beginY + ','+ endX + ','+ endY
+				},function(result){
+                    var msg = result.message;
+					if (result.success) {
+                        msg = result.length + 'cm';
+                        if ('L' == type) {
+                            $('#measure-length').val(result.length);
+						}
+                        if ('W' == type) {
+                            $('#measure-width').val(result.length);
+                        }
+                    }
+                    drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
+                }, "json");
+
                 //var ev = ev || window.event;//获取event对象
                 //oGc.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
                 //oGc.stroke();
@@ -205,7 +255,7 @@
 
         function drawArea() {
             oGc.beginPath();
-            oGc.strokeStyle = '#FF1BB2B2';//画笔颜色
+            oGc.strokeStyle = '#1BB2B2';//画笔颜色
             var beginX = 0, beginY=0;
             oCanvas.onmousedown = function(ev) {
                 var ev = ev || window.event;
@@ -228,15 +278,17 @@
                     oGc.closePath();//封闭一个图形
                     oGc.stroke();
 
-                    oGc.fillStyle = '#FF1BB2B1';//填充颜色
+                    oGc.fillStyle = '#1BB2B1';//填充颜色
                     oGc.fill();//填充图形
+
+                    convertCanvasToImage(oCanvas);
                 };
             };
 
 
         }
 
-        // Converts image to canvas; returns new canvas element
+        /* Converts image to canvas; returns new canvas element
         function convertImageToCanvas(image) {
             var canvas = document.createElement("canvas");
             canvas.width = image.width;
@@ -251,20 +303,35 @@
             var image = new Image();
             image.src = canvas.toDataURL("image/png");
             return image;
-        }
+        }*/
 
         // Converts canvas to an image
         function convertCanvasToImage(canvas) {
-            var newImageData = cvs.toDataURL(fileType, 0.8);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
+		    var fileType = 'image/jpeg';
+            var newImageData = canvas.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
             var sendData = newImageData.replace("data:"+fileType+";base64,",'');
-            $.post('/user/personalchange',{type:'photo',value:sendData},function(data){
-                if(data.code == '200'){
-                    $('.modify_img').attr('src',newImageData);
-                    $.notify.close();
-                }else{
-                    $.notify.show(data.message, {placement: 'center'});
-                }
-            });
+            var url = '${ctx}/archivesRecord/computerArea';
+            $.post(url,{
+                uuid: '64a9b96201bb4312b27ef163cbc2f177',
+                date: '20180701172557',
+                imageData: sendData
+            },function(result){
+                console.log(result)
+                if (result.success) {
+                    var areaMap = result.areaMap;
+                    $('#measure-area').val(areaMap.area);
+                    $('#measure-volume').val(areaMap.volume);
+                    $('#measure-deep').val(areaMap.deep);
+                    $('#measure-red').val(areaMap.red);
+                    $('#measure-yellow').val(areaMap.yellow);
+                    $('#measure-black').val(areaMap.black);
+
+                } else {
+                    var msg = result.message;
+                    alert(msg);
+				}
+                //drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
+            }, "json");
         }
 	</script>
 </body>

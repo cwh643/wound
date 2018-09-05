@@ -1,12 +1,21 @@
 package com.iteye.chenwh.wound.web;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
+import com.iteye.chenwh.wound.opencv.DeepImageUtils;
+import com.iteye.chenwh.wound.opencv.Image;
+import com.iteye.chenwh.wound.opencv.ImageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +36,7 @@ import com.iteye.chenwh.wound.service.ArchivesRecordService;
 import com.iteye.chenwh.wound.service.PatientService;
 import com.iteye.chenwh.wound.service.RecordImageService;
 import com.iteye.chenwh.wound.utils.CommonUtils;
+import sun.misc.BASE64Decoder;
 
 @Controller
 @RequestMapping(value = "/archivesRecord")
@@ -183,6 +193,63 @@ public class ArchivesRecordController {
 		//model.addAttribute("patient", patient);
 		model.addAttribute("imageUrl", imageUrl);
 		return "archivesRecord/takePhoto";
+	}
+
+	@RequestMapping(value = "computerArea", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelMap computerArea(String uuid, String date, String imageData, HttpServletRequest request) {
+		ModelMap map = new ModelMap();
+		try {
+			String path = request.getSession().getServletContext().getRealPath("/");
+			File webRoot = new File(path).getParentFile();
+			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+
+			BASE64Decoder decoder = new BASE64Decoder();
+			byte[] b = decoder.decodeBuffer(imageData);
+			ByteArrayInputStream bais = new ByteArrayInputStream(b);
+			BufferedImage bi = ImageIO.read(bais);
+			//File w2 = new File("D:/tmp/test.png");
+			//ImageIO.write(bi, "png", w2);
+			Image image = ImageUtils.createImage(bi);
+			Map<String, String> areaMap = utils.calcArea(image);
+			map.addAttribute("success", true);
+			map.addAttribute("areaMap", areaMap);
+		} catch (Exception e) {
+			map.addAttribute("success", false);
+			map.addAttribute("message", "获取面积信息出错");
+			log.error("获取面积信息出错", e);
+		}
+		return map;
+	}
+
+	@RequestMapping(value = "computerLength", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelMap computerLength(String uuid, String date, String points, HttpServletRequest request) {
+		ModelMap map = new ModelMap();
+		try {
+			ArchivesRecord patient = service.findRecord(uuid);
+			if (patient == null) {
+				map.addAttribute("success", false);
+				map.addAttribute("message", "创伤记录不存在");
+				return map;
+			}
+			double result = 0;
+			String path = request.getSession().getServletContext().getRealPath("/");
+			File webRoot = new File(path).getParentFile();
+			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+			String[] pointList = points.split(",");
+			if (pointList != null && pointList.length == 4) {
+				result = utils.calcDistince(Integer.parseInt(pointList[0]),Integer.parseInt(pointList[1]),
+						Integer.parseInt(pointList[2]),Integer.parseInt(pointList[3]));
+			}
+			map.addAttribute("success", true);
+			map.addAttribute("length", new DecimalFormat("#.00").format(result));
+		} catch (Exception e) {
+			map.addAttribute("success", false);
+			map.addAttribute("message", "获取长度信息出错");
+			log.error("获取长度信息出错", e);
+		}
+		return map;
 	}
 	
 	@RequestMapping(value = "updatePatient", method = RequestMethod.POST)
