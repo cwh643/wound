@@ -12,10 +12,12 @@
 			background: #000;
 		}
 		#canvas{
-			background:white;
+            position: absolute;
+			background:#00000000;
 		}
 		#hacker {
-			display: none;
+            position: absolute;
+			/*display: none;*/
 		}
 		.operation-btn {
 			width: 120px;
@@ -31,20 +33,20 @@
 	<div class="row">
 		<div class="span12" style="padding: 5px;">
 			<div class="btn-group" id="measureGroup">
-				<button id="btnLength" class="btn btn-primary">长度</button>
+                <button id="btnArea" class="btn btn-primary">面积</button>
+				<button id="btnLength" class="btn">长度</button>
 				<button id="btnWidth" class="btn">宽度</button>
-				<button id="btnArea" class="btn">面积</button>
+                <button id="btnDeep" class="btn">深度</button>
 				<button id="btnSave" class="btn">保存</button>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="span9">
+			<img id="hacker" src="${imageUrl}">
 			<canvas id="canvas" width="600" height="300">
 				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
 			</canvas>
-			<!--<img id="hacker" src="${ctx}/static/images/hacker.jpg">-->
-			<img id="hacker" src="${imageUrl}">
 		</div>
 		<div class="span3">
 			<div class="input-prepend">
@@ -104,7 +106,12 @@
             var hacker = $("#hacker")[0];
             oCanvas = $("#canvas")[0];
             oGc = oCanvas.getContext( '2d' );
+            setTimeout(drawBackground, 1000);
 
+
+		}
+
+		function drawBackground() {
             oCanvas.width = hacker.width;
             oCanvas.height = hacker.height;
             oGc.drawImage(hacker, 0, 0);
@@ -114,16 +121,53 @@
             $("#btnLength").on('click', onLength);
             $("#btnWidth").on('click', onWidth);
             $("#btnArea").on('click', onArea);
+            $("#btnDeep").on('click', onDeep);
             $("#btnSave").on('click', onSave);
 
-            defaultLine();
-		}
+            drawArea();
+        }
 
         function defaultLine() {
-            oGc.strokeStyle = 'green';
-            oGc.fillStyle = 'green';//填充颜色
-            oGc.lineWidth = 3;
-            drawLine();
+            //oGc.strokeStyle = 'green';
+            //oGc.fillStyle = 'green';//填充颜色
+            //oGc.lineWidth = 3;
+            oCanvas.onmouseup = function(ev) {
+                oCanvas.onmouseup = null;
+                var ev = ev || window.event;
+                beginX = ev.clientX-oCanvas.offsetLeft;
+                beginY = ev.clientY-oCanvas.offsetTop;
+                drawCrossPoint(oGc, beginX, beginY, 10);
+            }
+        }
+
+        function onDeep() {
+            selectBtn(this);
+            var count = 0;
+            var restore;
+            restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+            //drawCrossPoint(oGc, beginX, beginY, 10);
+            oCanvas.onmousemove = function(ev) {
+                var ev = ev || window.event;//获取event对象
+                var beginX = ev.clientX-oCanvas.offsetLeft;
+                var beginY = ev.clientY-oCanvas.offsetTop;
+                oGc.putImageData(restore, 0, 0);
+                drawCrossPoint(oGc, beginX, beginY, 10);
+            };
+
+            oCanvas.onmousedown = function(ev) {
+                var ev = ev || window.event;
+                var beginX = ev.clientX-oCanvas.offsetLeft;
+                var beginY = ev.clientY-oCanvas.offsetTop;
+                drawCrossPoint(oGc, beginX, beginY, 10);
+                restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+                count++;
+                if (count == 2) {
+                    oCanvas.onmousedown = null;
+                    oCanvas.onmousemove = null;
+                    //oCanvas.onmouseup = null;
+				}
+
+            };
         }
 
 		function onLength() {
@@ -159,6 +203,20 @@
             $(el).addClass('btn-primary')
 		}
 
+		function drawCrossPoint(ctx, x, y, r) {
+            //var restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+            //oGc.putImageData(restore, 0, 0);
+            ctx.strokeStyle = '#FFFFFFB2';//画笔颜色
+            //ctx.fillStyle = '#FFFFFF80';//填充颜色
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x - r, y);
+            ctx.lineTo(x + r, y);
+            ctx.moveTo(x, y - r);
+            ctx.lineTo(x, y + r);
+            ctx.stroke();
+		}
+
         function drawLine(type) {
             var beginX = 0, beginY=0, endX = 0, endY=0;
             var isDrag = false;
@@ -172,7 +230,7 @@
                 //console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
                 //drawPoint(oGc, beginX, beginY); //鼠标在当前画布上X,Y坐标
                 //oGc.lineTo(beginX, beginY);
-            }
+            };
             oCanvas.onmousemove = function(ev) {
                 var ev = ev || window.event;//获取event对象
                 //oGc.clearRect(0, 0, oCanvas.width, oCanvas.height);

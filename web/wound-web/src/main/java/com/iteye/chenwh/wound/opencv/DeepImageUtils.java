@@ -218,6 +218,94 @@ public class DeepImageUtils {
         return ret;
     }
 
+    private PointInfo3D getDeepPoint(int viewWidth, int bWidth, int pointX, int pointY) {
+        Mat depth = deepCameraInfo.getDepthMat();
+        //int viewWidth = mDeepMeasureView.getWidth();
+        //int bWidth = mDeepMeasureBitmap.getWidth();
+        //int bHeight = mDeepMeasureBitmap.getHeight();
+        int lx = deepCameraInfo.getDeep_lx();
+        int ly = deepCameraInfo.getDeep_ly();
+        int rx = deepCameraInfo.getDeep_rx();
+        int ry = deepCameraInfo.getDeep_ry();
+        int bitmapWidth = rx - lx;
+        int bitmapHeight = ry - ly;
+        float viewFactor = new Float(bWidth) / viewWidth;
+        float deepFactor = new Float(bitmapWidth) / viewWidth;
+
+        float t_x = new Float(pointX * viewFactor);
+        int d_x = new Float(pointX * deepFactor).intValue() + lx;
+        float t_y = new Float(pointY * viewFactor);
+        int d_y = new Float(pointY * deepFactor).intValue() + ly;
+        // 取温度数据
+        double deep = depth.get(d_y, d_x)[0];
+        PointInfo3D point = new PointInfo3D();
+        point.x = t_x;
+        point.y = t_y;
+        point.z = new Float(deep);
+        return point;
+    }
+
+    /*
+    private void drawDeepPoint(PointInfo3D point, boolean is_first) {
+        String temp;
+        float deep = point.z;
+        float t_x = point.x;
+        float t_y = point.y;
+        if (deep == 0) {
+            temp = mActivity.getString(R.string.measure_tip_deep_no_data);
+        } else {
+            if (is_first) {
+                temp = mActivity.getString(R.string.measure_tip_deep_base);
+            } else {
+                temp = new DecimalFormat("#0").format(deep) + "mm";
+            }
+        }
+        int text_witdh_diff = 150;
+        int text_heigth_diff = 80;
+        int tc_diff = 50;
+        float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
+        float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
+        float bolb = paint.getStrokeWidth();
+        paint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
+        deepCanvas.drawText(temp, text_x, text_y, paint);
+        deepCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, paint);
+        deepCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, paint);
+        paint.setStrokeWidth(bolb);
+        mDeepMeasureView.setImageBitmap(mDeepMeasureBitmap);
+    }
+
+    private void getEventDeep(MotionEvent e) {
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        deepCanvas.drawPaint(paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        PointInfo3D point = getDeepPoint(e);
+        if (point.z == 0) {
+            drawDeepPoint(point, false);
+            return;
+        }
+        deep_mode_first = !deep_mode_first;
+        if (!deep_mode_first) {
+            wound_deep_first = point;
+            drawDeepPoint(point, false);
+            return;
+        }
+        float distince = Math.abs(point.z - wound_deep_first.z);
+        String format = new DecimalFormat("#0").format(distince);
+        point.z = distince;
+        drawDeepPoint(point, false);
+        drawDeepPoint(wound_deep_first, true);
+
+        deepCameraInfo.setWoundDeep(new Float(format));
+        setDeep();
+
+    }
+    private void setDeep() {
+        mDeepView.setText(deepCameraInfo.getWoundDeep() + "");
+    }
+    */
+
+
+
     public Map<String, String> calcArea(Image measureBitmap ) {
         Map<String, String> map = new HashMap<>();
         if (measureBitmap == null) {
