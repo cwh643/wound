@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #ifndef SAMPLE_COMMON_UTILS_HPP_
 #define SAMPLE_COMMON_UTILS_HPP_
 

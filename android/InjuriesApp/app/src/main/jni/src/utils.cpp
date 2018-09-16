@@ -4,9 +4,7 @@
 #include <opencv2/features2d/features2d.hpp>
 #include <vector>
 #define LOG_TAG "rooxin_jni"
-#include <android/log.h>
 #include <string.h>
-#define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
 
 //Ax+by+cz=D  
 int cvFitPlane(cv::Mat* points, cv::Mat* plane){  
@@ -63,9 +61,9 @@ int cvFitPlane(cv::Mat* points, cv::Mat* plane){
 } 
 
 extern "C" {
-    JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong  plane);
+    JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong  plane);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong plane) {
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong plane) {
     return cvFitPlane((cv::Mat*)points, (cv::Mat*)plane);
 }
