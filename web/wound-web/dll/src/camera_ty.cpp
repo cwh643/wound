@@ -1,8 +1,10 @@
+#include "stdafx.h"
 #include <jni.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <vector>
+
 
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -17,12 +19,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.hpp"
-#include "utils.cpp"
+// #include "utils.cpp"
 
 #define LOG_TAG "rooxin_jni"
-#include <android/log.h>
+
 #include <string.h>
-#define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
 
 struct CallbackData {
     int             index;
@@ -90,10 +91,10 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
     //LOGD("     get ry  %d", (int)ry);
     // near
     nameFieldId = env->GetFieldID(cls , "deep_near" , "I"); //获得属性句柄 
-    jint near = env->GetIntField(obj , nameFieldId);
+    jint deep_near = env->GetIntField(obj , nameFieldId);
     // far
     nameFieldId = env->GetFieldID(cls , "deep_far" , "I"); //获得属性句柄 
-    jint far = env->GetIntField(obj , nameFieldId);
+    jint deep_far = env->GetIntField(obj , nameFieldId);
     // deep_x_diff
     nameFieldId = env->GetFieldID(cls , "deep_x_diff" , "I"); //获得属性句柄 
     jint x_diff = env->GetIntField(obj , nameFieldId);
@@ -143,7 +144,7 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             //         
             //         int fi = i - y_diff;
             //         int fj = j - x_diff;
-            //         if (value < near || value > far) {
+            //         if (value < deep_near || value > deep_far) {
             //             dt->at<short>(fi, fj) = 0;
             //             continue;
             //         }
@@ -267,7 +268,7 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
                     
                     int fi = i - y_diff;
                     int fj = j - x_diff;
-                    if (value < near || value > far) {
+                    if (value < deep_near || value > deep_far) {
                         dt->at<short>(fi, fj) = 0;
                         continue;
                     }
@@ -471,35 +472,35 @@ int CloseDevice() {
 }
 
 extern "C" {
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr);
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
 {
     return OpenDevice(width, heigth);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)
 {
     return CloseDevice();
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz)
 {
     LOGD("=== Start capture");
 	return TYStartCapture(hDevice);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz)
 {
     return TYStopCapture(hDevice);
 }
 
-JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr)
+JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr)
 {
 	LOGD("Fetch Data");
     //exit_main = false;

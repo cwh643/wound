@@ -336,7 +336,7 @@ public class RecordFragmentIRCamera extends Fragment implements CameraBridgeView
      */
     @Override
     public boolean onVolumeDown(int keyCode, KeyEvent event) {
-        new ProcessTask(null).execute();
+        mShotButton.callOnClick();
         return true;
     }
 
