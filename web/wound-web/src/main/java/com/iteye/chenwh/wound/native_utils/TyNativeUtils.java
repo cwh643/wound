@@ -1,4 +1,4 @@
-package com.dnion.app.android.injuriesapp.camera_tool.native_utils;
+package com.iteye.chenwh.wound.native_utils;
 
 import java.nio.ByteBuffer;
 

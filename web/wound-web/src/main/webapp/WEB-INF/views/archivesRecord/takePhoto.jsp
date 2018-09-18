@@ -44,6 +44,9 @@
 	<div class="row">
 		<div class="span9">
 			<img id="hacker" src="${imageUrl}">
+			<input type="hidden" id="image-uid" value="${uid}" />
+			<input type="hidden" id="image-date" value="${date}" />
+
 			<canvas id="canvas" width="600" height="300">
 				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
 			</canvas>
@@ -143,6 +146,8 @@
         function onDeep() {
             selectBtn(this);
             var count = 0;
+            var firstX = 0;
+            var firstY = 0;
             var restore;
             restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
             //drawCrossPoint(oGc, beginX, beginY, 10);
@@ -165,7 +170,24 @@
                     oCanvas.onmousedown = null;
                     oCanvas.onmousemove = null;
                     //oCanvas.onmouseup = null;
-				}
+                    var url = '${ctx}/archivesRecord/computerDeep';
+                    $.post(url,{
+                        uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
+                        date: $('#image-date').val(),//'20180701172557',
+                        points: ''+ firstX + ','+ firstY + ','+ beginX + ','+ beginY
+                    },function(result){
+                        var msg = result.message;
+                        if (result.success) {
+                            msg = result.length + 'cm';
+                            $('#measure-deep').val(result.length);
+                        }
+                        //drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
+                    }, "json");
+
+				} else {
+                    firstX = beginX;
+                    firstY = beginY
+                }
 
             };
         }
@@ -256,8 +278,8 @@
                 //drawTips(oGc, endX + 10, endY, endX + 30, endY + 10, '23.3cm');
 				var url = '${ctx}/archivesRecord/computerLength';
                 $.post(url,{
-                    uuid: '64a9b96201bb4312b27ef163cbc2f177',
-					date: '20180701172557',
+                    uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
+					date: $('#image-date').val(),//'20180701172557',
 					points: ''+ beginX + ','+ beginY + ','+ endX + ','+ endY
 				},function(result){
                     var msg = result.message;
@@ -370,8 +392,8 @@
             var sendData = newImageData.replace("data:"+fileType+";base64,",'');
             var url = '${ctx}/archivesRecord/computerArea';
             $.post(url,{
-                uuid: '64a9b96201bb4312b27ef163cbc2f177',
-                date: '20180701172557',
+                uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
+                date: $('#image-date').val(),//'20180701172557',
                 imageData: sendData
             },function(result){
                 console.log(result)

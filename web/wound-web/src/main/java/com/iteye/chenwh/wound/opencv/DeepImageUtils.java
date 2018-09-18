@@ -34,10 +34,11 @@ public class DeepImageUtils {
     private Image mAreaMeasureBitmap;
 
     public DeepImageUtils(File webRoot, String uuid, String recordDate) {
-        //String path = webRoot.getPath() + "/upload/wound/" + uuid + "/deep/" + recordDate + "/model.data";
-        String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/model.data";
-        String deepPath = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/deep.data";
-        String rgbPath = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/rgb.jpeg";
+        String rootPath = "D:/work/tool/apache-tomcat-7.0.86/webapps"; //webRoot.getPath();
+        String path = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/model.data";
+        //String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/model.data";
+        String deepPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/deep.data";
+        String rgbPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/rgb.jpeg";
         try {
             //mAreaMeasureBitmap = ImageUtils.createImage(GlobalDef.RES_CALC_WIDTH, GlobalDef.RES_CALC_HEIGHT);
             String json = FileUtils.readFileToString(new File(path));
@@ -245,6 +246,14 @@ public class DeepImageUtils {
         return point;
     }
 
+    public double calcDeep(int firstX, int firstY, int secondX, int secondY) {
+        int viewWidth = deepCameraInfo.getRgbBitmap().getWidth();
+        int bWidth = deepCameraInfo.getRgbBitmap().getWidth();
+        PointInfo3D pointFirst = getDeepPoint(viewWidth, bWidth, firstX, firstY);
+        PointInfo3D pointSecond = getDeepPoint(viewWidth, bWidth, secondX, secondY);
+        float distinct = Math.abs(pointSecond.z - pointFirst.z);
+        return distinct;
+    }
     /*
     private void drawDeepPoint(PointInfo3D point, boolean is_first) {
         String temp;

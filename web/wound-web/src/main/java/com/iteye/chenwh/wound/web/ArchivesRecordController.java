@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
 import com.iteye.chenwh.wound.opencv.DeepImageUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
@@ -191,6 +192,11 @@ public class ArchivesRecordController {
 	public String takePhoto(String imageUrl, Model model) {
 		//Patient patient = patientService.findPatient(query.getInpatientNo());
 		//model.addAttribute("patient", patient);
+		String[] imageInfo = imageUrl.split("/");
+		if (imageInfo.length >= 6) {
+			model.addAttribute("uid", imageInfo[3]);
+			model.addAttribute("date", imageInfo[5]);
+		}
 		model.addAttribute("imageUrl", imageUrl);
 		return "archivesRecord/takePhoto";
 	}
@@ -222,6 +228,39 @@ public class ArchivesRecordController {
 		return map;
 	}
 
+	@RequestMapping(value = "computerDeep", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelMap computerDeep(String uuid, String date, String points, HttpServletRequest request) {
+		ModelMap map = new ModelMap();
+		try {
+			ArchivesRecord patient = service.findRecord(uuid);
+			if (patient == null) {
+				map.addAttribute("success", false);
+				map.addAttribute("message", "创伤记录不存在");
+				return map;
+			}
+			double result = 0;
+			String path = request.getSession().getServletContext().getRealPath("/");
+			File webRoot = new File(path).getParentFile();
+			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+			String[] pointList = points.split(",");
+			if (pointList != null && pointList.length == 4) {
+				result = utils.calcDeep(Integer.parseInt(pointList[0]),Integer.parseInt(pointList[1]),
+						Integer.parseInt(pointList[2]),Integer.parseInt(pointList[3]));
+			}
+			//System.out.println( "chenwh:" + System.getProperty("java.library.path"));
+			//int r = CommonNativeUtils.cvFitPlane(50, 20);
+
+			map.addAttribute("success", true);
+			map.addAttribute("length", new DecimalFormat("#.00").format(result));
+		} catch (Exception e) {
+			map.addAttribute("success", false);
+			map.addAttribute("message", "获取长度信息出错");
+			log.error("获取长度信息出错", e);
+		}
+		return map;
+	}
+
 	@RequestMapping(value = "computerLength", method = RequestMethod.POST)
 	@ResponseBody
 	public ModelMap computerLength(String uuid, String date, String points, HttpServletRequest request) {
@@ -242,6 +281,9 @@ public class ArchivesRecordController {
 				result = utils.calcDistince(Integer.parseInt(pointList[0]),Integer.parseInt(pointList[1]),
 						Integer.parseInt(pointList[2]),Integer.parseInt(pointList[3]));
 			}
+			//System.out.println( "chenwh:" + System.getProperty("java.library.path"));
+			//int r = CommonNativeUtils.cvFitPlane(50, 20);
+
 			map.addAttribute("success", true);
 			map.addAttribute("length", new DecimalFormat("#.00").format(result));
 		} catch (Exception e) {

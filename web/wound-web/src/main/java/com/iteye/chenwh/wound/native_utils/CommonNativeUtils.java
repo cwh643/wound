@@ -1,4 +1,4 @@
-package com.dnion.app.android.injuriesapp.camera_tool.native_utils;
+package com.iteye.chenwh.wound.native_utils;
 
 import org.opencv.core.Mat;
 
@@ -7,6 +7,12 @@ import org.opencv.core.Mat;
  */
 
 public class CommonNativeUtils {
+
+    static {
+        System.loadLibrary("tycam");
+        System.loadLibrary("wound_dll");
+        //System.out.println( "chenwh:" + System.getProperty("java.library.path"));
+    }
 
     public static native int cvFitPlane(final long points, final long plane);
 

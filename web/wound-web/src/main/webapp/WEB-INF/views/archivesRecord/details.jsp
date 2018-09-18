@@ -228,7 +228,7 @@
 						<!--<a href="${uploadCtx}/${img.imagePath}/rgb.jpeg" target="_blank">-->
 		                    <div class="divcss5" style="margin-top: 30px">
 		                  		<!--<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>-->
-								<img alt="" data-url = '${uploadCtx}/${img.imagePath}/rgb.jpeg' class="deep-image" src="${uploadCtx}/${img.imagePath}/list_rgb.jpeg"></img>
+								<img alt="" data-uid="${img.id}" data-url = '${uploadCtx}/${img.imagePath}/rgb.jpeg' class="deep-image" src="${uploadCtx}/${img.imagePath}/list_rgb.jpeg"></img>
 		                    </div>
 						<!--</a>-->
 		                <div class="caption">
@@ -667,7 +667,8 @@
 		
 		function onTakePhoto() {
 		    var imageUrl = $(this).data('url');
-			window.open("${ctx}/archivesRecord/takePhoto?imageUrl="+encodeURI(imageUrl));
+            var uid = $(this).data('uid');
+			window.open("${ctx}/archivesRecord/takePhoto?uid="+uid+"&imageUrl="+encodeURI(imageUrl));
         }
 		
 		function woundDressingTypeChange(val) {
