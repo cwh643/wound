@@ -472,35 +472,35 @@ int CloseDevice() {
 }
 
 extern "C" {
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr);
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr);
 }
 
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
 {
     return OpenDevice(width, heigth);
 }
 
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)
 {
     return CloseDevice();
 }
 
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz)
 {
     LOGD("=== Start capture");
 	return TYStartCapture(hDevice);
 }
 
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz)
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz)
 {
     return TYStopCapture(hDevice);
 }
 
-JNIEXPORT jint JNICALL com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr)
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_TyNativeUtils_FetchData(JNIEnv* env, jobject thiz, jlong depthMatAddr, jlong rgbMatAddr, jlong pointMatAddr)
 {
 	LOGD("Fetch Data");
     //exit_main = false;
