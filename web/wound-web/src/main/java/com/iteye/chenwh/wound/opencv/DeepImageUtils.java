@@ -1,6 +1,8 @@
 package com.iteye.chenwh.wound.opencv;
 
 import com.alibaba.fastjson.JSONObject;
+import com.iteye.chenwh.wound.native_utils.AbNativeUtils;
+import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
 import org.apache.commons.io.FileUtils;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -32,6 +34,8 @@ public class DeepImageUtils {
     private Mat mFilterDepth;
 
     private Image mAreaMeasureBitmap;
+
+    private AbNativeUtils abNativeUtils = new AbNativeUtils();
 
     public DeepImageUtils(File webRoot, String uuid, String recordDate) {
         String rootPath = "D:/work/tool/apache-tomcat-7.0.86/webapps"; //webRoot.getPath();
@@ -518,7 +522,7 @@ public class DeepImageUtils {
         }
         Mat planeMat = new Mat(1, 4, CvType.CV_32FC1);
         //未找到PC对应方法
-        //CommonNativeUtils.cvFitPlane(points.getNativeObjAddr(), planeMat.getNativeObjAddr());
+        CommonNativeUtils.cvFitPlane(points.getNativeObjAddr(), planeMat.getNativeObjAddr());
         plane[0] = new Double(planeMat.get(0, 0)[0]).floatValue();
         plane[1] = new Double(planeMat.get(0, 1)[0]).floatValue();
         plane[2] = new Double(planeMat.get(0, 2)[0]).floatValue();
@@ -526,10 +530,11 @@ public class DeepImageUtils {
     }
 
     private void clacColorRate(Image rgbBitmap, ModelPointinfo mi) {
-        Mat srcRgbMat = new Mat(rgbBitmap.getHeight(), rgbBitmap.getWidth(), CvType.CV_8UC3);
+        //Mat srcRgbMat = new Mat(rgbBitmap.getHeight(), rgbBitmap.getWidth(), CvType.CV_8UC3);
         Mat dstRgbMat = new Mat(rgbBitmap.getHeight(), rgbBitmap.getWidth(), CvType.CV_8UC3);
         //未找到PC对应方法
         //Utils.bitmapToMat(rgbBitmap, srcRgbMat);
+        Mat srcRgbMat = ImageUtils.BufImg2Mat(rgbBitmap.getAsBufferedImage(), BufferedImage.TYPE_INT_ARGB, CvType.CV_8UC3);
         Imgproc.cvtColor(srcRgbMat, dstRgbMat, Imgproc.COLOR_RGB2HSV);
         //Bitmap dstBitmap = Bitmap.createBitmap(rgbBitmap);
         //Utils.matToBitmap(dstRgbMat, dstBitmap);
