@@ -1,102 +1,71 @@
 #include "stdafx.h"
-#ifndef SAMPLE_COMMON_UTILS_HPP_
-#define SAMPLE_COMMON_UTILS_HPP_
+#include <jni.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <vector>
+#define LOG_TAG "rooxin_jni"
+#include <string.h>
+#include "common.hpp"
 
-#include <opencv2/opencv.hpp>
-#include "TY_API.h"
+//Ax+by+cz=D  
+int cvFitPlane(cv::Mat* points, cv::Mat* plane){  
+    LOGD("start calc plane point:%ld, plane:%ld", (long)points, (long)plane);
+    // Estimate geometric centroid.  
+    //LOGD("calc plane1");
+    CvMat p_tmp(*points);
+    CvMat *points_1 = &p_tmp;
+    //LOGD("calc plane2");
+    int nrows = points->rows;  
+    int ncols = points->cols;  
+    int type = points->type();  
+    CvMat* centroid = cvCreateMat(1, ncols, type);  
+    cvSet(centroid, cvScalar(0));  
+    LOGD("calc plane ponits rows:%d, cols:%d, type:%d", nrows, ncols, type);
+    LOGD("calc plane planeMat rows:%d, cols:%d, type:%d", plane->rows, plane->cols, plane->type());
+    for (int c = 0; c<ncols; c++){  
+        for (int r = 0; r < nrows; r++)  
+        {  
+            // LOGD("calc plane:%f", points->at<float>(r, c));
+            centroid->data.fl[c] += points->at<float>(r, c);  
+        }  
+        centroid->data.fl[c] /= nrows;  
+    }  
+    //LOGD("calc plane4");
+    // Subtract geometric centroid from each point.  
+    CvMat* points2 = cvCreateMat(nrows, ncols, type);  
+    for (int r = 0; r<nrows; r++)  
+        for (int c = 0; c<ncols; c++)  
+            points2->data.fl[ncols*r + c] = points->at<float>(r, c) - centroid->data.fl[c];  
+    //LOGD("calc plane5");
+    // Evaluate SVD of covariance matrix.  
+    CvMat* A = cvCreateMat(ncols, ncols, type);  
+    CvMat* W = cvCreateMat(ncols, ncols, type);  
+    CvMat* V = cvCreateMat(ncols, ncols, type);  
+    //LOGD("calc plane6");
+    cvGEMM(points2, points_1, 1, NULL, 0, A, CV_GEMM_A_T);  
+    cvSVD(A, W, NULL, V, CV_SVD_V_T);  
+    // Assign plane coefficients by singular vector corresponding to smallest singular value.  
+    //LOGD("calc plane7");
+    plane->at<float>(0, ncols) = 0.0f;  
+    for (int c = 0; c<ncols; c++){  
+        plane->at<float>(0, c) = V->data.fl[ncols*(ncols - 1) + c];  
+        plane->at<float>(0, ncols) += plane->at<float>(0, c) * centroid->data.fl[c];  
+    }  
+    LOGD("calc plane a:%f,b:%f,c:%f,d:%f", plane->at<float>(0, 0), plane->at<float>(0, 1),plane->at<float>(0, 2), plane->at<float>(0, 3));
+    // Release allocated resources.  
+    cvReleaseMat(&centroid);  
+    cvReleaseMat(&points2);  
+    cvReleaseMat(&A);  
+    cvReleaseMat(&W);  
+    cvReleaseMat(&V);  
+    return 0;
+} 
 
-static inline const char* colorFormatName(TY_PIXEL_FORMAT fmt)
-{
-#define FORMAT_CASE(a) case (a): return #a
-	switch (fmt) {
-		FORMAT_CASE(TY_PIXEL_FORMAT_UNDEFINED);
-		FORMAT_CASE(TY_PIXEL_FORMAT_MONO);
-		FORMAT_CASE(TY_PIXEL_FORMAT_RGB);
-		FORMAT_CASE(TY_PIXEL_FORMAT_YVYU);
-		FORMAT_CASE(TY_PIXEL_FORMAT_YUYV);
-		FORMAT_CASE(TY_PIXEL_FORMAT_DEPTH16);
-		FORMAT_CASE(TY_PIXEL_FORMAT_FPOINT3D);
-		FORMAT_CASE(TY_PIXEL_FORMAT_BAYER8GB);
-	default: return "UNKNOWN FORMAT";
-	}
-#undef FORMAT_CASE
+extern "C" {
+    JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong  plane);
 }
 
-
-static inline const TY_IMAGE_DATA* TYImageInFrame(const TY_FRAME_DATA& frame
-	, const TY_COMPONENT_ID comp)
-{
-	for (int i = 0; i < frame.validCount; i++) {
-		if (frame.image[i].componentID == comp) {
-			return &frame.image[i];
-		}
-	}
-	return NULL;
+JNIEXPORT jint JNICALL Java_com_iteye_chenwh_wound_native_1utils_CommonNativeUtils_cvFitPlane(JNIEnv* env, jobject thiz, jlong points, jlong plane) {
+    return cvFitPlane((cv::Mat*)points, (cv::Mat*)plane);
 }
-
-
-static inline int parseFrame(const TY_FRAME_DATA& frame, cv::Mat* pDepth
-	, cv::Mat* pLeftIR, cv::Mat* pRightIR
-	, cv::Mat* pColor, cv::Mat* pPoints)
-{
-	for (int i = 0; i < frame.validCount; i++) {
-		// get depth image
-		if (pDepth && frame.image[i].componentID == TY_COMPONENT_DEPTH_CAM) {
-			*pDepth = cv::Mat(frame.image[i].height, frame.image[i].width
-				, CV_16U, frame.image[i].buffer);
-		}
-		// get left ir image
-		if (pLeftIR && frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT) {
-			*pLeftIR = cv::Mat(frame.image[i].height, frame.image[i].width
-				, CV_8U, frame.image[i].buffer);
-		}
-		// get right ir image
-		if (pRightIR && frame.image[i].componentID == TY_COMPONENT_IR_CAM_RIGHT) {
-			*pRightIR = cv::Mat(frame.image[i].height, frame.image[i].width
-				, CV_8U, frame.image[i].buffer);
-		}
-		// get BGR
-		if (pColor && frame.image[i].componentID == TY_COMPONENT_RGB_CAM) {
-			if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_JPEG) {
-				cv::Mat jpeg(frame.image[i].height, frame.image[i].width
-					, CV_8UC1, frame.image[i].buffer);
-				*pColor = cv::imdecode(jpeg, CV_LOAD_IMAGE_COLOR);
-			}
-			if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU) {
-				cv::Mat yuv(frame.image[i].height, frame.image[i].width
-					, CV_8UC2, frame.image[i].buffer);
-				cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YVYU);
-			}
-			else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YUYV) {
-				cv::Mat yuv(frame.image[i].height, frame.image[i].width
-					, CV_8UC2, frame.image[i].buffer);
-				cv::cvtColor(yuv, *pColor, cv::COLOR_YUV2BGR_YUYV);
-			}
-			else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB) {
-				cv::Mat rgb(frame.image[i].height, frame.image[i].width
-					, CV_8UC3, frame.image[i].buffer);
-				cv::cvtColor(rgb, *pColor, cv::COLOR_RGB2BGR);
-			}
-			else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_MONO) {
-				cv::Mat gray(frame.image[i].height, frame.image[i].width
-					, CV_8U, frame.image[i].buffer);
-				cv::cvtColor(gray, *pColor, cv::COLOR_GRAY2BGR);
-			}
-			else if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_BAYER8GB) {
-				cv::Mat raw(frame.image[i].height, frame.image[i].width
-					, CV_8U, frame.image[i].buffer);
-				cv::cvtColor(raw, *pColor, cv::COLOR_BayerGB2BGR);
-			}
-		}
-		// get point3D
-		if (pPoints && frame.image[i].componentID == TY_COMPONENT_POINT3D_CAM) {
-			*pPoints = cv::Mat(frame.image[i].height, frame.image[i].width
-				, CV_32FC3, frame.image[i].buffer);
-		}
-	}
-
-	return 0;
-}
-
-
-#endif
