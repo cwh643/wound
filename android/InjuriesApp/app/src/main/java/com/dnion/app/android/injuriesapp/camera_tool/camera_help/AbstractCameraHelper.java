@@ -17,7 +17,7 @@ public abstract class AbstractCameraHelper {
     String TAG = "cameraHelper";
 
     protected int CENTER_DIS = 3;
-    protected int FINAL_DEPTH_NUM = 3;
+    protected int FINAL_DEPTH_NUM = 5;
     boolean mInit_Ok = false;
     protected Context mContext;
     protected Mat mRgbMat;

@@ -17,7 +17,7 @@ endif
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := usb-1.0
-LOCAL_SRC_FILES := $(THIRD_LIB_PATH)/libusb1.0.so
+LOCAL_SRC_FILES := $(THIRD_LIB_PATH)/libusb.so
 include $(PREBUILT_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)

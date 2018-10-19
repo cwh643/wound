@@ -60,7 +60,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
     public static final double AREA_PER_PIX = WIDTH_PER_PIX * WIDTH_PER_PIX / length_factor;
     private MainActivity mActivity;
 
-    private int displayMode = 1; // 1 rgb, 2 depth, 3 orgin rgb
+    private int displayMode = 3; // 1 rgb, 2 depth, 3 orgin rgb
 
     private Bitmap mWoundRgbBitmap;
     private Bitmap mWoundCalcBitmap;
@@ -237,6 +237,11 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     }
 
+    private void changeDisplay(int displayMode) {
+        this.displayMode = displayMode;
+        displayMat();
+    }
+
     private void initMenuBar(View rootView) {
         mActivity.hiddenTopBar();
         mActivity.hiddenSubMenuBar();
@@ -336,8 +341,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         measure_btn_rgb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayMode = 1;
-                displayMat();
+                changeDisplay(1);
             }
         });
 
@@ -348,8 +352,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         measure_btn_org_rgb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayMode = 3;
-                displayMat();
+                changeDisplay(3);
             }
         });
 
@@ -360,8 +363,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         measure_btn_depth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayMode = 2;
-                displayMat();
+                changeDisplay(2);
             }
         });
 
@@ -406,9 +408,11 @@ public class RecordFragmentWoundMeasure extends Fragment {
                 if (Integer.parseInt("" + tagValue) == 1) {
                     valueAnimator = ValueAnimator.ofFloat(y, y - distance);
                     v.setTag(2);
+                    changeDisplay(3);
                 } else {
                     valueAnimator = ValueAnimator.ofFloat(y, y + distance);
                     v.setTag(1);
+                    changeDisplay(1);
                 }
                 measureBarAnimator(valueAnimator);
             }

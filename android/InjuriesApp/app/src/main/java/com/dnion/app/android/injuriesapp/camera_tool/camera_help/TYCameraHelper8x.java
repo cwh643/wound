@@ -18,8 +18,13 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.openni.OpenNI;
+import org.openni.VideoFrameRef;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by yy on 17/10/14.
@@ -31,6 +36,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
     protected TyNativeUtils nativeUtils;
 
     private Mat mPointMat;
+    private Mat[] mPointMatArr;
 
     @Override
     public void init(Context context, String size) {
@@ -48,6 +54,11 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         nativeUtils.deep_y_diff = transIntParam(0);
         nativeUtils.deep_center_dis = transIntParam(GlobalDef.DEPTH_CENTER_DIS);
         mPointMat = new Mat(mHeight, mWidth, CvType.CV_16UC1);
+        // 初始化数组，为保存时候取帧做准备
+        mPointMatArr = new Mat[FINAL_DEPTH_NUM];
+        for (int i = 0; i < FINAL_DEPTH_NUM; i++) {
+            mPointMatArr[i] = new Mat(mHeight, mWidth, CvType.CV_16UC1);
+        }
     }
 
     @Override
@@ -89,22 +100,61 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         }
     };
 
+    @Override
     public int FetchData(Mat depthMat, Bitmap rgbBitmap) {
         if (!mInit_Ok) {
             return GlobalDef.NOT_READY;
         }
         Log.d(TAG, "fatch data....");
 
-        nativeUtils.FetchData(mPointMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr(), depthMat.getNativeObjAddr() );
+        nativeUtils.FetchData(mPointMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr(), depthMat.getNativeObjAddr());
         Utils.matToBitmap(mRgbMat, rgbBitmap);
         centerDeep = nativeUtils.deep_center_deep;
         Log.d(TAG, "fatch data....0");
-        //Mat tmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
-        //mRgb.convertTo(tmpMap, tmpMap.type());
-        //Utils.matToBitmap(mRgbMat, rgbBitmap);
-        //Log.d(TAG, "fatch data....1");
-        //mDepthView.post(mUpdateDepthTask);
-        //Log.d(TAG, "fatch data....3");
+        return GlobalDef.SUCC;
+    }
+
+    @Override
+    public int FetchFinalData(Mat depthMat, Bitmap rgbBitmap) {
+        if (!mInit_Ok) {
+            return GlobalDef.NOT_READY;
+        }
+        Log.d(TAG, "fatch final data....");
+
+        for (int i = 0; i < FINAL_DEPTH_NUM; i++) {
+            nativeUtils.FetchData(mPointMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr(), mPointMatArr[i].getNativeObjAddr());
+            Utils.matToBitmap(mRgbMat, rgbBitmap);
+            centerDeep = nativeUtils.deep_center_deep;
+        }
+
+        // 补全点集
+        double maxNumValue = 0;
+        int maxNum = 0;
+        Map<Double, Integer> cacheMap = new HashMap<>();
+        for (int w = 0; w < depthMat.cols(); w++) {
+            for (int h = 0; h < depthMat.height(); h++) {
+                for (int i = 0; i < FINAL_DEPTH_NUM; i++) {
+                    double deep = mPointMatArr[i].get(h, w)[0];
+                    if (deep < GlobalDef.CALC_MIN_DEEP || deep > GlobalDef.CALC_MAX_DEEP) {
+                        continue;
+                    }
+                    int num = 1;
+                    if (cacheMap.containsKey(deep)) {
+                        num = cacheMap.get(deep);
+                        num++;
+                    }
+                    cacheMap.put(deep, num);
+                    if (Math.max(num, maxNum) == num) {
+                        maxNumValue = deep;
+                        maxNum = num;
+                    }
+                }
+                depthMat.put(h, w, maxNumValue);
+                cacheMap.clear();
+                maxNumValue = 0;
+                maxNum = 0;
+            }
+        }
         return GlobalDef.SUCC;
     }
 

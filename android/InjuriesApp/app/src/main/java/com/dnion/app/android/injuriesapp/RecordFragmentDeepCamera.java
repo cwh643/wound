@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -539,6 +540,15 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         @Override
         public void run() {
             if (mRgbBitmap != null) {
+                Paint pt = new Paint();
+                pt.setColor(Color.BLACK);
+                Canvas can = new Canvas(mRgbBitmap);
+                int lx = new Float(0 * cameraHelper.getParam().camera_size_factor).intValue();
+                int ly = new Float(360 * cameraHelper.getParam().camera_size_factor).intValue();
+                int rx = new Float(640 * cameraHelper.getParam().camera_size_factor).intValue();
+                int ry = new Float(480 * cameraHelper.getParam().camera_size_factor).intValue();
+
+                can.drawRect(lx, ly, rx, ry, pt);
                 mRgbView.setImageBitmap(mRgbBitmap);
             }
         }
