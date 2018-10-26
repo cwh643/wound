@@ -3,6 +3,8 @@ package com.iteye.chenwh.wound.web;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +14,17 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import com.dnion.app.android.injuriesapp.camera_tool.CameraParam;
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
 import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
 import com.iteye.chenwh.wound.opencv.DeepImageUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,6 +194,78 @@ public class ArchivesRecordController {
 			return 0;
 		}
 		return f.doubleValue();
+	}
+
+	@RequestMapping(value = "openCamera", method = RequestMethod.GET)
+	public String openCamera(String uid, Model model) {
+		//Patient patient = patientService.findPatient(query.getInpatientNo());
+		//model.addAttribute("patient", patient);
+		/*String[] imageInfo = imageUrl.split("/");
+		if (imageInfo.length >= 6) {
+			model.addAttribute("uid", imageInfo[3]);
+			model.addAttribute("date", imageInfo[5]);
+		}
+		*/
+		//model.addAttribute("imageUrl", imageUrl);
+		return "archivesRecord/cameraView";
+	}
+
+	private AbstractCameraHelper cameraHelper;
+
+	@RequestMapping(value = "deepImage", method = RequestMethod.GET)
+	@ResponseBody
+	public void deepImage(Integer index, Model model, HttpServletResponse resp) {
+		try {
+			final OutputStream out = resp.getOutputStream();
+			try {
+				if (cameraHelper == null) {
+
+					final AbstractCameraHelper cameraHelper = new TYCameraHelper8x();
+					//final Image mRgbBitmap = cameraHelper.getRgbBitmap();
+					final Image mDepthBitmap = cameraHelper.getDepthBitmap();
+					//final Mat mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
+					final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
+					cameraHelper.init("640x480");
+					cameraHelper.onResume(new AbstractCameraHelper.Callback() {
+						@Override
+						public void onInited(int status) {
+							if (status != 0) {
+								log.error("打开摄像头错误:" + status);
+								return;
+							}
+							BufferedImage buffImg = cameraHelper.FetchData(mDepth);
+							try {
+								ImageIO.write(buffImg, "jpeg", out);
+							} catch (IOException e) {
+								log.error(e.getMessage(), e);
+								//e.printStackTrace();
+							}
+
+						}
+					});
+					//
+					//
+					//
+					//
+					//Mat mRgb = new Mat(mRgbBitmap.getHeight(), mRgbBitmap.getWidth(), CvType.CV_8UC3);
+				}
+				;
+
+				/*
+				String path = "D:\\work\\chenwh\\android\\wound\\web\\wound-web\\src\\main\\webapp\\static\\images\\hacker.jpg";
+				if (index % 2 == 0) {
+					path = "D:\\work\\chenwh\\android\\wound\\web\\wound-web\\src\\main\\webapp\\static\\images\\btn_save_bg.png";
+				}
+				*/
+				//BufferedImage buffImg = new Image(path).getAsBufferedImage();
+                //ImageIO.write(buffImg, "jpeg", out);
+            } finally {
+                out.close();
+            }
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			//e.printStackTrace();
+		}
 	}
 
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)

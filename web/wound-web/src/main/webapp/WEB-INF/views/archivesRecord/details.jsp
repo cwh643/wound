@@ -214,7 +214,7 @@
 	    </div>
     
      <div class="bs-docs-example"  id="photo" style="min-height: 300px;">
-      <div class="title1"><span>照片</span></div>
+      <div class="title1"><span>照片</span><i id="take_photo_btn" data-uid="1111" style="cursor:pointer;"></i></div>
 		<div class="row-fluid">
 		  <c:forEach items="${images}" var="img" varStatus="status">
 		      <c:if test="${status.index % 4 == 0}">
@@ -648,6 +648,7 @@
 			});
 			
 			$("#baseinfo_btn").on("click", submitBaseinfo);
+            $("#take_photo_btn").on("click", onOpemCamera);
 			$("#record1_btn").on("click", submitRecord1);
 			$("#record2_btn").on("click", submitRecord2);
 			$("#record3_btn").on("click", submitRecord3);
@@ -664,6 +665,11 @@
 
 			$('.deep-image').on('click', onTakePhoto);
 		});
+
+		function onOpemCamera() {
+            var uid = $(this).data('uid');
+            window.open("${ctx}/archivesRecord/openCamera?uid="+uid);
+        }
 		
 		function onTakePhoto() {
 		    var imageUrl = $(this).data('url');
