@@ -437,6 +437,16 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         deepCameraInfo.setCenterDeep(deep_center_deep);
         synchronized (mDepth) {
             cameraHelper.FetchFinalData(mDepth, mRgbBitmap);
+
+            Paint pt = new Paint();
+            pt.setColor(Color.BLACK);
+            Canvas can = new Canvas(mRgbBitmap);
+            int lx = new Float(0 * cameraHelper.getParam().camera_size_factor).intValue();
+            int ly = new Float(360 * cameraHelper.getParam().camera_size_factor).intValue();
+            int rx = new Float(640 * cameraHelper.getParam().camera_size_factor).intValue();
+            int ry = new Float(480 * cameraHelper.getParam().camera_size_factor).intValue();
+
+            can.drawRect(lx, ly, rx, ry, pt);
             deepCameraInfo.setRgbBitmap(mRgbBitmap);
             Mat depth_data = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_16UC1);
             mDepth.convertTo(depth_data, depth_data.type());
