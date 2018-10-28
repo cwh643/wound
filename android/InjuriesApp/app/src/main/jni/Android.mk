@@ -36,7 +36,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/include
 LOCAL_SHARED_LIBRARIES := tycam usb-1.0
 
 LOCAL_MODULE    := rooxin_camm
-LOCAL_SRC_FILES := src/camera_ab.cpp src/camera_ty.cpp
+LOCAL_SRC_FILES := src/camera_ab.cpp src/camera_ty.cpp src/GPIOControl.cpp
 #LOCAL_SRC_FILES := src/jni_part_v2.cpp 
 LOCAL_LDLIBS +=  -llog
 
