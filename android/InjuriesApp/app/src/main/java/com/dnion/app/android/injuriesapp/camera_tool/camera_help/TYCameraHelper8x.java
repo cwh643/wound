@@ -158,6 +158,20 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         return GlobalDef.SUCC;
     }
 
+    @Override
+    public int FetchImage(Bitmap rgbBitmap) {
+        if (!mInit_Ok) {
+            return GlobalDef.NOT_READY;
+        }
+        Log.d(TAG, "fatch data....");
+
+        nativeUtils.FetchData(mPointMat.getNativeObjAddr(), mRgbMat.getNativeObjAddr(), mPointMat.getNativeObjAddr());
+        Utils.matToBitmap(mRgbMat, rgbBitmap);
+        centerDeep = nativeUtils.deep_center_deep;
+        Log.d(TAG, "fatch data....0");
+        return GlobalDef.SUCC;
+    }
+
     public void onStop() {
         nativeUtils.CloseDevice();
     }

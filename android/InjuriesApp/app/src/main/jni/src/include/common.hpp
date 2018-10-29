@@ -10,7 +10,7 @@
                 if(!(x)) { \
                     LOGD("Assert failed at %s:%d", __FILE__, __LINE__); \
                     LOGD("    : " #x ); \
-                    abort(); \
+                    return -1; \
                 } \
             }while(0)
 
@@ -19,7 +19,7 @@
                 if(err != TY_STATUS_OK) { \
                     LOGD("Assert failed: error %d(%s) at %s:%d", err, TYErrorString(err), __FILE__, __LINE__); \
                     LOGD("    : " #x ); \
-                    abort(); \
+                    return -1; \
                 } \
             }while(0)
 

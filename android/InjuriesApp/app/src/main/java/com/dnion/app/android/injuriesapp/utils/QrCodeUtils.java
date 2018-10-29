@@ -1,8 +1,12 @@
 package com.dnion.app.android.injuriesapp.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbCameraHelper;
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
+import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
@@ -33,6 +37,33 @@ public class QrCodeUtils {
         scanBitmap = BitmapFactory.decodeFile(path, options);
         return scanningImage(scanBitmap);
     }
+
+    public static Bitmap fetchImage(Context context) {
+        Bitmap rgb = Bitmap.createBitmap(1280, 960, Bitmap.Config.ARGB_8888);
+        // 1. 创建个cameraHelper，并初始化图片参数
+        AbstractCameraHelper cameraHelper = new TYCameraHelper8x();
+        cameraHelper.init(context, "1280x960");
+
+        // 2. 创建个回调，用看打开摄像头之后的操作
+        AbstractCameraHelper.Callback mLoadCallback = new AbCameraHelper.Callback() {
+            @Override
+            public void onInited(int status) {
+                if (status != 0) {
+                    // 错误
+                    return;
+                }
+                // TODO 这里表示打开成功，可以在这里直接轮询图片
+            }
+        };
+        // 3. 打开设备
+        cameraHelper.onResume(mLoadCallback);
+        // 4.读读片的具体方法
+        cameraHelper.FetchImage(rgb);
+        // 4.注销设备
+        cameraHelper.onStop();
+        return rgb;
+    }
+
 
     public static Result scanningImage(Bitmap scanBitmap) {
         if (scanBitmap == null) {

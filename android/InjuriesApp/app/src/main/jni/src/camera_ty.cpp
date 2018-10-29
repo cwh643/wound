@@ -44,7 +44,7 @@ static char* frameBuffer[2];
 static cv::Mat *dt;
 static cv::Mat *pColor;
 
-void undistort_rgb(CallbackData &pData, cv::Mat &color, cv::Mat &dst_color) {
+int undistort_rgb(CallbackData &pData, cv::Mat &color, cv::Mat &dst_color) {
     cv::Mat undistort_result(color.size(), CV_8UC3);
     TY_IMAGE_DATA dst;
     dst.width = color.cols;
@@ -63,6 +63,7 @@ void undistort_rgb(CallbackData &pData, cv::Mat &color, cv::Mat &dst_color) {
     //you can also use opencv API cv::undistort to do this job.
     ASSERT_OK(TYUndistortImage(&pData.color_intri, &pData.color_dist, NULL, &src, &dst));
     dst_color = undistort_result;
+    return 0;
 }
 
 int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rgbMat, jlong pointMat, JNIEnv* env, jobject &obj)
@@ -297,7 +298,7 @@ void trans_width_and_log(int i, float &value, float &factor) {
     value = value * factor;
 }
 
-int OpenDevice(jint width, jint heigth) {
+int OpenDevice(jint width, jint heigth, jint type) {
 	   LOGD("=== Init lib");
 	    ASSERT_OK( TYInitLib() );
 	    TY_VERSION_INFO* pVer = (TY_VERSION_INFO*)buffer;
@@ -402,22 +403,24 @@ int OpenDevice(jint width, jint heigth) {
             ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
         }
 
-	    LOGD("=== Configure components, open depth cam");
-	    // int32_t componentIDs = TY_COMPONENT_DEPTH_CAM | TY_COMPONENT_IR_CAM_LEFT;
-	    int32_t componentIDs = TY_COMPONENT_POINT3D_CAM;// |TY_COMPONENT_DEPTH_CAM;
-	    ASSERT_OK( TYEnableComponents(hDevice, componentIDs) );
+        if (type == 1 || type == 3) {
+            LOGD("=== Configure components, open depth cam");
+            // int32_t componentIDs = TY_COMPONENT_DEPTH_CAM | TY_COMPONENT_IR_CAM_LEFT;
+            int32_t componentIDs = TY_COMPONENT_POINT3D_CAM;// |TY_COMPONENT_DEPTH_CAM;
+            ASSERT_OK( TYEnableComponents(hDevice, componentIDs) );
 
-	    LOGD("=== Configure feature, set resolution to %dx%d.", width, heigth);
-	    LOGD("Note: DM460 resolution feature is in component TY_COMPONENT_DEVICE,");
-	    LOGD("      other device may lays in some other components.");
+            LOGD("=== Configure feature, set resolution to %dx%d.", width, heigth);
+            LOGD("Note: DM460 resolution feature is in component TY_COMPONENT_DEVICE,");
+            LOGD("      other device may lays in some other components.");
 
-	    // err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
-		// LOGD("err = %d", err);
-	    // ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+            // err = TYSetEnum(hDevice, TY_COMPONENT_DEPTH_CAM, TY_ENUM_IMAGE_MODE, image_size);
+            // LOGD("err = %d", err);
+            // ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
 
-	    err = TYSetEnum(hDevice, TY_COMPONENT_POINT3D_CAM, TY_ENUM_IMAGE_MODE, image_size);
-		LOGD("err = %d", err);
-	    ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+            err = TYSetEnum(hDevice, TY_COMPONENT_POINT3D_CAM, TY_ENUM_IMAGE_MODE, image_size);
+            LOGD("err = %d", err);
+            ASSERT(err == TY_STATUS_OK || err == TY_STATUS_NOT_PERMITTED);
+        }
 
         //LOGD("=== Enable rgb undistort");
         //TYSetBool(hDevice, TY_COMPONENT_RGB_CAM, TY_BOOL_UNDISTORTION, true);
@@ -472,6 +475,7 @@ int CloseDevice() {
 
 extern "C" {
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth);
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDeviceCustom(JNIEnv* env, jobject thiz, jint width, jint heigth, jint type);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StartDevice(JNIEnv* env, jobject thiz);
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_StopDevice(JNIEnv* env, jobject thiz);
@@ -480,7 +484,12 @@ JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_nativ
 
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDevice(JNIEnv* env, jobject thiz, jint width, jint heigth)
 {
-    return OpenDevice(width, heigth);
+    return OpenDevice(width, heigth, 1);
+}
+
+JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_OpenDeviceCustom(JNIEnv* env, jobject thiz, jint width, jint heigth, jint type)
+{
+    return OpenDevice(width, heigth, type);
 }
 
 JNIEXPORT jint JNICALL Java_com_dnion_app_android_injuriesapp_camera_1tool_native_1utils_TyNativeUtils_CloseDevice(JNIEnv* env, jobject thiz)
