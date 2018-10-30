@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.dnion.app.android.injuriesapp.camera_tool.native_utils.GPIOControl;
 import com.dnion.app.android.injuriesapp.dao.ConfigDao;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfoDao;
@@ -140,6 +141,7 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
         if (!OpenCVLoader.initDebug()) {
             // Handle initialization error
         }
+        GPIOControl.open();
 
         TopMenuFragment fragment = TopMenuFragment.createInstance();
         getSupportFragmentManager().beginTransaction()
@@ -174,6 +176,12 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
         // 注销广播
         mHomeWatcher.stopWatch();
         super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        GPIOControl.close();
+        super.onStop();
     }
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {

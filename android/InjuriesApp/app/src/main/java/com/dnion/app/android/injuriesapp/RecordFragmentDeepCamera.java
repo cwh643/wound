@@ -36,6 +36,7 @@ import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
+import com.dnion.app.android.injuriesapp.camera_tool.native_utils.GPIOControl;
 import com.dnion.app.android.injuriesapp.dao.DeepCameraInfo;
 import com.dnion.app.android.injuriesapp.utils.AlertDialogUtil;
 import com.dnion.app.android.injuriesapp.utils.CommonUtil;
@@ -49,6 +50,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Date;
+
+import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
 
 /**
  * Created by yy on 2017/6/18.
@@ -495,6 +498,7 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         protected void onPostExecute(Long aLong) {
             view.setClickable(true);
             AlertDialogUtil.dismissAlertDialog(mActivity);
+            GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_OFF);
         }
     }
 
@@ -506,6 +510,8 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
      */
     @Override
     public boolean onVolumeDown(int keyCode, KeyEvent event) {
+        //添加打开LED灯
+        GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_ON);
         mShotButton.callOnClick();
         return true;
     }
