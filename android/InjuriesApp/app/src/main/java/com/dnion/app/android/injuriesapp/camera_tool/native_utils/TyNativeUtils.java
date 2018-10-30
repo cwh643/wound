@@ -34,6 +34,8 @@ public class TyNativeUtils {
 
     public native int OpenDevice(final int width, final int heigth);
 
+    public native int OpenDeviceCustom(final int width, final int heigth, final int type);
+
     public native int FetchData(final long depthAddr, final long rgbAddr, final long pointAddr);
 
 }

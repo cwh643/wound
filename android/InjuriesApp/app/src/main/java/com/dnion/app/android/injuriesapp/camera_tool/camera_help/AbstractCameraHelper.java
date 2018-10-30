@@ -84,6 +84,10 @@ public abstract class AbstractCameraHelper {
         return 0;
     }
 
+    public int FetchImage(Bitmap rgbBitmap) {
+        return 0;
+    }
+
     public void onStop() {
     }
 
