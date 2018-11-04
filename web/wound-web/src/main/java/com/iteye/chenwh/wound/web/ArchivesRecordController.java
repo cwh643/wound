@@ -6,10 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
@@ -20,9 +17,11 @@ import com.dnion.app.android.injuriesapp.camera_tool.CameraParam;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
 import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
+import com.iteye.chenwh.wound.opencv.DeepCameraInfo;
 import com.iteye.chenwh.wound.opencv.DeepImageUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
@@ -197,7 +196,7 @@ public class ArchivesRecordController {
 	}
 
 	@RequestMapping(value = "openCamera", method = RequestMethod.GET)
-	public String openCamera(String uid, Model model) {
+	public String openCamera(String uuid, Model model) {
 		//Patient patient = patientService.findPatient(query.getInpatientNo());
 		//model.addAttribute("patient", patient);
 		/*String[] imageInfo = imageUrl.split("/");
@@ -206,15 +205,15 @@ public class ArchivesRecordController {
 			model.addAttribute("date", imageInfo[5]);
 		}
 		*/
-		//model.addAttribute("imageUrl", imageUrl);
+		model.addAttribute("uuid", uuid);
 		return "archivesRecord/cameraView";
 	}
 
-	private AbstractCameraHelper cameraHelper;
+	private static AbstractCameraHelper cameraHelper;
 
 	@RequestMapping(value = "deepImage", method = RequestMethod.GET)
 	@ResponseBody
-	public void deepImage(Integer index, Model model, HttpServletResponse resp) {
+	public void deepImage(Model model, HttpServletResponse resp) {
 		try {
 			final OutputStream out = resp.getOutputStream();
 			try {
@@ -268,8 +267,80 @@ public class ArchivesRecordController {
 		}
 	}
 
+
+	private static int deep_lx = 120;
+	private static int deep_ly = 90;
+	private static int deep_rx = 360;
+	private static int deep_ry = 270;
+	private static int deep_near = 500;
+	private static int deep_far = 700;
+	private static  double deep_center_deep = 0;
+
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
-	public String takePhoto(String imageUrl, Model model) {
+	public String takePhoto(Model model, String uuid,  HttpServletRequest request) {
+		String dateTime = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+		String path = getDeepPath(request, uuid, dateTime);
+		model.addAttribute("uid", uuid);
+		model.addAttribute("date", dateTime);
+		model.addAttribute("imageUrl", path + "/list_rgb.jpeg");
+		saveDataAndJumpPage(request, path);
+		return "archivesRecord/takePhoto";
+	}
+
+	private void syncDepthSizeParam(DeepCameraInfo deepCameraInfo) {
+		deepCameraInfo.setDeep_lx(deep_lx);
+		deepCameraInfo.setDeep_ly(deep_ly);
+		deepCameraInfo.setDeep_rx(deep_rx);
+		deepCameraInfo.setDeep_ry(deep_ry);
+		deepCameraInfo.setCamera_size_factor(cameraHelper.getParam().camera_size_factor);
+		deepCameraInfo.setDeep_near(deep_near);
+		deepCameraInfo.setDeep_far(deep_far);
+	}
+
+	private String getDeepPath(HttpServletRequest request, String uuid, String dateTime) {
+		String path = request.getSession().getServletContext().getRealPath("/");
+		File webRoot = new File(path).getParentFile();
+		path = webRoot.getPath() + "/upload/wound/"+ uuid + "/deep/" + dateTime;
+		File parent = new File(path);
+		if (!parent.exists()) {
+			parent.mkdirs();
+		}
+		return path;
+	}
+
+	private void saveDataAndJumpPage(HttpServletRequest request, String path) {
+		Image mRgbBitmap = cameraHelper.getRgbBitmap();
+		Image mDepthBitmap = cameraHelper.getDepthBitmap();
+		Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
+
+		DeepCameraInfo deepCameraInfo = new DeepCameraInfo();
+		syncDepthSizeParam(deepCameraInfo);
+		deepCameraInfo.setNew(true);
+		deepCameraInfo.setFilepath(path);
+		deepCameraInfo.setCenterDeep(deep_center_deep);
+		synchronized (mDepth) {
+			cameraHelper.FetchFinalData(mDepth, mRgbBitmap);
+			/*
+			Paint pt = new Paint();
+			pt.setColor(Color.BLACK);
+			Canvas can = new Canvas(mRgbBitmap);
+			int lx = new Float(0 * cameraHelper.getParam().camera_size_factor).intValue();
+			int ly = new Float(360 * cameraHelper.getParam().camera_size_factor).intValue();
+			int rx = new Float(640 * cameraHelper.getParam().camera_size_factor).intValue();
+			int ry = new Float(480 * cameraHelper.getParam().camera_size_factor).intValue();
+
+			can.drawRect(lx, ly, rx, ry, pt);
+			*/
+			deepCameraInfo.setRgbBitmap(mRgbBitmap);
+			Mat depth_data = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_16UC1);
+			mDepth.convertTo(depth_data, depth_data.type());
+			deepCameraInfo.setDepthMat(depth_data);
+			//mActivity.getDeepCameraInfo().setDepthMat(depth_data);
+		}
+	}
+
+	@RequestMapping(value = "openPhoto", method = RequestMethod.GET)
+	public String openPhoto(String imageUrl, Model model) {
 		//Patient patient = patientService.findPatient(query.getInpatientNo());
 		//model.addAttribute("patient", patient);
 		String[] imageInfo = imageUrl.split("/");

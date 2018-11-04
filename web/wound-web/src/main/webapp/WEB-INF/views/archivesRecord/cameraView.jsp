@@ -33,11 +33,8 @@
 	<div class="row">
 		<div class="span12" style="padding: 5px;">
 			<div class="btn-group" id="measureGroup">
-                <button id="btnArea" class="btn btn-primary">面积</button>
-				<button id="btnLength" class="btn">长度</button>
-				<button id="btnWidth" class="btn">宽度</button>
-                <button id="btnDeep" class="btn">深度</button>
-				<button id="btnSave" class="btn">保存</button>
+                <input type="hidden" id="hidden-uuid" value="${uuid}" ></input>
+                <button id="btnShot" class="btn btn-primary">拍照</button>
 			</div>
 		</div>
 	</div>
@@ -45,68 +42,37 @@
 		<div class="span9">
 			<img id="hacker" src="" />
 		</div>
-		<div class="span3">
-			<div class="input-prepend">
-				<span class="add-on">面积（cm2）</span>
-				<input id="measure-area" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">容积（cm3）</span>
-				<input id="measure-volume" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">深度（cm）</span>
-				<input id="measure-deep" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">长度（cm）</span>
-				<input id="measure-length" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">宽度（cm）</span>
-				<input id="measure-width" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">黄色组织（%）</span>
-				<input id="measure-yellow" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">红色组织（%）</span>
-				<input id="measure-red" type="text" style="width: auto;">
-			</div>
-			<div class="input-prepend">
-				<span class="add-on">黑色组织（%）</span>
-				<input id="measure-black" type="text" style="width: auto;">
-			</div>
-			<!--
-			<button class="btn operation-btn">长度</button>
-			<button class="btn operation-btn">宽度</button>
-			<button class="btn operation-btn">面积</button>
-			<button class="btn operation-btn ">保存</button>
-			-->
-		</div>
 	</div>
-
 </div>
 
 <div id="result"></div>
 
 	<script>
-        var index = 0;
+        var loop = true;
 		$(function() {
 		    configPage();
 		});
 
 		function configPage() {
-            loadImage(index);
+		    $('#btnShot').on('click', onShotClick);
             $('#hacker').load(function () {
-                index++;
-                setTimeout(loadImage, 100)
+                console.log('camera load end.')
+                if (loop) {
+                    setTimeout(loadImage, 100)
+				}
             });
+            loadImage();
 		}
 
 		function loadImage() {
-            $('#hacker').attr("src","${ctx}/archivesRecord/deepImage?index=" + index +"&"+new Date().getTime());
+		    console.log('camera load bengin.')
+            $('#hacker').attr("src","${ctx}/archivesRecord/deepImage?index=1&"+new Date().getTime());
+        }
+
+        function onShotClick() {
+            loop = false;
+            var uuid = $('#hidden-uuid').val();
+            window.open("${ctx}/archivesRecord/takePhoto?uuid="+uuid);
         }
 
 	</script>

@@ -1,8 +1,8 @@
 package com.dnion.app.android.injuriesapp.camera_tool.camera_help;
 
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
-import com.dnion.app.android.injuriesapp.camera_tool.native_utils.TyNativeUtils;
 
+import com.iteye.chenwh.wound.native_utils.TyNativeUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
 import org.opencv.android.BaseLoaderCallback;
@@ -67,7 +67,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
         if (OpenCVLoader.initDebug()) { //默认加载opencv_java.so库
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
             //加载依赖opencv_java.so的jni库
-            System.loadLibrary("opencv_java3");
+            System.loadLibrary("opencv_java300");
         }
         // OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
     }

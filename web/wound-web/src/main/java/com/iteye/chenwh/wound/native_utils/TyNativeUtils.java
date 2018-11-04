@@ -1,7 +1,5 @@
 package com.iteye.chenwh.wound.native_utils;
 
-import java.nio.ByteBuffer;
-
 /**
  * Created by yy on 17-3-2.
  */
@@ -23,7 +21,8 @@ public class TyNativeUtils {
 
     static {
         //System.loadLibrary("usb1.0ty");
-        System.loadLibrary("rooxin_camm");
+        //System.loadLibrary("rooxin_camm");
+        System.loadLibrary("wound_dll");
     }
 
     public native int CloseDevice();

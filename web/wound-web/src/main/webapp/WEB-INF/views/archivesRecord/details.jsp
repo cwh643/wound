@@ -214,7 +214,7 @@
 	    </div>
     
      <div class="bs-docs-example"  id="photo" style="min-height: 300px;">
-      <div class="title1"><span>照片</span><i id="take_photo_btn" data-uid="1111" style="cursor:pointer;"></i></div>
+      <div class="title1"><span>照片</span><i id="take_photo_btn" data-uuid="${patient.uuid}" style="cursor:pointer;"></i></div>
 		<div class="row-fluid">
 		  <c:forEach items="${images}" var="img" varStatus="status">
 		      <c:if test="${status.index % 4 == 0}">
@@ -667,8 +667,9 @@
 		});
 
 		function onOpemCamera() {
-            var uid = $(this).data('uid');
-            window.open("${ctx}/archivesRecord/openCamera?uid="+uid);
+            var uuid = $(this).data('uuid');
+            //alert(uuid);
+            window.open("${ctx}/archivesRecord/openCamera?uuid="+uuid);
         }
 		
 		function onTakePhoto() {
