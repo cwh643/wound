@@ -80,10 +80,11 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
                     logger.info("OpenCV loaded successfully");
                     // Load native library after(!) OpenCV initialization
                     int err = nativeUtils.OpenDevice(mWidth, mHeight);
-                    mLoadCallback.onInited(err);
-                    if (err == 0) {
+					if (err == 0) {
                         mInit_Ok = true;
                     }
+                    mLoadCallback.onInited(err);
+                     
                 }
                 break;
                 default: {
