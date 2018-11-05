@@ -34,7 +34,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
     private static Logger logger = LoggerFactory.getLogger(TYCameraHelper8x.class);
     @Override
     public void init(String size) {
-        //super.init(context, size);
+        super.init(size);
         nativeUtils = new TyNativeUtils();
         nativeUtils.deep_lx = param.deep_lx;
         nativeUtils.deep_rx = param.deep_rx;
