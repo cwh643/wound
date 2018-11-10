@@ -219,11 +219,9 @@ public class ArchivesRecordController {
 			try {
 				if (cameraHelper == null) {
 
-					final AbstractCameraHelper cameraHelper = new TYCameraHelper8x();
+					cameraHelper = new TYCameraHelper8x();
 					//final Image mRgbBitmap = cameraHelper.getRgbBitmap();
-					final Image mDepthBitmap = cameraHelper.getDepthBitmap();
-					//final Mat mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
-					final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
+					//deep_center_deep = cameraHelper.getCenterDeep();
 					cameraHelper.init("640x480");
 					cameraHelper.onResume(new AbstractCameraHelper.Callback() {
 						@Override
@@ -232,21 +230,20 @@ public class ArchivesRecordController {
 								log.error("打开摄像头错误:" + status);
 								return;
 							}
-							BufferedImage buffImg = cameraHelper.FetchData(mDepth);
-							try {
-								ImageIO.write(buffImg, "jpeg", out);
-							} catch (IOException e) {
-								log.error(e.getMessage(), e);
-								//e.printStackTrace();
-							}
-
 						}
 					});
-					//
-					//
-					//
-					//
 					//Mat mRgb = new Mat(mRgbBitmap.getHeight(), mRgbBitmap.getWidth(), CvType.CV_8UC3);
+				}
+				final Image mDepthBitmap = cameraHelper.getDepthBitmap();
+				final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
+				BufferedImage buffImg = cameraHelper.FetchData(mDepth);
+				Image newPic = new Image(buffImg);
+				newPic.combineWithPicture(mDepthBitmap);//合成图片
+				try {
+					ImageIO.write(newPic.getAsBufferedImage(), "jpeg", out);
+				} catch (IOException e) {
+					log.error(e.getMessage(), e);
+					//e.printStackTrace();
 				}
 				;
 
@@ -260,6 +257,7 @@ public class ArchivesRecordController {
                 //ImageIO.write(buffImg, "jpeg", out);
             } finally {
                 out.close();
+				//cameraHelper.onStop();
             }
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);

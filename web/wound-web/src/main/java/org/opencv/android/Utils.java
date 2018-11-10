@@ -120,7 +120,7 @@ public class Utils {
         //if (bmp == null)
         //    throw new IllegalArgumentException("bmp == null");
         //nMatToBitmap2(mat.nativeObj, bmp, premultiplyAlpha);
-        return Mat2BufImg(mat, "jpg");
+        return Mat2BufImg(mat, ".jpg");
     }
 
     /**
