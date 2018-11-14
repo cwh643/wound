@@ -22,6 +22,7 @@ import com.iteye.chenwh.wound.opencv.DeepImageUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.slf4j.Logger;
@@ -218,7 +219,6 @@ public class ArchivesRecordController {
 			final OutputStream out = resp.getOutputStream();
 			try {
 				if (cameraHelper == null) {
-
 					cameraHelper = new TYCameraHelper8x();
 					//final Image mRgbBitmap = cameraHelper.getRgbBitmap();
 					//deep_center_deep = cameraHelper.getCenterDeep();
@@ -230,23 +230,13 @@ public class ArchivesRecordController {
 								log.error("打开摄像头错误:" + status);
 								return;
 							}
+							cameraPreview(out);
 						}
 					});
 					//Mat mRgb = new Mat(mRgbBitmap.getHeight(), mRgbBitmap.getWidth(), CvType.CV_8UC3);
+				} else {
+					cameraPreview(out);
 				}
-				final Image mDepthBitmap = cameraHelper.getDepthBitmap();
-				final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
-				BufferedImage buffImg = cameraHelper.FetchData(mDepth);
-				Image newPic = new Image(buffImg);
-				newPic.combineWithPicture(mDepthBitmap);//合成图片
-				try {
-					ImageIO.write(newPic.getAsBufferedImage(), "jpeg", out);
-				} catch (IOException e) {
-					log.error(e.getMessage(), e);
-					//e.printStackTrace();
-				}
-				;
-
 				/*
 				String path = "D:\\work\\chenwh\\android\\wound\\web\\wound-web\\src\\main\\webapp\\static\\images\\hacker.jpg";
 				if (index % 2 == 0) {
@@ -259,6 +249,20 @@ public class ArchivesRecordController {
                 out.close();
 				//cameraHelper.onStop();
             }
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+			//e.printStackTrace();
+		}
+	}
+
+	private void cameraPreview(OutputStream out) {
+		final Image mDepthBitmap = cameraHelper.getDepthBitmap();
+		final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
+		BufferedImage buffImg = cameraHelper.FetchData(mDepth);
+		Image newPic = new Image(buffImg);
+		newPic.combineWithPicture(mDepthBitmap);//合成图片
+		try {
+			ImageIO.write(newPic.getAsBufferedImage(), "jpeg", out);
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 			//e.printStackTrace();
@@ -607,5 +611,13 @@ public class ArchivesRecordController {
 		}
 		return map;
 	}
-	
+
+	static {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		//System.loadLibrary("opencv_info");
+		System.loadLibrary("wound_dll");
+		//System.loadLibrary("opencv_java");
+		//System.loadLibrary("rooxin_camm");
+		System.loadLibrary("opencv_java300");
+	}
 }
