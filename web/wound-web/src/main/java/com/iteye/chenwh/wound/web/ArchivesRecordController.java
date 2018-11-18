@@ -321,7 +321,7 @@ public class ArchivesRecordController {
 		deepCameraInfo.setFilepath(path);
 		deepCameraInfo.setCenterDeep(deep_center_deep);
 		synchronized (mDepth) {
-			cameraHelper.FetchFinalData(mDepth, mRgbBitmap);
+			mRgbBitmap = cameraHelper.FetchFinalData(mDepth);
 			/*
 			Paint pt = new Paint();
 			pt.setColor(Color.BLACK);
@@ -333,6 +333,7 @@ public class ArchivesRecordController {
 
 			can.drawRect(lx, ly, rx, ry, pt);
 			*/
+			mRgbBitmap.saveAs(path);
 			deepCameraInfo.setRgbBitmap(mRgbBitmap);
 			Mat depth_data = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_16UC1);
 			mDepth.convertTo(depth_data, depth_data.type());

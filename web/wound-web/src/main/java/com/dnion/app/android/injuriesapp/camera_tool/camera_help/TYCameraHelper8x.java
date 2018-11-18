@@ -110,9 +110,10 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
     }
 
     @Override
-    public int FetchFinalData(Mat depthMat, Image image) {
+    public Image FetchFinalData(Mat depthMat) {
         if (!mInit_Ok) {
-            return GlobalDef.NOT_READY;
+            return null;
+            //return GlobalDef.NOT_READY;
         }
         logger.debug("fatch final data....");
         for (int i = 0; i < FINAL_DEPTH_NUM; i++) {
@@ -121,6 +122,8 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
             //Utils.matToBitmap(mRgbMat, image.getAsBufferedImage());
             centerDeep = nativeUtils.deep_center_deep;
         }
+        BufferedImage bi = Utils.matToBitmap(mRgbMat);
+        Image image = new Image(bi);
 
         // 补全点集
         double maxNumValue = 0;
@@ -150,7 +153,7 @@ public class TYCameraHelper8x extends AbstractCameraHelper {
                 maxNum = 0;
             }
         }
-        return GlobalDef.SUCC;
+        return image;
     }
 
     public void onStop() {

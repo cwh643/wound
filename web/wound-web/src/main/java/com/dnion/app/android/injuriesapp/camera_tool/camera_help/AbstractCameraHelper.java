@@ -84,8 +84,8 @@ public abstract class AbstractCameraHelper {
         return null;
     }
 
-    public int FetchFinalData(Mat depthMat, Image rgbBitmap) {
-        return 0;
+    public Image FetchFinalData(Mat depthMat) {
+        return null;
     }
 
     public void onStop() {
