@@ -40,6 +40,7 @@ import com.dnion.app.android.injuriesapp.utils.CommonUtil;
 import com.dnion.app.android.injuriesapp.utils.ImageTools;
 import com.dnion.app.android.injuriesapp.utils.SDCardHelper;
 import com.dnion.app.android.injuriesapp.utils.SharedPreferenceUtil;
+import com.forgpio.demo.ForGpio;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -141,7 +142,8 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
         if (!OpenCVLoader.initDebug()) {
             // Handle initialization error
         }
-        GPIOControl.open();
+        //ForGpio.open();
+        //GPIOControl.open();
 
         TopMenuFragment fragment = TopMenuFragment.createInstance();
         getSupportFragmentManager().beginTransaction()
@@ -180,7 +182,8 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
 
     @Override
     protected void onStop() {
-        GPIOControl.close();
+        //ForGpio.close();
+        //GPIOControl.close();
         super.onStop();
     }
 

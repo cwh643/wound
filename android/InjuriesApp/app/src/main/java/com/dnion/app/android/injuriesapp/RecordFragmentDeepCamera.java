@@ -52,6 +52,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 
 import com.dnion.app.android.injuriesapp.camera_tool.GlobalDef;
+import com.forgpio.demo.ForGpio;
 
 /**
  * Created by yy on 2017/6/18.
@@ -511,7 +512,8 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
     @Override
     public boolean onVolumeDown(int keyCode, KeyEvent event) {
         //添加打开LED灯
-        GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_ON);
+        //GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_ON);
+        //ForGpio.write();
         mShotButton.callOnClick();
         return true;
     }
