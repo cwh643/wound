@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_width">150dp</dimen>
-    <dimen name="rec_title_size">25sp</dimen>
+    <dimen name="rec_title_size">21sp</dimen>
     <dimen name="rec_menu_title_size">16sp</dimen>
     <dimen name="rec_history_title_size">18sp</dimen>
     <dimen name="measure_label_size">18sp</dimen>
     <dimen name="rec_title_width">100dp</dimen>
-    <dimen name="record_take_photo">250dp</dimen>
-    <dimen name="record_capture">180dp</dimen>
+    <dimen name="record_take_photo">150dp</dimen>
+    <dimen name="record_capture">150dp</dimen>
     <dimen name="camera_btn_width">75dp</dimen>
     <dimen name="camera_btn_height">30dp</dimen>
     <dimen name="activity_horizontal_margin">16.0dip</dimen>

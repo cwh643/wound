@@ -53,10 +53,10 @@
 
         <Button
             android:id="@+id/btn_sync"
-            android:layout_width="280dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_query"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="12dp"
             android:layout_toStartOf="@+id/btn_add"
             android:background="@mipmap/btn_photo_bg"
             android:text="@string/query_sync"

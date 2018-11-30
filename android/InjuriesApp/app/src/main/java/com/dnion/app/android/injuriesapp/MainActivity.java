@@ -87,9 +87,10 @@ public class MainActivity extends BaseActivity implements HomeWatcher.OnHomePres
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //隐藏虚拟键
-        View main = getLayoutInflater().from(this).inflate(R.layout.activity_main, null);
-        main.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        setContentView(main);
+        //View main = getLayoutInflater().from(this).inflate(R.layout.activity_main, null);
+        //main.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        //setContentView(main);
+        setContentView(R.layout.activity_main);
 
         mainActivity = this;
         recordDao = new RecordDao(this);

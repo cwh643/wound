@@ -21,7 +21,7 @@
                 <GridView
                     android:id="@+id/wound_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:numColumns="3"
                     android:horizontalSpacing = "20dp"
                     android:verticalSpacing="20dp"
@@ -37,7 +37,7 @@
             </LinearLayout>
 
             <FrameLayout
-                android:layout_width="600dp"
+                android:layout_width="400dp"
                 android:layout_height="match_parent">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -45,11 +45,13 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_width="300dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/person_a"/>
                     <ImageView
                         android:layout_width="300dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/person_b"/>

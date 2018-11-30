@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_width">150dp</dimen>
-    <dimen name="rec_title_size">25sp</dimen>
+    <dimen name="rec_title_size">21sp</dimen>
     <dimen name="rec_menu_title_size">16sp</dimen>
     <dimen name="rec_history_title_size">18sp</dimen>
     <dimen name="measure_label_size">18sp</dimen>

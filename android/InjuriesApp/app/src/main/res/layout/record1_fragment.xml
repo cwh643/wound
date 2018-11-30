@@ -44,7 +44,7 @@
 
                 <TextView
                     android:id="@+id/lab_complains"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/record_complaint"
@@ -54,7 +54,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
+                    android:layout_marginLeft="@dimen/item_margin_left"
                     android:orientation="horizontal">
 
                     <Button
@@ -85,21 +85,23 @@
                 <TableRow android:padding="10dp">
 
                     <TextView
-                        android:layout_width="160dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="@string/record_wound_type"
                         android:textAlignment="textEnd"
+                        android:layout_marginTop="10dp"
                         android:textSize="@dimen/rec_title_size" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="43dp"
+                        android:layout_column="1"
+                        android:layout_marginLeft="@dimen/item_margin_left2"
                         android:orientation="horizontal">
 
                         <Spinner
                             android:id="@+id/wound_type"
-                            android:layout_width="400dp"
+                            android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_spinner"
                             android:dropDownHorizontalOffset="-5dp"
@@ -122,7 +124,7 @@
                 <TableRow android:padding="10dp">
 
                     <TextView
-                        android:layout_width="@dimen/rec_title_width"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="@string/record_wound_size"
@@ -132,11 +134,11 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="@dimen/item_margin_left"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="110dp"
+                            android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:text="@string/record_wound_length"
                             android:textColor="@color/black"
@@ -153,7 +155,7 @@
                             android:textSize="@dimen/rec_title_size" />
 
                         <TextView
-                            android:layout_width="110dp"
+                            android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:text="@string/record_wound_width"
@@ -172,7 +174,7 @@
 
                         <TextView
                             android:id="@+id/textView4"
-                            android:layout_width="110dp"
+                            android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:text="@string/record_wound_depth"
@@ -199,11 +201,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                        android:layout_marginLeft="50dp"
+                        android:layout_marginLeft="@dimen/item_margin_left"
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="110dp"
+                            android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:digits="1234567890."
                             android:text="@string/record_wound_area"
@@ -221,7 +223,7 @@
                             android:textSize="@dimen/rec_title_size" />
 
                         <TextView
-                            android:layout_width="120dp"
+                            android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:text="@string/record_wound_volume"
@@ -244,7 +246,7 @@
                 <TableRow android:padding="10dp">
 
                     <TextView
-                        android:layout_width="@dimen/rec_title_width"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:text="@string/record_wound_time"
                         android:textAlignment="textEnd"
@@ -254,7 +256,7 @@
                         android:id="@+id/wound_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="43dp"
+                        android:layout_marginLeft="@dimen/item_margin_left2"
                         android:padding="5dp"
                         android:text=""
                         android:textSize="@dimen/rec_title_size" />
@@ -263,7 +265,7 @@
                 <TableRow android:padding="10dp">
 
                     <TextView
-                        android:layout_width="@dimen/rec_title_width"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/record_wound_take"
@@ -274,12 +276,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_column="1"
-                        android:layout_marginLeft="43dp"
+                        android:layout_marginLeft="@dimen/item_margin_left2"
                         android:orientation="horizontal">
 
                         <Spinner
                             android:id="@+id/wound_measures"
-                            android:layout_width="600dp"
+                            android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_spinner"
                             android:dropDownHorizontalOffset="-5dp"
