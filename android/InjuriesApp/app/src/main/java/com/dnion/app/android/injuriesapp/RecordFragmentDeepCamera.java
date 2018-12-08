@@ -65,7 +65,7 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
     public static final int CAMERA_DEFAULT_WIDTH = 960;
     public static final int CAMERA_DEFAULT_HEIGHT = 540;
     public static final int DEFAULT_TIME_OUT = 100000;
-    public static int camera_src = 2; // 0:图漾4x，1:图漾8x，2:奥比
+    public static int camera_src = 1; // 0:图漾4x，1:图漾8x，2:奥比
     public static String camera_size = "640x480"; // 0:图漾4x，1:图漾8x，2:奥比
     private int camera_x = 332;
     private int camera_y = 141;
