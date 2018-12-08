@@ -499,7 +499,7 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         protected void onPostExecute(Long aLong) {
             view.setClickable(true);
             AlertDialogUtil.dismissAlertDialog(mActivity);
-            GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_OFF);
+//            GPIOControl.write(GlobalDef.R2_GPIO_LED, GlobalDef.R2_GPIO_OFF);
         }
     }
 
