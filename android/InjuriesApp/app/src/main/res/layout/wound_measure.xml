@@ -119,10 +119,19 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="85dp"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="150dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="10dp">
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="150dp"
             android:background="@mipmap/measure_button_bg"
             android:orientation="vertical"
             android:padding="10dp">
@@ -146,7 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -243,7 +252,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
