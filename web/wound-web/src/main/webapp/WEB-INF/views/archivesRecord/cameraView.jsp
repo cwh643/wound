@@ -48,16 +48,22 @@
 <div id="result"></div>
 
 	<script>
-        var loop = true;
+        var flag = 1;
 		$(function() {
 		    configPage();
 		});
 
+        window.onbeforeunload = function() {
+            if (flag > 0) {
+                flag = 0;
+            }
+        }
+
 		function configPage() {
 		    $('#btnShot').on('click', onShotClick);
             $('#hacker').load(function () {
-                console.log('camera load end.')
-                if (loop) {
+                //console.log('camera load end.')
+                if (flag >= 0) {
                     setTimeout(loadImage, 100)
 				}
             });
@@ -66,11 +72,14 @@
 
 		function loadImage() {
 		    console.log('camera load bengin.')
-            $('#hacker').attr("src","${ctx}/archivesRecord/deepImage?index=1&"+new Date().getTime());
+            $('#hacker').attr("src","${ctx}/archivesRecord/deepImage?flag="+flag+"&"+new Date().getTime());
+            if (flag == 0) {
+                flag = -1;
+            }
         }
 
         function onShotClick() {
-            loop = false;
+            flag = -1;
             var uuid = $('#hidden-uuid').val();
             window.open("${ctx}/archivesRecord/takePhoto?uuid="+uuid);
         }
