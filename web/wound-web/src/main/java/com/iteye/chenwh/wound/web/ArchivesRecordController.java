@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import javax.annotation.PreDestroy;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -214,10 +215,14 @@ public class ArchivesRecordController {
 
 	@RequestMapping(value = "deepImage", method = RequestMethod.GET)
 	@ResponseBody
-	public void deepImage(Model model, HttpServletResponse resp) {
+	public void deepImage(Model model, Integer flag, HttpServletResponse resp) {
 		try {
 			final OutputStream out = resp.getOutputStream();
 			try {
+				if (flag != null && flag == -1) {
+					stopCamera();
+					return;
+				}
 				if (cameraHelper == null) {
 					cameraHelper = new TYCameraHelper8x();
 					//final Image mRgbBitmap = cameraHelper.getRgbBitmap();
@@ -237,14 +242,6 @@ public class ArchivesRecordController {
 				} else {
 					cameraPreview(out);
 				}
-				/*
-				String path = "D:\\work\\chenwh\\android\\wound\\web\\wound-web\\src\\main\\webapp\\static\\images\\hacker.jpg";
-				if (index % 2 == 0) {
-					path = "D:\\work\\chenwh\\android\\wound\\web\\wound-web\\src\\main\\webapp\\static\\images\\btn_save_bg.png";
-				}
-				*/
-				//BufferedImage buffImg = new Image(path).getAsBufferedImage();
-                //ImageIO.write(buffImg, "jpeg", out);
             } finally {
                 out.close();
 				//cameraHelper.onStop();
@@ -269,6 +266,18 @@ public class ArchivesRecordController {
 		}
 	}
 
+	private void stopCamera() {
+		if (cameraHelper != null) {
+			cameraHelper.onStop();
+			cameraHelper = null;
+		}
+	}
+
+	@PreDestroy
+	private void onDestory() {
+		stopCamera();
+	}
+
 
 	private static int deep_lx = 120;
 	private static int deep_ly = 90;
@@ -281,11 +290,12 @@ public class ArchivesRecordController {
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
 	public String takePhoto(Model model, String uuid,  HttpServletRequest request) {
 		String dateTime = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
-		String path = getDeepPath(request, uuid, dateTime);
+		String path = getDeepPath(uuid, dateTime) + "/list_rgb.jpeg";
 		model.addAttribute("uid", uuid);
 		model.addAttribute("date", dateTime);
-		model.addAttribute("imageUrl", path + "/list_rgb.jpeg");
+		model.addAttribute("imageUrl", path);
 		saveDataAndJumpPage(request, path);
+		stopCamera();
 		return "archivesRecord/takePhoto";
 	}
 
@@ -299,18 +309,20 @@ public class ArchivesRecordController {
 		deepCameraInfo.setDeep_far(deep_far);
 	}
 
-	private String getDeepPath(HttpServletRequest request, String uuid, String dateTime) {
-		String path = request.getSession().getServletContext().getRealPath("/");
-		File webRoot = new File(path).getParentFile();
-		path = webRoot.getPath() + "/upload/wound/"+ uuid + "/deep/" + dateTime;
-		File parent = new File(path);
-		if (!parent.exists()) {
-			parent.mkdirs();
-		}
+	private String getDeepPath(String uuid, String dateTime) {
+		String path = "/upload/wound/"+ uuid + "/deep/" + dateTime;
 		return path;
 	}
 
 	private void saveDataAndJumpPage(HttpServletRequest request, String path) {
+		String root = request.getSession().getServletContext().getRealPath("/");
+		File webRoot = new File(root).getParentFile();
+		path = webRoot.getPath() + path;
+		File parent = new File(path);
+		if (!parent.exists()) {
+			parent.mkdirs();
+		}
+		log.error("save path=" + path);
 		Image mRgbBitmap = cameraHelper.getRgbBitmap();
 		Image mDepthBitmap = cameraHelper.getDepthBitmap();
 		Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
