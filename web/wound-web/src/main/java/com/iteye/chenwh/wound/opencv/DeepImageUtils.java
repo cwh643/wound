@@ -7,6 +7,8 @@ import org.apache.commons.io.FileUtils;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DeepImageUtils {
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     public static final double length_factor = 1; // 2.2
     public static final double WIDTH_PER_PIX = (Math.tan(0.5236) / 320) * 1000 / length_factor;
@@ -38,8 +42,9 @@ public class DeepImageUtils {
     private AbNativeUtils abNativeUtils = new AbNativeUtils();
 
     public DeepImageUtils(File webRoot, String uuid, String recordDate) {
-        String rootPath = "D:/work/tool/apache-tomcat-7.0.86/webapps"; //webRoot.getPath();
+        String rootPath = webRoot.getPath();//"D:/work/tool/apache-tomcat-7.0.86/webapps";
         String path = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/model.data";
+        log.info("model path:" + path);
         //String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/model.data";
         String deepPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/deep.data";
         String rgbPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/rgb.jpeg";
@@ -490,13 +495,13 @@ public class DeepImageUtils {
         }
         volume = Math.abs(volume) / 1000;
         //deepCameraInfo.setWoundWidth(new Double(test).floatValue());
-        String format_area = new DecimalFormat("#.00").format(area / 100);
-        String format_volume = new DecimalFormat("#.00").format(volume);
-        String format_red = new DecimalFormat("#.00").format((float) mi.redNum / mi.pixSize * 100);
-        String format_yellow = new DecimalFormat("#.00").format((float) mi.yellowNum / mi.pixSize * 100);
-        String format_black = new DecimalFormat("#.00").format((float) mi.blackNum / mi.pixSize * 100);
+        String format_area = formatDouble(getDouble(area) / 100);
+        String format_volume = formatDouble(getDouble(volume));
+        String format_red = formatDouble((float) mi.redNum / mi.pixSize * 100);
+        String format_yellow = formatDouble((float) mi.yellowNum / mi.pixSize * 100);
+        String format_black = formatDouble((float) mi.blackNum / mi.pixSize * 100);
         double woundDeep = (deepCameraInfo.getMaxDeep() - deepCameraInfo.getMinDeep()) / 10;
-        String format_deep = new DecimalFormat("#.00").format(woundDeep);
+        String format_deep = formatDouble(getDouble(woundDeep));
         map.put("area", format_area);
         map.put("volume", format_volume);
         map.put("deep", format_deep);
@@ -505,6 +510,17 @@ public class DeepImageUtils {
         map.put("black", format_black);
 
         return map;
+    }
+
+    private double getDouble(double d) {
+        if (Double.isNaN(d) || Double.isInfinite(d)) {
+            return 0;
+        }
+        return d;
+    }
+
+    private String formatDouble(double d) {
+        return new DecimalFormat("#.00").format(d);
     }
 
     private double filterPoint(Mat depth, int x, int y) {

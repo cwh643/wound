@@ -14,15 +14,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dnion.app.android.injuriesapp.camera_tool.CameraParam;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.AbstractCameraHelper;
 import com.dnion.app.android.injuriesapp.camera_tool.camera_help.TYCameraHelper8x;
+import com.google.gson.Gson;
 import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
 import com.iteye.chenwh.wound.opencv.DeepCameraInfo;
 import com.iteye.chenwh.wound.opencv.DeepImageUtils;
 import com.iteye.chenwh.wound.opencv.Image;
 import com.iteye.chenwh.wound.opencv.ImageUtils;
+import com.iteye.chenwh.wound.utils.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -51,8 +55,14 @@ import sun.misc.BASE64Decoder;
 @Controller
 @RequestMapping(value = "/archivesRecord")
 public class ArchivesRecordController {
-	
-	private static Logger log = LoggerFactory.getLogger(ArchivesRecordController.class);
+
+	public final static String RGB_FILE_NAME = "rgb.jpeg";
+	public final static String PDF_IMAGE_FILE_NAME = "pdf.jpeg";
+	public final static String DEEP_FILE_NAME = "deep.data";
+	public final static String LIST_IMAGE_FILE_NAME = "list_rgb.jpeg";
+	public final static String MODEL_FILE_NAME = "model.data";
+
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private ArchivesRecordService service;
@@ -252,10 +262,17 @@ public class ArchivesRecordController {
 		}
 	}
 
+	//private Mat mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
+
 	private void cameraPreview(OutputStream out) {
-		final Image mDepthBitmap = cameraHelper.getDepthBitmap();
+		Image mDepthBitmap = cameraHelper.getDepthBitmap();
 		final Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
 		BufferedImage buffImg = cameraHelper.FetchData(mDepth);
+		Mat mDepthTmpMap = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_8UC1);
+		mDepth.convertTo(mDepthTmpMap, mDepthTmpMap.type());
+		BufferedImage buffDeep = Utils.matToBitmap(mDepthTmpMap);
+		mDepthBitmap = new Image(buffDeep);
+		//deep_center_deep = cameraHelper.getCenterDeep();
 		Image newPic = new Image(buffImg);
 		newPic.combineWithPicture(mDepthBitmap);//合成图片
 		try {
@@ -290,13 +307,23 @@ public class ArchivesRecordController {
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
 	public String takePhoto(Model model, String uuid,  HttpServletRequest request) {
 		String dateTime = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
-		String path = getDeepPath(uuid, dateTime) + "/list_rgb.jpeg";
-		model.addAttribute("uid", uuid);
-		model.addAttribute("date", dateTime);
-		model.addAttribute("imageUrl", path);
+		String path = getDeepPath(uuid, dateTime);
+		//model.addAttribute("uid", uuid);
+		//model.addAttribute("date", dateTime);
+		//model.addAttribute("imageUrl", path);
 		saveDataAndJumpPage(request, path);
 		stopCamera();
-		return "archivesRecord/takePhoto";
+		return "redirect:/archivesRecord/measurePhoto?uid="+uuid+"&date="+ dateTime;
+	}
+
+	@RequestMapping(value = "measurePhoto", method = RequestMethod.GET)
+	public String measurePhoto(Model model, String uid,  String date) {
+		//String path = "static/images/hacker.jpg";
+		String path = getDeepPath(uid, date);
+		model.addAttribute("uid", uid);
+		model.addAttribute("date", date);
+		model.addAttribute("imageUrl", path);
+		return "/archivesRecord/takePhoto";
 	}
 
 	private void syncDepthSizeParam(DeepCameraInfo deepCameraInfo) {
@@ -334,6 +361,7 @@ public class ArchivesRecordController {
 		deepCameraInfo.setCenterDeep(deep_center_deep);
 		synchronized (mDepth) {
 			mRgbBitmap = cameraHelper.FetchFinalData(mDepth);
+
 			/*
 			Paint pt = new Paint();
 			pt.setColor(Color.BLACK);
@@ -345,11 +373,19 @@ public class ArchivesRecordController {
 
 			can.drawRect(lx, ly, rx, ry, pt);
 			*/
-			mRgbBitmap.saveAs(path);
+			String rgbPath = path + File.separator + RGB_FILE_NAME;
+			mRgbBitmap.saveAs(rgbPath);
 			deepCameraInfo.setRgbBitmap(mRgbBitmap);
 			Mat depth_data = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_16UC1);
 			mDepth.convertTo(depth_data, depth_data.type());
 			deepCameraInfo.setDepthMat(depth_data);
+
+			// 保存deep点云
+			//String deepPath = path + File.separator + DEEP_FILE_NAME;
+			FileUtils.writeFile(ImageUtils.save_mat_to_string(deepCameraInfo.getDepthMat()), path, DEEP_FILE_NAME, true);
+			Gson gson = new Gson();
+			String data_json = gson.toJson(deepCameraInfo);
+			FileUtils.writeFile(data_json, path, MODEL_FILE_NAME, true);
 			//mActivity.getDeepCameraInfo().setDepthMat(depth_data);
 		}
 	}
@@ -373,6 +409,7 @@ public class ArchivesRecordController {
 		ModelMap map = new ModelMap();
 		try {
 			String path = request.getSession().getServletContext().getRealPath("/");
+			//String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/wound";
 			File webRoot = new File(path).getParentFile();
 			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
 

@@ -43,7 +43,8 @@
 	</div>
 	<div class="row">
 		<div class="span9">
-			<img id="hacker" src="${imageUrl}">
+			<img id="hacker" src="${imageUrl}/rgb.jpeg">
+			<!--<img id="hacker" src="${ctx}/static/images/hacker.jpg">-->
 			<input type="hidden" id="image-uid" value="${uid}" />
 			<input type="hidden" id="image-date" value="${date}" />
 

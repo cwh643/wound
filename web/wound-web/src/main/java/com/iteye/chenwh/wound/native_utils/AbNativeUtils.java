@@ -22,8 +22,8 @@ public class AbNativeUtils {
     public int deep_center_dis = 3;
 
     static {
-        System.loadLibrary("opencv_java");
-        System.loadLibrary("rooxin_camm");
+        //System.loadLibrary("opencv_java");
+        //System.loadLibrary("rooxin_camm");
     }
 
     public  native int ConvertTORGBA(ByteBuffer src, ByteBuffer dst, int w, int h, int strideInBytes);
