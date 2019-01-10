@@ -3,6 +3,7 @@ package com.iteye.chenwh.wound.opencv;
 import com.alibaba.fastjson.JSONObject;
 import com.iteye.chenwh.wound.native_utils.AbNativeUtils;
 import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
+import com.iteye.chenwh.wound.web.ArchivesRecordController;
 import org.apache.commons.io.FileUtils;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -41,13 +42,13 @@ public class DeepImageUtils {
 
     private AbNativeUtils abNativeUtils = new AbNativeUtils();
 
-    public DeepImageUtils(File webRoot, String uuid, String recordDate) {
-        String rootPath = webRoot.getPath();//"D:/work/tool/apache-tomcat-7.0.86/webapps";
-        String path = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/model.data";
+    public DeepImageUtils(String rootPath) {
+        //String rootPath = webRoot.getPath();//"D:/work/tool/apache-tomcat-7.0.86/webapps";
+        String path = rootPath + File.separator + ArchivesRecordController.MODEL_FILE_NAME;
         log.info("model path:" + path);
         //String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/model.data";
-        String deepPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/deep.data";
-        String rgbPath = rootPath + "/upload/wound/" + uuid + "/deep/" + recordDate + "/rgb.jpeg";
+        String deepPath = rootPath  + File.separator + ArchivesRecordController.DEEP_FILE_NAME;
+        String rgbPath = rootPath + File.separator + ArchivesRecordController.RGB_FILE_NAME;
         try {
             //mAreaMeasureBitmap = ImageUtils.createImage(GlobalDef.RES_CALC_WIDTH, GlobalDef.RES_CALC_HEIGHT);
             String json = FileUtils.readFileToString(new File(path));

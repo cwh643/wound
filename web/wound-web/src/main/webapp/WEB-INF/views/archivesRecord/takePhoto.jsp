@@ -217,8 +217,32 @@
 
         function onSave() {
             selectBtn(this);
-            var img = convertCanvasToImage(oCanvas);
-            $("#result").append($(img));
+            var fileType = 'image/jpeg';
+            var newImageData = canvas.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
+            var sendData = newImageData.replace("data:"+fileType+";base64,",'');
+            var url = '${ctx}/archivesRecord/saveMeasureInfo';
+            $.post(url,{
+                uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
+                date: $('#image-date').val(),//'20180701172557',
+                area: $('#measure-area').val(),
+                volume: $('#measure-volume').val(),
+                deep: $('#measure-deep').val(),
+                length: $('#measure-length').val(),
+                width: $('#measure-width').val(),
+                yellow: $('#measure-yellow').val(),
+                red: $('#measure-red').val(),
+                black: $('#measure-black').val(),
+                imageData: sendData
+            },function(result){
+                console.log(result)
+                if (result.success) {
+                    alert('保存成功');
+                } else {
+                    var msg = result.message;
+                    alert(msg);
+                }
+                //drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
+            }, "json");
         }
 
         function selectBtn(el) {

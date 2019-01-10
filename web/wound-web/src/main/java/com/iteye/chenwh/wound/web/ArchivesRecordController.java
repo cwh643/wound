@@ -307,11 +307,11 @@ public class ArchivesRecordController {
 	@RequestMapping(value = "takePhoto", method = RequestMethod.GET)
 	public String takePhoto(Model model, String uuid,  HttpServletRequest request) {
 		String dateTime = DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
-		String path = getDeepPath(uuid, dateTime);
+		String path = getDeepPath(request, uuid, dateTime);
 		//model.addAttribute("uid", uuid);
 		//model.addAttribute("date", dateTime);
 		//model.addAttribute("imageUrl", path);
-		saveDataAndJumpPage(request, path);
+		saveDataAndJumpPage(path);
 		stopCamera();
 		return "redirect:/archivesRecord/measurePhoto?uid="+uuid+"&date="+ dateTime;
 	}
@@ -341,7 +341,8 @@ public class ArchivesRecordController {
 		return path;
 	}
 
-	private void saveDataAndJumpPage(HttpServletRequest request, String path) {
+	private String getDeepPath(HttpServletRequest request, String uuid, String dateTime) {
+		String path = getDeepPath(uuid, dateTime);
 		String root = request.getSession().getServletContext().getRealPath("/");
 		File webRoot = new File(root).getParentFile();
 		path = webRoot.getPath() + path;
@@ -349,7 +350,11 @@ public class ArchivesRecordController {
 		if (!parent.exists()) {
 			parent.mkdirs();
 		}
-		log.error("save path=" + path);
+		//log.info("save path=" + path);
+		return path;
+	}
+
+	private void saveDataAndJumpPage(String path) {
 		Image mRgbBitmap = cameraHelper.getRgbBitmap();
 		Image mDepthBitmap = cameraHelper.getDepthBitmap();
 		Mat mDepth = new Mat(mDepthBitmap.getHeight(), mDepthBitmap.getWidth(), CvType.CV_16UC1);
@@ -408,10 +413,8 @@ public class ArchivesRecordController {
 	public ModelMap computerArea(String uuid, String date, String imageData, HttpServletRequest request) {
 		ModelMap map = new ModelMap();
 		try {
-			String path = request.getSession().getServletContext().getRealPath("/");
-			//String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/wound";
-			File webRoot = new File(path).getParentFile();
-			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+			String path = getDeepPath(request, uuid, date);
+			DeepImageUtils utils = new DeepImageUtils(path);
 
 			BASE64Decoder decoder = new BASE64Decoder();
 			byte[] b = decoder.decodeBuffer(imageData);
@@ -431,6 +434,59 @@ public class ArchivesRecordController {
 		return map;
 	}
 
+	@RequestMapping(value = "saveMeasureInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelMap saveMeasureInfo(String uuid, String date, String imageData,
+									String area, String volume, String deep,
+									String length, String width,
+									String yellow, String red, String black,
+									HttpServletRequest request) {
+		ModelMap map = new ModelMap();
+		try {
+			ArchivesRecord record = service.findRecord(uuid);
+			if (record == null) {
+				map.addAttribute("success", false);
+				map.addAttribute("message", "创伤记录不存在");
+				return map;
+			}
+			record.setWoundArea(Double.parseDouble(area));
+			record.setWoundVolume(Double.parseDouble(volume));
+			record.setWoundArea(Double.parseDouble(deep));
+			record.setWoundWidth(Double.parseDouble(width));
+			record.setWoundHeight(Double.parseDouble(length));
+			record.setWoundColorRed(Double.parseDouble(red));
+			record.setWoundColorYellow(Double.parseDouble(yellow));
+			record.setWoundColorBlack(Double.parseDouble(black));
+			service.saveRecord(record);
+
+			String path = getDeepPath(request, uuid, date);
+			//String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/wound";
+
+			BASE64Decoder decoder = new BASE64Decoder();
+			byte[] b = decoder.decodeBuffer(imageData);
+			ByteArrayInputStream bais = new ByteArrayInputStream(b);
+			BufferedImage bi = ImageIO.read(bais);
+			File w2 = new File(path + File.separator + PDF_IMAGE_FILE_NAME);
+			ImageIO.write(bi, "jpg", w2);
+			Image image = ImageUtils.createImage(bi);
+
+			RecordImage ri = new RecordImage();
+			ri.setRecordId(record.getRecordId());
+			ri.setImageType("deep");
+			path = getDeepPath(uuid, date).replace("/upload", "");
+			ri.setImagePath(path);
+			//ri.setImagePath(path + File.separator + PDF_IMAGE_FILE_NAME);
+			recordImageService.save(ri);
+
+			map.addAttribute("success", true);
+		} catch (Exception e) {
+			map.addAttribute("success", false);
+			map.addAttribute("message", "保存测量信息出错");
+			log.error("保存测量信息出错", e);
+		}
+		return map;
+	}
+
 	@RequestMapping(value = "computerDeep", method = RequestMethod.POST)
 	@ResponseBody
 	public ModelMap computerDeep(String uuid, String date, String points, HttpServletRequest request) {
@@ -443,9 +499,10 @@ public class ArchivesRecordController {
 				return map;
 			}
 			double result = 0;
-			String path = request.getSession().getServletContext().getRealPath("/");
-			File webRoot = new File(path).getParentFile();
-			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+			String path = getDeepPath(request, uuid, date);
+			//String path = request.getSession().getServletContext().getRealPath("/");
+			//File webRoot = new File(path).getParentFile();
+			DeepImageUtils utils = new DeepImageUtils(path);
 			String[] pointList = points.split(",");
 			if (pointList != null && pointList.length == 4) {
 				result = utils.calcDeep(Integer.parseInt(pointList[0]),Integer.parseInt(pointList[1]),
@@ -476,9 +533,8 @@ public class ArchivesRecordController {
 				return map;
 			}
 			double result = 0;
-			String path = request.getSession().getServletContext().getRealPath("/");
-			File webRoot = new File(path).getParentFile();
-			DeepImageUtils utils = new DeepImageUtils(webRoot, uuid, date);
+			String path = getDeepPath(request, uuid, date);
+			DeepImageUtils utils = new DeepImageUtils(path);
 			String[] pointList = points.split(",");
 			if (pointList != null && pointList.length == 4) {
 				result = utils.calcDistince(Integer.parseInt(pointList[0]),Integer.parseInt(pointList[1]),
