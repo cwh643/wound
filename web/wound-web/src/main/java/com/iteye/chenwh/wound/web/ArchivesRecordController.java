@@ -236,7 +236,7 @@ public class ArchivesRecordController {
 				if (cameraHelper == null) {
 					cameraHelper = new TYCameraHelper8x();
 					//final Image mRgbBitmap = cameraHelper.getRgbBitmap();
-					//deep_center_deep = cameraHelper.getCenterDeep();
+					deep_center_deep = cameraHelper.getCenterDeep();
 					cameraHelper.init("640x480");
 					cameraHelper.onResume(new AbstractCameraHelper.Callback() {
 						@Override
@@ -272,7 +272,7 @@ public class ArchivesRecordController {
 		mDepth.convertTo(mDepthTmpMap, mDepthTmpMap.type());
 		BufferedImage buffDeep = Utils.matToBitmap(mDepthTmpMap);
 		mDepthBitmap = new Image(buffDeep);
-		//deep_center_deep = cameraHelper.getCenterDeep();
+		deep_center_deep = cameraHelper.getCenterDeep();
 		Image newPic = new Image(buffImg);
 		newPic.combineWithPicture(mDepthBitmap);//合成图片
 		try {
@@ -392,6 +392,8 @@ public class ArchivesRecordController {
 			String data_json = gson.toJson(deepCameraInfo);
 			FileUtils.writeFile(data_json, path, MODEL_FILE_NAME, true);
 			//mActivity.getDeepCameraInfo().setDepthMat(depth_data);
+
+			deep_center_deep = cameraHelper.getCenterDeep();
 		}
 	}
 
