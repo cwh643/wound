@@ -107,7 +107,8 @@ public class ArchivesRecordController {
 		}
 		model.addAttribute("record", dbRecord);
 		
-		List<RecordImage> images = recordImageService.findByRecordId(dbRecord.getId());
+		//List<RecordImage> images = recordImageService.findByRecordId(dbRecord.getId());
+		List<RecordImage> images = recordImageService.findByRecordId(dbRecord.getRecordId());
 		model.addAttribute("images", images);
 		
 		model.addAttribute("dict_wound_describe_clean", CommonUtils.dict_wound_describe_clean);
@@ -380,6 +381,9 @@ public class ArchivesRecordController {
 			*/
 			String rgbPath = path + File.separator + RGB_FILE_NAME;
 			mRgbBitmap.saveAs(rgbPath);
+			Image listRgb = mRgbBitmap.resize(320, 240);
+			listRgb.saveAs(path + File.separator + LIST_IMAGE_FILE_NAME);
+
 			deepCameraInfo.setRgbBitmap(mRgbBitmap);
 			Mat depth_data = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_16UC1);
 			mDepth.convertTo(depth_data, depth_data.type());
@@ -475,7 +479,7 @@ public class ArchivesRecordController {
 			RecordImage ri = new RecordImage();
 			ri.setRecordId(record.getRecordId());
 			ri.setImageType("deep");
-			path = getDeepPath(uuid, date).replace("/upload", "");
+			path = getDeepPath(uuid, date).replace("/upload/wound/", "");
 			ri.setImagePath(path);
 			//ri.setImagePath(path + File.separator + PDF_IMAGE_FILE_NAME);
 			recordImageService.save(ri);

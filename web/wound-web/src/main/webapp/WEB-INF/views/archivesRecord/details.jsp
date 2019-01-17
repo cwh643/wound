@@ -224,7 +224,7 @@
 		      <ul class="thumbnails">
 		      </c:if>
 			  <li class="span3">
-		            <div class="thumbnail" style="height:200px;">
+		            <div class="thumbnail" style="height:200px;" data-path="${img.imagePath}">
 						<!--<a href="${uploadCtx}/${img.imagePath}/rgb.jpeg" target="_blank">-->
 		                    <div class="divcss5" style="margin-top: 30px">
 		                  		<!--<img alt="" src="${ctx}/static/wound/${img.imagePath}/list_rgb.jpeg"></img>-->
@@ -663,8 +663,16 @@
 			
 			loadHistoryData();
 
-			$('.deep-image').on('click', onTakePhoto);
+			//$('.deep-image').on('click', onTakePhoto);
+			$('.thumbnail').on('click', onPhotoMeasure);
 		});
+
+		function onPhotoMeasure() {
+            var path = $(this).data('path');
+            var datas = path.split("/");
+            //debugger
+            window.open("${ctx}/archivesRecord/measurePhoto?uid="+datas[0]+"&date="+ datas[2]);
+		}
 
 		function onOpemCamera() {
             var uuid = $(this).data('uuid');
