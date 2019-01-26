@@ -47,8 +47,22 @@
 			<!--<img id="hacker" src="${ctx}/static/images/hacker.jpg">-->
 			<input type="hidden" id="image-uid" value="${uid}" />
 			<input type="hidden" id="image-date" value="${date}" />
-
-			<canvas id="canvas" width="600" height="300">
+			<canvas id="canvasImage" width="600" height="300" style="position: absolute">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<canvas id="canvasArea" width="600" height="300" style="position: absolute">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<canvas id="canvasWidth" width="600" height="300" style="position: absolute">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<canvas id="canvasHight" width="600" height="300" style="position: absolute">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<canvas id="canvasDeep" width="600" height="300" style="position: absolute">
+				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
+			</canvas>
+			<canvas id="canvas" width="600" height="300" style="position: absolute">
 				<span>该浏览器不支持canvas内容</span> <!--对于不支持canvas的浏览器显示-->
 			</canvas>
 		</div>
@@ -98,28 +112,53 @@
 
 <div id="result"></div>
 
-	<script>
-        var oGc;
-        var oCanvas;
+<script>
+        var oGc, oCanvas, hacker;
+        var areaCanvas, widthCanvas, heightCanvas, deepCanvas, imageCanvas;
+        var areaLayer, widthLayer, heightLayer, deepLayer, imageLayer;
 
-		$(function() {
-		    configPage();
-		});
+	$(function() {
+	    configPage();
+	});
 
-		function configPage() {
-            var hacker = $("#hacker")[0];
+	function configPage() {
+            hacker = $("#hacker")[0];
             oCanvas = $("#canvas")[0];
             oGc = oCanvas.getContext( '2d' );
+debugger
+            imageLayer = $("#canvasImage")[0];
+            imageLayer.width = hacker.width;
+            imageLayer.height = hacker.height;
+            imageCanvas = imageLayer.getContext('2d');
+            
+            areaLayer = $("#canvasArea")[0];
+            areaLayer.width = hacker.width;
+            areaLayer.height = hacker.height;
+            areaCanvas = areaLayer.getContext('2d');
+
+            widthLayer = $("#canvasWidth")[0];
+            widthLayer.width = hacker.width;
+            widthLayer.height = hacker.height;
+            widthCanvas = widthLayer.getContext('2d');
+            
+            heightLayer = $("#canvasHight")[0];
+            heightLayer.width = hacker.width;
+            heightLayer.height = hacker.height;
+            heightCanvas = heightLayer.getContext('2d');
+            
+            deepLayer = $("#canvasDeep")[0];
+            deepLayer.width = hacker.width;
+            deepLayer.height = hacker.height;
+            deepCanvas = deepLayer.getContext('2d');
+            
             setTimeout(drawBackground, 1000);
+	}
 
-
-		}
-
-		function drawBackground() {
+	function drawBackground() {
             oCanvas.width = hacker.width;
             oCanvas.height = hacker.height;
-            oGc.drawImage(hacker, 0, 0);
-            hacker.display ='none';
+            //oGc.drawImage(hacker, 0, 0);
+            //hacker.display ='none';
             //drawArea();
 
             $("#btnLength").on('click', onLength);
@@ -150,22 +189,25 @@
             var firstX = 0;
             var firstY = 0;
             var restore;
-            restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+            restore = deepCanvas.getImageData(0, 0, oCanvas.width, oCanvas.height);
             //drawCrossPoint(oGc, beginX, beginY, 10);
             oCanvas.onmousemove = function(ev) {
                 var ev = ev || window.event;//获取event对象
                 var beginX = ev.clientX-oCanvas.offsetLeft;
                 var beginY = ev.clientY-oCanvas.offsetTop;
-                oGc.putImageData(restore, 0, 0);
-                drawCrossPoint(oGc, beginX, beginY, 10);
+                deepCanvas.putImageData(restore, 0, 0);
+                drawCrossPoint(deepCanvas, beginX, beginY, 10);
             };
 
             oCanvas.onmousedown = function(ev) {
                 var ev = ev || window.event;
+                if (count == 0) {
+                	deepCanvas.clearRect (0, 0, oCanvas.width, oCanvas.height)
+                }
                 var beginX = ev.clientX-oCanvas.offsetLeft;
                 var beginY = ev.clientY-oCanvas.offsetTop;
-                drawCrossPoint(oGc, beginX, beginY, 10);
-                restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+                drawCrossPoint(deepCanvas, beginX, beginY, 10);
+                restore = deepCanvas.getImageData(0, 0, oCanvas.width, oCanvas.height);
                 count++;
                 if (count == 2) {
                     oCanvas.onmousedown = null;
@@ -185,7 +227,7 @@
                         //drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
                     }, "json");
 
-				} else {
+		   } else {
                     firstX = beginX;
                     firstY = beginY
                 }
@@ -193,33 +235,37 @@
             };
         }
 
-		function onLength() {
+	function onLength() {
             selectBtn(this);
-            oGc.strokeStyle = 'green';
-            oGc.fillStyle = 'green';//填充颜色
-            oGc.lineWidth = 3;
-            drawLine('L');
+            heightCanvas.strokeStyle = 'green';
+            heightCanvas.fillStyle = 'green';//填充颜色
+            heightCanvas.lineWidth = 3;
+            drawLine('L', heightCanvas);
         }
 
         function onWidth() {
             selectBtn(this);
-            oGc.strokeStyle = 'blue';
-            oGc.fillStyle = 'blue';
-            oGc.lineWidth = 3;
-            drawLine('W');
+            widthCanvas.strokeStyle = 'blue';
+            widthCanvas.fillStyle = 'blue';
+            widthCanvas.lineWidth = 3;
+            drawLine('W', widthCanvas);
         }
 
         function onArea() {
             selectBtn(this);
-            oGc.lineWidth = 3;
             drawArea();
         }
-
+        
         function onSave() {
-            selectBtn(this);
-            var fileType = 'image/jpeg';
-            var newImageData = canvas.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
-            var sendData = newImageData.replace("data:"+fileType+";base64,",'');
+        	selectBtn(this);
+        	image = convertCanvasToImage(imageCanvas, true);
+        	postImageData(image);
+        }
+
+        function postImageData(image) {
+            //var fileType = 'image/jpeg';
+            //var newImageData = canvas.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
+            //var sendData = newImageData.replace("data:"+fileType+";base64,",'');
             var url = '${ctx}/archivesRecord/saveMeasureInfo';
             $.post(url,{
                 uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
@@ -232,7 +278,7 @@
                 yellow: $('#measure-yellow').val(),
                 red: $('#measure-red').val(),
                 black: $('#measure-black').val(),
-                imageData: sendData
+                imageData: image
             },function(result){
                 console.log(result)
                 if (result.success) {
@@ -248,9 +294,9 @@
         function selectBtn(el) {
             $("#measureGroup button").removeClass('btn-primary');
             $(el).addClass('btn-primary')
-		}
+	  }
 
-		function drawCrossPoint(ctx, x, y, r) {
+	  function drawCrossPoint(ctx, x, y, r) {
             //var restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
             //oGc.putImageData(restore, 0, 0);
             ctx.strokeStyle = '#FFFFFFB2';//画笔颜色
@@ -262,9 +308,9 @@
             ctx.moveTo(x, y - r);
             ctx.lineTo(x, y + r);
             ctx.stroke();
-		}
+	}
 
-        function drawLine(type) {
+        function drawLine(type, ctx) {
             var beginX = 0, beginY=0, endX = 0, endY=0;
             var isDrag = false;
             var restore;
@@ -273,26 +319,26 @@
                 beginX = ev.clientX-oCanvas.offsetLeft;
                 beginY = ev.clientY-oCanvas.offsetTop;
                 isDrag = true;
-                restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
+                ctx.clearRect (0, 0, oCanvas.width, oCanvas.height)
+                restore = ctx.getImageData(0, 0, oCanvas.width, oCanvas.height);
                 //console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
-                //drawPoint(oGc, beginX, beginY); //鼠标在当前画布上X,Y坐标
-                //oGc.lineTo(beginX, beginY);
+                //drawPoint(ctx, beginX, beginY); //鼠标在当前画布上X,Y坐标
+                //ctx.lineTo(beginX, beginY);
             };
             oCanvas.onmousemove = function(ev) {
                 var ev = ev || window.event;//获取event对象
-                //oGc.clearRect(0, 0, oCanvas.width, oCanvas.height);
+                //ctx.clearRect(0, 0, oCanvas.width, oCanvas.height);
                 endX = ev.clientX-oCanvas.offsetLeft;
                 endY = ev.clientY-oCanvas.offsetTop;
-				if (isDrag) {
-                    oGc.putImageData(restore, 0, 0);
-                    oGc.beginPath();
-                    drawPoint(oGc, beginX, beginY)
-                    oGc.moveTo(beginX, beginY);
-                    oGc.lineTo(endX, endY);
-                    oGc.stroke();
-                    drawPoint(oGc, endX, endY);
-				}
-
+		   if (isDrag) {
+                    ctx.putImageData(restore, 0, 0);
+                    ctx.beginPath();
+                    drawPoint(ctx, beginX, beginY)
+                    ctx.moveTo(beginX, beginY);
+                    ctx.lineTo(endX, endY);
+                    ctx.stroke();
+                    drawPoint(ctx, endX, endY);
+		    }
             };
 
             oCanvas.onmouseup = function(ev) {
@@ -300,8 +346,8 @@
                 oCanvas.onmousedown = null;
                 oCanvas.onmouseup = null;
                 isDrag = false;
-                //drawTips(oGc, endX + 10, endY, endX + 30, endY + 10, '23.3cm');
-				var url = '${ctx}/archivesRecord/computerLength';
+                //drawTips(ctx, endX + 10, endY, endX + 30, endY + 10, '23.3cm');
+		   var url = '${ctx}/archivesRecord/computerLength';
                 $.post(url,{
                     uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
 					date: $('#image-date').val(),//'20180701172557',
@@ -312,17 +358,17 @@
                         msg = result.length + 'cm';
                         if ('L' == type) {
                             $('#measure-length').val(result.length);
-						}
+			     }
                         if ('W' == type) {
                             $('#measure-width').val(result.length);
                         }
                     }
-                    drawTips(oGc, endX + 25, endY - 15, 40, 30, msg);
+                    drawTips(ctx, endX + 25, endY - 15, 40, 30, msg);
                 }, "json");
 
                 //var ev = ev || window.event;//获取event对象
-                //oGc.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
-                //oGc.stroke();
+                //ctx.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
+                //ctx.stroke();
             };
         }
 
@@ -335,8 +381,8 @@
         }
 
         function drawTips(ctx, x1, y1, w, h, txt) {
-		    var r = h / 2;
-		    var lx = x1, ly = y1 + r;
+	     var r = h / 2;
+	     var lx = x1, ly = y1 + r;
             var rx = x1 + w, ry = y1 + r;
             var cx = x1 + w / 2, cy = y1 + r;
             ctx.strokeStyle = '#FFFFFFB2';//画笔颜色
@@ -359,20 +405,23 @@
         }
 
         function drawArea() {
-            oGc.beginPath();
-            oGc.strokeStyle = '#1BB2B2';//画笔颜色
+            areaCanvas.lineWidth = 3;
+            areaCanvas.strokeStyle = '#FF1BB2B2';//画笔颜色
+            areaCanvas.fillStyle = '#FF1BB2B1';//填充颜色
+            areaCanvas.beginPath();
             var beginX = 0, beginY=0;
             oCanvas.onmousedown = function(ev) {
                 var ev = ev || window.event;
                 beginX = ev.clientX-oCanvas.offsetLeft;
                 beginY = ev.clientY-oCanvas.offsetTop;
                 //console.log("(" + ev.clientX + "," + ev.clientY + "," + oCanvas.offsetLeft + "," + oCanvas.offsetTop + ")");
-                oGc.moveTo(beginX, beginY); //鼠标在当前画布上X,Y坐标
+                areaCanvas.clearRect(0, 0, oCanvas.width, oCanvas.height);
+                areaCanvas.moveTo(beginX, beginY); //鼠标在当前画布上X,Y坐标
 
                 document.onmousemove = function(ev) {
                     var ev = ev || window.event;//获取event对象
-                    oGc.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
-                    oGc.stroke();
+                    areaCanvas.lineTo(ev.clientX-oCanvas.offsetLeft,ev.clientY-oCanvas.offsetTop);
+                    areaCanvas.stroke();
                 };
                 oCanvas.onmouseup = function() {
                     document.onmousemove = null;
@@ -380,13 +429,13 @@
                     oCanvas.onmouseup = null;
                     //oGc.lineTo(beginX, beginY);
                     //oGc.stroke();
-                    oGc.closePath();//封闭一个图形
-                    oGc.stroke();
+                    areaCanvas.closePath();//封闭一个图形
+                    areaCanvas.stroke();
 
-                    oGc.fillStyle = '#1BB2B1';//填充颜色
-                    oGc.fill();//填充图形
+                    areaCanvas.fill();//填充图形
 
-                    convertCanvasToImage(oCanvas);
+                    image = convertCanvasToImage(imageCanvas, false);
+                    reqAreaData(image)
                 };
             };
 
@@ -411,15 +460,30 @@
         }*/
 
         // Converts canvas to an image
-        function convertCanvasToImage(canvas) {
-		    var fileType = 'image/jpeg';
-            var newImageData = canvas.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
+        function convertCanvasToImage(canvas, isAll) {
+            canvas.save();
+            canvas.globalCompositeOperation="destination-over";
+            canvas.drawImage(hacker, 0, 0);
+            canvas.drawImage(areaLayer, 0, 0);
+            if (isAll) {
+            	canvas.drawImage(widthLayer, 0, 0);
+            	canvas.drawImage(heightLayer, 0, 0);
+            	canvas.drawImage(deepLayer, 0, 0);
+            }
+            canvas.restore();
+            
+            var fileType = 'image/jpeg';
+            var newImageData = imageLayer.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
             var sendData = newImageData.replace("data:"+fileType+";base64,",'');
+            canvas.clearRect(0, 0, oCanvas.width, oCanvas.height);
+            return sendData
+	  }
+	  function reqAreaData(image) {
             var url = '${ctx}/archivesRecord/computerArea';
             $.post(url,{
                 uuid: $('#image-uid').val(),//'64a9b96201bb4312b27ef163cbc2f177',
                 date: $('#image-date').val(),//'20180701172557',
-                imageData: sendData
+                imageData: image
             },function(result){
                 console.log(result)
                 if (result.success) {
