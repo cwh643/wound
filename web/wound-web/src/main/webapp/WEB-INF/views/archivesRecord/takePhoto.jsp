@@ -125,7 +125,7 @@
             hacker = $("#hacker")[0];
             oCanvas = $("#canvas")[0];
             oGc = oCanvas.getContext( '2d' );
-debugger
+
             imageLayer = $("#canvasImage")[0];
             imageLayer.width = hacker.width;
             imageLayer.height = hacker.height;
@@ -462,22 +462,24 @@ debugger
         // Converts canvas to an image
         function convertCanvasToImage(canvas, isAll) {
             canvas.save();
-            canvas.globalCompositeOperation="destination-over";
-            canvas.drawImage(hacker, 0, 0);
-            canvas.drawImage(areaLayer, 0, 0);
+            //canvas.globalCompositeOperation="destination-over";
+            canvas.drawImage(hacker, 0, 0, oCanvas.width, oCanvas.height);
+            canvas.drawImage(areaLayer, 0, 0, oCanvas.width, oCanvas.height);
             if (isAll) {
-            	canvas.drawImage(widthLayer, 0, 0);
-            	canvas.drawImage(heightLayer, 0, 0);
-            	canvas.drawImage(deepLayer, 0, 0);
+            	canvas.drawImage(widthLayer, 0, 0, oCanvas.width, oCanvas.height);
+            	canvas.drawImage(heightLayer, 0, 0, oCanvas.width, oCanvas.height);
+            	canvas.drawImage(deepLayer, 0, 0, oCanvas.width, oCanvas.height);
             }
             canvas.restore();
             
             var fileType = 'image/jpeg';
             var newImageData = imageLayer.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
             var sendData = newImageData.replace("data:"+fileType+";base64,",'');
+            //debugger
             canvas.clearRect(0, 0, oCanvas.width, oCanvas.height);
             return sendData
 	  }
+	  
 	  function reqAreaData(image) {
             var url = '${ctx}/archivesRecord/computerArea';
             $.post(url,{
