@@ -5,6 +5,7 @@ import com.iteye.chenwh.wound.native_utils.AbNativeUtils;
 import com.iteye.chenwh.wound.native_utils.CommonNativeUtils;
 import com.iteye.chenwh.wound.web.ArchivesRecordController;
 import org.apache.commons.io.FileUtils;
+import org.opencv.android.Utils;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgproc.Imgproc;
@@ -43,7 +44,7 @@ public class DeepImageUtils {
     private AbNativeUtils abNativeUtils = new AbNativeUtils();
 
     public DeepImageUtils(String rootPath) {
-        //String rootPath = webRoot.getPath();//"D:/work/tool/apache-tomcat-7.0.86/webapps";
+        //rootPath = "D:\\work\\tool\\apache-tomcat-7.0.86\\webapps\\upload\\wound\\7a26013ca8aa450493f80ab4361fce4d\\deep\\20190110212042";
         String path = rootPath + File.separator + ArchivesRecordController.MODEL_FILE_NAME;
         log.info("model path:" + path);
         //String path = "D:/work/tool/apache-tomcat-7.0.86/webapps/upload/wound/64a9b96201bb4312b27ef163cbc2f177/deep/20180701172557/model.data";
@@ -99,6 +100,16 @@ public class DeepImageUtils {
             mWoundOrgRgbView.setVisibility(View.VISIBLE);
         }
         */
+    }
+
+
+    public Image getDepthImage() {
+        Mat mDepth = deepCameraInfo.getDepthMat();
+        Mat mDepthTmpMap = new Mat(mDepth.rows(), mDepth.cols(), CvType.CV_8UC1);
+        mDepth.convertTo(mDepthTmpMap, mDepthTmpMap.type());
+        BufferedImage buffDeep = Utils.matToBitmap(mDepthTmpMap);
+        Image mDepthBitmap = new Image(buffDeep);
+        return mDepthBitmap;
     }
 
     public double calcDistince(int x1, int y1, int x2, int y2) {

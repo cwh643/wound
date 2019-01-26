@@ -414,6 +414,26 @@ public class ArchivesRecordController {
 		return "archivesRecord/takePhoto";
 	}
 
+	@RequestMapping(value = "depthImage", method = RequestMethod.GET)
+	@ResponseBody
+	public void depthImage(String uuid, String date, HttpServletRequest request, HttpServletResponse resp) {
+		//ModelMap map = new ModelMap();
+		try {
+			final OutputStream out = resp.getOutputStream();
+			try {
+				String path = getDeepPath(request, uuid, date);
+				DeepImageUtils utils = new DeepImageUtils(path);
+				Image image = utils.getDepthImage();
+				ImageIO.write(image.getAsBufferedImage(), "jpeg", out);
+			} finally {
+				out.close();
+			}
+		} catch (Exception e) {
+			log.error("获取深度图像出错", e);
+		}
+		//return map;
+	}
+
 	@RequestMapping(value = "computerArea", method = RequestMethod.POST)
 	@ResponseBody
 	public ModelMap computerArea(String uuid, String date, String imageData, HttpServletRequest request) {

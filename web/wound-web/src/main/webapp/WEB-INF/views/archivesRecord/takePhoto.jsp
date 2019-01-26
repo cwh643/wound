@@ -31,13 +31,19 @@
 <body>
 <div style="position: static">
 	<div class="row">
-		<div class="span12" style="padding: 5px;">
+		<div class="span8" style="padding: 5px;">
 			<div class="btn-group" id="measureGroup">
                 <button id="btnArea" class="btn btn-primary">面积</button>
 				<button id="btnLength" class="btn">长度</button>
 				<button id="btnWidth" class="btn">宽度</button>
                 <button id="btnDeep" class="btn">深度</button>
 				<button id="btnSave" class="btn">保存</button>
+			</div>
+		</div>
+		<div class="span3 pull-right" style="padding: 5px;">
+			<div class="btn-group" id="typeGroup">
+				<button id="btnRgb" class="btn btn-primary">3D Photo</button>
+				<button id="btnDepth" class="btn">Depth</button>
 			</div>
 		</div>
 	</div>
@@ -166,9 +172,25 @@
             $("#btnArea").on('click', onArea);
             $("#btnDeep").on('click', onDeep);
             $("#btnSave").on('click', onSave);
-
+            $("#btnDepth").on('click', onDepth);
+        	$("#btnRgb").on('click', onRgbPhoto);
             drawArea();
         }
+
+
+        function onRgbPhoto() {
+            selectBtn2(this);
+            uuid = $('#image-uid').val();//'64a9b96201bb4312b27ef163cbc2f177'
+            date = $('#image-date').val();//'20180701172557',
+            $('#hacker').attr("src","${imageUrl}/rgb.jpeg");
+        }
+
+        function onDepth() {
+            selectBtn2(this);
+            uuid = $('#image-uid').val();//'64a9b96201bb4312b27ef163cbc2f177'
+			date = $('#image-date').val();//'20180701172557',
+            $('#hacker').attr("src","${ctx}/archivesRecord/depthImage?uuid="+uuid+"&date="+date+"&"+new Date().getTime());
+		}
 
         function defaultLine() {
             //oGc.strokeStyle = 'green';
@@ -294,7 +316,11 @@
         function selectBtn(el) {
             $("#measureGroup button").removeClass('btn-primary');
             $(el).addClass('btn-primary')
-	  }
+	    }
+        function selectBtn2(el) {
+            $("#typeGroup button").removeClass('btn-primary');
+            $(el).addClass('btn-primary')
+        }
 
 	  function drawCrossPoint(ctx, x, y, r) {
             //var restore = oGc.getImageData(0, 0, oCanvas.width, oCanvas.height);
