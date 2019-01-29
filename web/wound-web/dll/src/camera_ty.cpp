@@ -185,7 +185,7 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
                 cv::Mat yuv(pColor->rows, pColor->cols
                         , CV_8UC2, frame.image[i].buffer);
                 // 注意 这里是转换为RGB，源代码中是BGR，是sdk的bug还是demo写错了需要确认
-                cv::cvtColor(yuv, color, cv::COLOR_YUV2RGB_YUYV);
+                cv::cvtColor(yuv, color, cv::COLOR_YUV2BGR_YUYV);
             } else if(frame.image[i].pixelFormat == TY_PIXEL_FORMAT_RGB){
                 LOGD("RGB RGB");
                 cv::Mat rgb(pColor->rows, pColor->cols
