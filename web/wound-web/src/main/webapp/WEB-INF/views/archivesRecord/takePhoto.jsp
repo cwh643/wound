@@ -432,8 +432,10 @@
 
         function drawArea() {
             areaCanvas.lineWidth = 3;
-            areaCanvas.strokeStyle = '#FF1BB2B2';//画笔颜色
-            areaCanvas.fillStyle = '#FF1BB2B1';//填充颜色
+            //areaCanvas.strokeStyle = '#1BB2B2FF';//画笔颜色
+            //areaCanvas.fillStyle = '#1BB2B1FF';//填充颜色
+            areaCanvas.strokeStyle = 'rgba(27, 178, 178, 1)';
+            areaCanvas.fillStyle = 'rgba(27, 178, 177, 0.7)';
             areaCanvas.beginPath();
             var beginX = 0, beginY=0;
             oCanvas.onmousedown = function(ev) {
@@ -489,7 +491,9 @@
         function convertCanvasToImage(canvas, isAll) {
             canvas.save();
             //canvas.globalCompositeOperation="destination-over";
-            canvas.drawImage(hacker, 0, 0, oCanvas.width, oCanvas.height);
+			if (isAll) {
+                canvas.drawImage(hacker, 0, 0, oCanvas.width, oCanvas.height);
+			}
             canvas.drawImage(areaLayer, 0, 0, oCanvas.width, oCanvas.height);
             if (isAll) {
             	canvas.drawImage(widthLayer, 0, 0, oCanvas.width, oCanvas.height);

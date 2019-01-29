@@ -34,8 +34,8 @@ public class GlobalDef {
 
     public static final int DEPTH_CENTER_DIS = 3;
 
-    public static final int AREA_COLOR = 0xFF1CB2B1;
-    public static final int AREA_EDGE_COLOR = 0xFF1CB2B2;
+    public static final int AREA_COLOR = 0xff137d7b;
+    public static final int AREA_EDGE_COLOR = 0xFF1BB2B1;
     public static final int LENGTH_COLOR = 0xFF00FF00;
     public static final int WIDTH_COLOR = 0xFF0000FF;
     public static final int DEEP_COLOR = 0xFFFF0000;
