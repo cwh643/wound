@@ -12,6 +12,7 @@ import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -353,6 +354,12 @@ public class DeepImageUtils {
         deepValidWidth = deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx();
         deepValidHeight = deepCameraInfo.getDeep_ry() - deepCameraInfo.getDeep_ly();
         Image areaMeasureBitmap = ImageUtils.scaleImage(mAreaMeasureBitmap, deepValidWidth, deepValidHeight);
+        //try {
+        //    File w2 = new File("D:/tmp/test-s.png");
+        //    ImageIO.write(areaMeasureBitmap.getAsBufferedImage(), "png", w2);
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
         // 测量页面与depth的缩放比例，用于还原测量点的坐标
         int width = areaMeasureBitmap.getWidth();
         int height = areaMeasureBitmap.getHeight();
@@ -383,8 +390,11 @@ public class DeepImageUtils {
 
         for (int i = 0; i < width; i++) {
             mi.last_deep = 0;
+            //System.out.println();
             for (int j = 0; j < height; j++) {
                 if (areaMeasureBitmap.getRGB(i, j) == GlobalDef.AREA_EDGE_COLOR) {
+                //if (areaMeasureBitmap.getRGB(i, j) != GlobalDef.OTHER_COLOR
+                //        && areaMeasureBitmap.getRGB(i, j) != GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;
                     int depth_i = i + lx;
                     mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);
@@ -392,6 +402,7 @@ public class DeepImageUtils {
                         areaEdgePointList.add(new Point3(depth_i, depth_j, mi.last_deep));
                     }
                 }
+                //System.out.print("," +  Integer.toHexString(areaMeasureBitmap.getRGB(i, j)));
                 //System.out.println("RGB("+i+","+j+") = 0x" + Integer.toHexString(areaMeasureBitmap.getRGB(i, j)) + "," +  GlobalDef.AREA_COLOR);
                 if (areaMeasureBitmap.getRGB(i, j) == GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;

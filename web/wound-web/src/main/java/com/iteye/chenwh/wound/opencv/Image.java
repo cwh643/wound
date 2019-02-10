@@ -130,8 +130,10 @@ public class Image {
             }
         }
         
+        //BufferedImage result =
+        //    new BufferedImage(newWidth , newHeight, BufferedImage.TYPE_INT_BGR);
         BufferedImage result =
-            new BufferedImage(newWidth , newHeight, BufferedImage.TYPE_INT_BGR);
+                new BufferedImage(newWidth , newHeight, BufferedImage.TYPE_INT_RGB);
         
         double widthSkip =  new Double(oldWidth-newWidth) / new Double(newWidth);
         double heightSkip =  new Double(oldHeight-newHeight) / new Double(newHeight);

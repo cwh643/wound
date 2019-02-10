@@ -502,7 +502,8 @@
             }
             canvas.restore();
             
-            var fileType = 'image/jpeg';
+            //var fileType = 'image/jpeg';
+            var fileType = 'image/png';
             var newImageData = imageLayer.toDataURL(fileType);   //重新生成图片，<span style="font-family: Arial, Helvetica, sans-serif;">fileType为用户选择的图片类型</span>
             var sendData = newImageData.replace("data:"+fileType+";base64,",'');
             //debugger
