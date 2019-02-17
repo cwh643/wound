@@ -392,9 +392,9 @@ public class DeepImageUtils {
             mi.last_deep = 0;
             //System.out.println();
             for (int j = 0; j < height; j++) {
-                if (areaMeasureBitmap.getRGB(i, j) == GlobalDef.AREA_EDGE_COLOR) {
-                //if (areaMeasureBitmap.getRGB(i, j) != GlobalDef.OTHER_COLOR
-                //        && areaMeasureBitmap.getRGB(i, j) != GlobalDef.AREA_COLOR) {
+                //if (areaMeasureBitmap.getRGB(i, j) == GlobalDef.AREA_EDGE_COLOR) {
+                if (areaMeasureBitmap.getRGB(i, j) != GlobalDef.OTHER_COLOR
+                        && areaMeasureBitmap.getRGB(i, j) != GlobalDef.AREA_COLOR) {
                     int depth_j = j + ly;
                     int depth_i = i + lx;
                     mi.last_deep = filterPoint(mFilterDepth, depth_i, depth_j);

@@ -277,9 +277,24 @@
             selectBtn(this);
             drawArea();
         }
+
+        function isEmpty(val) {
+	    	return (undefined == val || 0 == val.length)
+		}
         
         function onSave() {
-        	selectBtn(this);
+            if (isEmpty($('#measure-area').val())
+				|| isEmpty($('#measure-volume').val())
+                || isEmpty($('#measure-deep').val())
+                || isEmpty($('#measure-length').val())
+                || isEmpty($('#measure-width').val())
+                || isEmpty($('#measure-yellow').val())
+                || isEmpty($('#measure-red').val())
+                || isEmpty($('#measure-black').val())) {
+                alert("请先完成测量");
+                return
+			}
+            selectBtn(this);
         	image = convertCanvasToImage(imageCanvas, true);
         	postImageData(image);
         }
