@@ -321,6 +321,8 @@ public class ArchivesRecordController {
 	public String measurePhoto(Model model, String uid,  String date) {
 		//String path = "static/images/hacker.jpg";
 		String path = getDeepPath(uid, date);
+		ArchivesRecord record = service.findRecord(uid);
+		model.addAttribute("record", record);
 		model.addAttribute("uid", uid);
 		model.addAttribute("date", date);
 		model.addAttribute("imageUrl", path);
@@ -477,7 +479,7 @@ public class ArchivesRecordController {
 			}
 			record.setWoundArea(Double.parseDouble(area));
 			record.setWoundVolume(Double.parseDouble(volume));
-			record.setWoundArea(Double.parseDouble(deep));
+			record.setWoundDeep(Double.parseDouble(deep));
 			record.setWoundWidth(Double.parseDouble(width));
 			record.setWoundHeight(Double.parseDouble(length));
 			record.setWoundColorRed(Double.parseDouble(red));

@@ -75,35 +75,35 @@
 		<div class="span3">
 			<div class="input-prepend">
 				<span class="add-on">面积（cm2）</span>
-				<input id="measure-area" type="text" style="width: auto;">
+				<input id="measure-area" type="text" value="${record.woundArea}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">容积（cm3）</span>
-				<input id="measure-volume" type="text" style="width: auto;">
+				<input id="measure-volume" type="text" value="${record.woundVolume}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">深度（cm）</span>
-				<input id="measure-deep" type="text" style="width: auto;">
+				<input id="measure-deep" type="text" value="${record.woundDeep}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">长度（cm）</span>
-				<input id="measure-length" type="text" style="width: auto;">
+				<input id="measure-length" type="text" value="${record.woundWidth}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">宽度（cm）</span>
-				<input id="measure-width" type="text" style="width: auto;">
+				<input id="measure-width" type="text" value="${record.woundHeight}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">黄色组织（%）</span>
-				<input id="measure-yellow" type="text" style="width: auto;">
+				<input id="measure-yellow" type="text" value="${record.woundColorYellow}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">红色组织（%）</span>
-				<input id="measure-red" type="text" style="width: auto;">
+				<input id="measure-red" type="text" value="${record.woundColorRed}" style="width: auto;">
 			</div>
 			<div class="input-prepend">
 				<span class="add-on">黑色组织（%）</span>
-				<input id="measure-black" type="text" style="width: auto;">
+				<input id="measure-black" type="text" value="${record.woundColorBlack}" style="width: auto;">
 			</div>
 			<!--
 			<button class="btn operation-btn">长度</button>
