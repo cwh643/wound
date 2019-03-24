@@ -9,6 +9,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -94,7 +95,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private FrameLayout mImageFrameLayout;
     private DeepModelDisplayView mModelView;
     private GestureDetector gestureDetector;
-    private Paint paint;
+    private Paint area_paint;
+    private Paint length_paint;
+    private Paint width_paint;
+    private Paint deep_paint;
     private Canvas areaCanvas;
     private Canvas lengthCanvas;
     private Canvas widthCanvas;
@@ -109,6 +113,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private boolean inited;
 
     private LinearLayout measure_bar;
+    private LinearLayout msgContainer;
+    private LinearLayout msgContainerBack;
 
     private ImageButton btn_measure_bar;
 
@@ -121,6 +127,14 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private ImageButton btn_menu_bar;
 
     private Mat mFilterDepth;
+
+    private volatile long area_operate_time;
+    private volatile long length_operate_time;
+    private volatile long width_operate_time;
+
+    private volatile int area_operat_mode;
+    private volatile int length_operat_mode;
+    private volatile int width_operat_mode;
 
     public static RecordFragmentWoundMeasure createInstance() {
         RecordFragmentWoundMeasure fragment = new RecordFragmentWoundMeasure();
@@ -203,17 +217,14 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     return;
                 }
                 if (deepCameraInfo.getAreaPointList().size() > 0) {
-                    paint.setColor(GlobalDef.AREA_COLOR);
                     fillArea();
                     setArea();
                 }
                 if (deepCameraInfo.getLengthPointList().size() > 1) {
-                    paint.setColor(GlobalDef.LENGTH_COLOR);
                     fillLength();
                     setLength();
                 }
                 if (deepCameraInfo.getWidthPointList().size() > 1) {
-                    paint.setColor(GlobalDef.WIDTH_COLOR);
                     fillWidth();
                     setWidth();
                 }
@@ -223,9 +234,22 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         displayMat();
 
-        paint = new Paint();
-        paint.setStrokeWidth(10);
-        paint.setTextSize(60);
+        area_paint = new Paint();
+        area_paint.setColor(GlobalDef.AREA_COLOR);
+        length_paint = new Paint();
+        length_paint.setColor(GlobalDef.LENGTH_COLOR);
+        width_paint = new Paint();
+        width_paint.setColor(GlobalDef.WIDTH_COLOR);
+        deep_paint = new Paint();
+        deep_paint.setColor(GlobalDef.DEEP_COLOR);
+        area_paint.setStrokeWidth(10);
+        area_paint.setTextSize(60);
+        length_paint.setStrokeWidth(10);
+        length_paint.setTextSize(60);
+        width_paint.setStrokeWidth(10);
+        width_paint.setTextSize(60);
+        deep_paint.setStrokeWidth(10);
+        deep_paint.setTextSize(60);
         areaCanvas = new Canvas(mAreaMeasureBitmap);
         areaCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//设置为透明，画布也是透明
         lengthCanvas = new Canvas(mLengthMeasureBitmap);
@@ -239,6 +263,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     private void changeDisplay(int displayMode) {
         this.displayMode = displayMode;
+        area_operat_mode = 0;
+        length_operat_mode = 0;
+        width_operat_mode = 0;
         displayMat();
     }
 
@@ -397,6 +424,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
         measure_bar = (LinearLayout) rootView.findViewById(R.id.measure_bar);
         btn_measure_bar = (ImageButton) rootView.findViewById(R.id.btn_measure_bar);
+        msgContainer = (LinearLayout) rootView.findViewById(R.id.msg_container);
+        msgContainerBack = (LinearLayout) rootView.findViewById(R.id.msg_container_back);
+        final int offset_gap = 180;
         btn_measure_bar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -409,10 +439,16 @@ public class RecordFragmentWoundMeasure extends Fragment {
                     valueAnimator = ValueAnimator.ofFloat(y, y - distance);
                     v.setTag(2);
                     changeDisplay(3);
+                    msgContainer.getLayoutParams().height += offset_gap;
+                    msgContainerBack.getLayoutParams().height += offset_gap;
+                    //msgContainer.setY(msgContainer.getY() - 100);
                 } else {
                     valueAnimator = ValueAnimator.ofFloat(y, y + distance);
                     v.setTag(1);
                     changeDisplay(1);
+                    msgContainer.getLayoutParams().height -= offset_gap;
+                    msgContainerBack.getLayoutParams().height -= offset_gap;
+                    //msgContainer.setY(msgContainer.getY() + 100);
                 }
                 measureBarAnimator(valueAnimator);
             }
@@ -561,31 +597,70 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     private View.OnTouchListener mTouchEvent = new View.OnTouchListener() {
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            // 最后一个点
+        public boolean onTouch(View v, MotionEvent event_org) {
+            final MotionEvent event = event_org;
+            final float e_x = event.getX();
+            final float e_y = event.getY();
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                Log.i("touch", "up");
                 switch (mMeasureStat) {
                     case 1:
-                        upArea(event);
+                        // 最后一个点
+                        Log.i("touch", "up");
+                        area_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                long c_time = System.currentTimeMillis();
+                                long time_gap = c_time - area_operate_time;
+                                if (time_gap < 0) {
+                                    return;
+                                }
+                                upArea(e_x, e_y);
+                                return;
+                            }
+                        }, GlobalDef.measure_time_delay);
                         break;
-                    case 2:
-                        upLength(event);
-                        break;
-                    case 3:
-                        upWidth(event);
-                        break;
-                    case 4:
-                        upDeep(event);
-                        break;
-                }
+                        case 2:
+                            length_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    long c_time = System.currentTimeMillis();
+                                    long time_gap = c_time - length_operate_time;
+                                    if (time_gap < 0) {
+                                        return;
+                                    }
+                                    upLength(e_x, e_y);
+                                    return;
+                                }
+                            }, GlobalDef.measure_time_delay);
+                            break;
+                        case 3:
+                            width_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    long c_time = System.currentTimeMillis();
+                                    long time_gap = c_time - width_operate_time;
+                                    if (time_gap < 0) {
+                                        return;
+                                    }
+                                    upWidth(e_x, e_y);
+                                    return;
+                                }
+                            }, GlobalDef.measure_time_delay);
 
+                            break;
+                        case 4:
+                            upDeep(event_org);
+                            break;
+                }
                 return true;
             }
-            if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+            if (event_org.getAction() == MotionEvent.ACTION_CANCEL) {
                 Log.i("touch", "cancel");
             }
-            gestureDetector.onTouchEvent(event);
+            gestureDetector.onTouchEvent(event_org);
             return true;
         }
 
@@ -595,14 +670,18 @@ public class RecordFragmentWoundMeasure extends Fragment {
             new GestureDetector.SimpleOnGestureListener() {
                 @Override
                 public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                    Log.i("touch", "down" + e2.getX() + ","+ e2.getY());
                     switch (mMeasureStat) {
                         case 1:
+                            area_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
                             drawArea(e1, e2);
                             break;
                         case 2:
+                            length_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
                             drawlength(e1, e2);
                             break;
                         case 3:
+                            width_operate_time = System.currentTimeMillis() + GlobalDef.measure_time_delay;
                             drawWidth(e1, e2);
                             break;
                         case 4:
@@ -614,24 +693,37 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
                 @Override
                 public boolean onDown(MotionEvent e) {
-//                    Log.i("touch", "down" + e.getX() + ","+ e.getY());
+                    Log.i("touch", "down" + e.getX() + ","+ e.getY());
                     displayFactor = new Float(mAreaMeasureBitmap.getWidth()) / mWoundRgbView.getWidth();
+
                     switch (mMeasureStat) {
                         case 1:
+                            if (area_operat_mode > 0) {
+                                return true;
+                            }
                             downArea(e);
+                            area_operat_mode = 1;
                             break;
                         case 2:
+                            if (length_operat_mode > 0) {
+                                return true;
+                            }
                             downLength(e);
+                            length_operat_mode = 1;
                             break;
                         case 3:
+                            if (width_operat_mode > 0) {
+                                return true;
+                            }
                             downWidth(e);
+                            width_operat_mode = 1;
                             break;
                         case 4:
                             downDeep(e);
                             break;
                     }
-                    return true;
 
+                    return true;
                 }
 
                 @Override
@@ -642,9 +734,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
             };
 
     private void downArea(MotionEvent e) {
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        areaCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        area_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        areaCanvas.drawPaint(area_paint);
+        area_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         deepCameraInfo.getAreaPointList().clear();
 
         float x = Math.round(e.getX() * displayFactor);
@@ -659,17 +751,32 @@ public class RecordFragmentWoundMeasure extends Fragment {
         float y1 = (float) last_p.y;
         float x2 = Math.round(e2.getX() * displayFactor);
         float y2 = Math.round(e2.getY() * displayFactor);
-        areaCanvas.drawLine(x1, y1, x2, y2, paint);
+        areaCanvas.drawLine(x1, y1, x2, y2, area_paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
         areaPointList.add(new Point(x2, y2));
 
     }
+    private void set_process(TextView tipView, float x, float y) {
+        float tip_factor = (float) mAreaMeasureView.getWidth() / (deepCameraInfo.getDeep_rx() - deepCameraInfo.getDeep_lx());
+        float p_x = new Double(deepCameraInfo.getDeep_rx() / 2 - deepCameraInfo.getDeep_lx() / 2).floatValue() * tip_factor;
+        float p_y = new Double(deepCameraInfo.getDeep_ry() / 2 - deepCameraInfo.getDeep_ly() / 2).floatValue() * tip_factor;
+        setTipView(tipView, "processing",
+                x,
+                y);
+    }
 
-    private void upArea(MotionEvent e) {
+    private void upArea(float x, float y) {
         fillArea();
-        // 计算面积
-        calcArea();
-        setArea();
+        set_process(mAreaTipView, x, y);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 计算面积
+                calcArea();
+                setArea();
+                area_operat_mode = 0;
+            }
+        }, 0);
     }
 
     private void extractPonitByPath(List<Point3> areaEdgePointList) {
@@ -697,15 +804,15 @@ public class RecordFragmentWoundMeasure extends Fragment {
         }
         path.close();
         // 先画出轮廓
-        paint.setColor(GlobalDef.AREA_EDGE_COLOR);
-        paint.setStyle(Paint.Style.STROKE);
-        areaCanvas.drawPath(path, paint);
+        area_paint.setColor(GlobalDef.AREA_EDGE_COLOR);
+        area_paint.setStyle(Paint.Style.STROKE);
+        areaCanvas.drawPath(path, area_paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
 
         // 填充面积
-        paint.setColor(GlobalDef.AREA_COLOR);
-        paint.setStyle(Paint.Style.FILL);
-        areaCanvas.drawPath(path, paint);
+        area_paint.setColor(GlobalDef.AREA_COLOR);
+        area_paint.setStyle(Paint.Style.FILL);
+        areaCanvas.drawPath(path, area_paint);
         mAreaMeasureView.setImageBitmap(mAreaMeasureBitmap);
     }
 
@@ -1087,9 +1194,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     private void downLength(MotionEvent e) {
         mLengthTipView.setVisibility(View.GONE);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        lengthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        lengthCanvas.drawPaint(length_paint);
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         deepCameraInfo.getLengthPointList().clear();
         float x = Math.round(e.getX() * displayFactor);
         float y = Math.round(e.getY() * displayFactor);
@@ -1099,10 +1206,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void drawlength(MotionEvent e1, MotionEvent e2) {
         Point lp = deepCameraInfo.getLengthPointList().get(0);
         Point rp = new Point(e2.getX() * displayFactor, e2.getY() * displayFactor);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        lengthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        fillLine(lengthCanvas, lp, rp);
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        lengthCanvas.drawPaint(length_paint);
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        fillLine(lengthCanvas, lp, rp, length_paint);
         mLengthMeasureView.setImageBitmap(mLengthMeasureBitmap);
     }
 
@@ -1113,13 +1220,15 @@ public class RecordFragmentWoundMeasure extends Fragment {
         view.setVisibility(View.VISIBLE);
     }
 
-    private void upLength(MotionEvent e) {
-        float x = Math.round(e.getX() * displayFactor);
-        float y = Math.round(e.getY() * displayFactor);
+    private void upLength(float e_x, float e_y) {
+        float x = Math.round(e_x * displayFactor);
+        float y = Math.round(e_y * displayFactor);
         deepCameraInfo.getLengthPointList().add(new Point(x, y));
+        set_process(mLengthTipView, x, y);
         clacLength();
         fillLength();
         setLength();
+        length_operat_mode = 0;
     }
 
 
@@ -1133,12 +1242,12 @@ public class RecordFragmentWoundMeasure extends Fragment {
     }
 
     private void fillLength() {
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        lengthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        lengthCanvas.drawPaint(length_paint);
+        length_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         Point lp = deepCameraInfo.getLengthPointList().get(0);
         Point rp = deepCameraInfo.getLengthPointList().get(1);
-        fillLine(lengthCanvas, lp, rp);
+        fillLine(lengthCanvas, lp, rp, length_paint);
         mLengthMeasureView.setImageBitmap(mLengthMeasureBitmap);
 
         float tip_factor = (float) mAreaMeasureView.getWidth() / mAreaMeasureBitmap.getWidth();
@@ -1149,9 +1258,9 @@ public class RecordFragmentWoundMeasure extends Fragment {
 
     private void downWidth(MotionEvent e) {
         mWidthTipView.setVisibility(View.GONE);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        widthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        widthCanvas.drawPaint(width_paint);
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         deepCameraInfo.getWidthPointList().clear();
         float x = Math.round(e.getX() * displayFactor);
         float y = Math.round(e.getY() * displayFactor);
@@ -1161,21 +1270,23 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void drawWidth(MotionEvent e1, MotionEvent e2) {
         Point lp = deepCameraInfo.getWidthPointList().get(0);
         Point rp = new Point(e2.getX() * displayFactor, e2.getY() * displayFactor);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        widthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        fillLine(widthCanvas, lp, rp);
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        widthCanvas.drawPaint(width_paint);
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        fillLine(widthCanvas, lp, rp, width_paint);
         mWidthMeasureView.setImageBitmap(mWidthMeasureBitmap);
 
     }
 
-    private void upWidth(MotionEvent e) {
-        float x = Math.round(e.getX() * displayFactor);
-        float y = Math.round(e.getY() * displayFactor);
+    private void upWidth(float e_x, float e_y) {
+        float x = Math.round(e_x * displayFactor);
+        float y = Math.round(e_y * displayFactor);
         deepCameraInfo.getWidthPointList().add(new Point(x, y));
+        set_process(mWidthTipView, e_x, e_y);
         clacWidth();
         fillWidth();
         setWidth();
+        width_operat_mode = 0;
     }
 
     private void downDeep(MotionEvent e) {
@@ -1236,19 +1347,19 @@ public class RecordFragmentWoundMeasure extends Fragment {
         int tc_diff = 50;
         float text_x = t_x < text_witdh_diff ? t_x : t_x - text_witdh_diff;
         float text_y = (t_y < text_heigth_diff ? t_y + text_heigth_diff : t_y) - 15;
-        float bolb = paint.getStrokeWidth();
-        paint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
-        deepCanvas.drawText(temp, text_x, text_y, paint);
-        deepCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, paint);
-        deepCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, paint);
-        paint.setStrokeWidth(bolb);
+        float bolb = deep_paint.getStrokeWidth();
+        deep_paint.setStrokeWidth(GlobalDef.FOCUS_STROKE_WIDTH);
+        deepCanvas.drawText(temp, text_x, text_y, deep_paint);
+        deepCanvas.drawLine(t_x - tc_diff, t_y, t_x + tc_diff, t_y, deep_paint);
+        deepCanvas.drawLine(t_x, t_y - tc_diff, t_x, t_y + tc_diff, deep_paint);
+        deep_paint.setStrokeWidth(bolb);
         mDeepMeasureView.setImageBitmap(mDeepMeasureBitmap);
     }
 
     private void getEventDeep(MotionEvent e) {
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        deepCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        deep_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        deepCanvas.drawPaint(deep_paint);
+        deep_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
         PointInfo3D point = getDeepPoint(e);
         if (point.z == 0) {
             drawDeepPoint(point, false);
@@ -1282,10 +1393,10 @@ public class RecordFragmentWoundMeasure extends Fragment {
     private void fillWidth() {
         Point lp = deepCameraInfo.getWidthPointList().get(0);
         Point rp = deepCameraInfo.getWidthPointList().get(1);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        widthCanvas.drawPaint(paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        fillLine(widthCanvas, lp, rp);
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        widthCanvas.drawPaint(width_paint);
+        width_paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        fillLine(widthCanvas, lp, rp, width_paint);
         mWidthMeasureView.setImageBitmap(mWidthMeasureBitmap);
 
         float tip_factor = (float) mAreaMeasureView.getWidth() / mAreaMeasureBitmap.getWidth();
@@ -1294,7 +1405,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
                 new Double(rp.y * tip_factor).floatValue());
     }
 
-    private void fillLine(Canvas canvas, Point lp, Point rp) {
+    private void fillLine(Canvas canvas, Point lp, Point rp, Paint paint) {
         float lx = (float) lp.x;
         float ly = (float) lp.y;
         float rx = (float) rp.x;
@@ -1431,6 +1542,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         Point center = deepCameraInfo.getModelCenter();
         float p_x = new Double(center.x - deepCameraInfo.getDeep_lx()).floatValue() * tip_factor;
         float p_y = new Double(center.y - deepCameraInfo.getDeep_ly()).floatValue() * tip_factor;
+
         setTipView(mAreaTipView, "area:" + deepCameraInfo.getWoundArea() + "cm²",
                 p_x,
                 p_y);
@@ -1459,7 +1571,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 1;
-            paint.setColor(GlobalDef.AREA_COLOR);
+            area_operat_mode = 0;
+            area_paint.setColor(GlobalDef.AREA_COLOR);
             ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_area));
             //canvas.restoreToCount(areaLayerID);
         }
@@ -1469,7 +1582,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 2;
-            paint.setColor(GlobalDef.LENGTH_COLOR);
+            length_operat_mode = 0;
+            length_paint.setColor(GlobalDef.LENGTH_COLOR);
             ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_length));
             //canvas.restoreToCount(lengthLayerID);
         }
@@ -1479,7 +1593,8 @@ public class RecordFragmentWoundMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 3;
-            paint.setColor(GlobalDef.WIDTH_COLOR);
+            width_operat_mode = 0;
+            width_paint.setColor(GlobalDef.WIDTH_COLOR);
             ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_width));
             //canvas.restoreToCount(lengthLayerID);
         }
@@ -1489,7 +1604,7 @@ public class RecordFragmentWoundMeasure extends Fragment {
         @Override
         public void onClick(final View view) {
             mMeasureStat = 4;
-            paint.setColor(GlobalDef.DEEP_COLOR);
+            deep_paint.setColor(GlobalDef.DEEP_COLOR);
             ToastUtil.showLongToastTop(mActivity, mActivity.getString(R.string.measure_tip_msg_deep));
             //canvas.restoreToCount(lengthLayerID);
         }

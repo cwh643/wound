@@ -115,21 +115,25 @@
     </FrameLayout>
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/msg_container_back"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="145dp"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="150dp"
             android:background="@color/white"
             android:orientation="vertical"
             android:padding="10dp">
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/msg_container"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="145dp"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="150dp"
             android:background="@mipmap/measure_button_bg"

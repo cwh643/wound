@@ -48,6 +48,8 @@ public class GlobalDef {
     public static final int NOT_READY = -1;
     public static final int TIME_OUT = 2;
 
+    public static final int measure_time_delay = 3000;
+
     public static final int R2_GPIO_LED = 14;
     public static final int R2_GPIO_ON = 1;
     public static final int R2_GPIO_OFF = 0;

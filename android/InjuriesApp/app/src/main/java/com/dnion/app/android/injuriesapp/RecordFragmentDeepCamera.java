@@ -1,6 +1,7 @@
 package com.dnion.app.android.injuriesapp;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -244,6 +249,43 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         cameraHelper.onResume(mLoadCallback);
     }
 
+    public void chaneFlasgLight(boolean if_open) {
+        Camera camera = Camera.open();
+        Camera.Parameters parameters = camera.getParameters();
+        if (if_open) {
+            //打开闪光灯
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);//开启
+            camera.setParameters(parameters);
+        } else {
+            //关闭闪光灯
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);//关闭
+            camera.setParameters(parameters);
+            camera.release();
+        }
+    }
+    //public void changeFlashLight(boolean openOrClose) {
+    //    //判断API是否大于24（安卓7.0系统对应的API）
+    //        try {
+    //            //获取CameraManager
+    //            CameraManager mCameraManager = (CameraManager) mActivity.getSystemService(Context.CAMERA_SERVICE);
+    //            //获取当前手机所有摄像头设备ID
+    //            String[] ids  = mCameraManager.getCameraIdList();
+    //            for (String id : ids) {
+    //                CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+    //                //查询该摄像头组件是否包含闪光灯
+    //                Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+    //                Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
+    //                if (flashAvailable != null && flashAvailable
+    //                        && lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+    //                    //打开或关闭手电筒
+    //                    mCameraManager.setTorchMode(id, openOrClose);
+    //                }
+    //            }
+    //        } catch (CameraAccessException e) {
+    //            e.printStackTrace();
+    //        }
+    //}
+
     private boolean focusValidBack = false;
 
     private void updataFocusBitmap(String text) {
@@ -251,12 +293,13 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         focusPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         focusCanvas.drawPaint(focusPaint);
         focusPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        if (deep_center_deep != 0) {
-            if (deep_center_deep < GlobalDef.CALC_MIN_DEEP + 50 || deep_center_deep > GlobalDef.CALC_MAX_DEEP - 50) {
-                focusBackCanvas.drawRect(param.deep_lx, param.deep_ly, param.deep_rx, param.deep_ry, focusBackpaint);
+        // if (deep_center_deep != 0) {
+            if (deep_center_deep == 0 || deep_center_deep < GlobalDef.CALC_MIN_DEEP + 50 || deep_center_deep > GlobalDef.CALC_MAX_DEEP - 50) {
+                // focusBackCanvas.drawRect(param.deep_lx, param.deep_ly, param.deep_rx, param.deep_ry, focusBackpaint);
+                focusCanvas.drawRect(param.deep_lx, param.deep_ly, param.deep_rx, param.deep_ry, focusBackpaint);
                 text = deep_center_deep < GlobalDef.CALC_MIN_DEEP + 50 ? "远一点" : "近一点";
             }
-        }
+        // }
         focusPaint.setStrokeWidth(param.transIntParam(1));
         focusPaint.setTextSize(param.transIntParam(20));
         focusCanvas.drawText(text, focusParam.text_x, focusParam.text_y, focusPaint);
@@ -265,6 +308,12 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
                 focusParam.center_x + focusParam.line_length, focusParam.center_y, focusPaint);
         focusCanvas.drawLine(focusParam.center_x, focusParam.center_y - focusParam.line_length,
                 focusParam.center_x, focusParam.center_y + focusParam.line_length, focusPaint);
+        // 画一个框
+        focusPaint.setStrokeWidth(param.transIntParam(1));
+        focusCanvas.drawLine(param.deep_lx, param.deep_ly, param.deep_lx, param.deep_ry, focusPaint);
+        focusCanvas.drawLine(param.deep_lx, param.deep_ly, param.deep_rx, param.deep_ly, focusPaint);
+        focusCanvas.drawLine(param.deep_rx, param.deep_ry, param.deep_lx, param.deep_ry, focusPaint);
+        focusCanvas.drawLine(param.deep_rx, param.deep_ry, param.deep_rx, param.deep_ly, focusPaint);
         mFocusView.setImageBitmap(mFocusBm);
     }
 
@@ -360,6 +409,7 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         if (mRun == 1) {
             return 0;
         }
+        chaneFlasgLight(true);
         if (mRun == 0) {
             getDataThread.start();
         } else {
@@ -380,6 +430,7 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
             e.printStackTrace();
         }
         cameraHelper.onStop();
+        chaneFlasgLight(false);
     }
 
     private final OnClickListener mBackListener = new OnClickListener() {
