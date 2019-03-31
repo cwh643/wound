@@ -170,8 +170,8 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
         if(frame.image[i].componentID == TY_COMPONENT_RGB_CAM){
             // LOGD("pixelFormat %d", frame.image[i].pixelFormat); 
             LOGD("     RGB image width:%d, height:%d, size:%d", frame.image[i].width, frame.image[i].height, frame.image[i].size);
-            // cv::Mat &color =  *((cv::Mat*)rgbMat);
-            cv::Mat color;
+            cv::Mat &color =  *((cv::Mat*)rgbMat);
+            // cv::Mat color;
             pColor = (cv::Mat*)rgbMat;
             // get BGR
             if (frame.image[i].pixelFormat == TY_PIXEL_FORMAT_YVYU){
@@ -207,9 +207,9 @@ int frameHandler8X(TY_FRAME_DATA& frame, void* userdata, jlong deptMat, jlong rg
             if(!pData->colorM.empty()){
                 LOGD("     RGB mat undistortImage");
                 // 直接使用opencv的畸变方式
-                cv::undistort(color, undistort_color, pData->colorM, pData->colorD, pData->colorM);
+                // cv::undistort(color, undistort_color, pData->colorM, pData->colorD, pData->colorM);
             }
-            cv::resize(undistort_color, *pColor, depth_size);
+            //cv::resize(undistort_color, *pColor, depth_size);
         }
         // get & show left ir image
         if(frame.image[i].componentID == TY_COMPONENT_IR_CAM_LEFT){
