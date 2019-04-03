@@ -175,7 +175,8 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         mShotButton.setOnClickListener(mShotListener);
         mParamView = (TextView) rootView.findViewById(R.id.rgb_param);
 
-        initCameraHelper();
+        //initCameraHelper();
+        new ConfigCameraTask().execute("");
         // mImageSwitch = (Switch) rootView.findViewById(R.id.image_swith);
         //  手势相关
         scollGestureDetector = new GestureDetector(this.getContext(), onScollGestureListener);
@@ -237,11 +238,17 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
     @Override
     public void onResume() {
         super.onResume();
-        deep_lx = cameraHelper.getParam().deep_lx;
-        deep_ly = cameraHelper.getParam().deep_ly;
-        deep_rx = cameraHelper.getParam().deep_rx;
-        deep_ry = cameraHelper.getParam().deep_ry;
-        cameraHelper.onResume(mLoadCallback);
+        onMyResume();
+    }
+
+    private void onMyResume() {
+        if (cameraHelper != null) {
+            deep_lx = cameraHelper.getParam().deep_lx;
+            deep_ly = cameraHelper.getParam().deep_ly;
+            deep_rx = cameraHelper.getParam().deep_rx;
+            deep_ry = cameraHelper.getParam().deep_ry;
+            cameraHelper.onResume(mLoadCallback);
+        }
     }
 
     private boolean focusValidBack = false;
@@ -266,6 +273,35 @@ public class RecordFragmentDeepCamera extends Fragment implements KeyEventHandle
         focusCanvas.drawLine(focusParam.center_x, focusParam.center_y - focusParam.line_length,
                 focusParam.center_x, focusParam.center_y + focusParam.line_length, focusPaint);
         mFocusView.setImageBitmap(mFocusBm);
+    }
+
+    private class ConfigCameraTask extends AsyncTask<String, Object, Long> {
+
+        @Override
+        protected void onPreExecute() {
+            AlertDialogUtil.showAlertDialog(mActivity,
+                    mActivity.getString(R.string.message_title_tip),
+                    mActivity.getString(R.string.message_wait));
+        }
+
+        @Override
+        protected Long doInBackground(String... params) {
+            try {
+                initCameraHelper();
+                return 0L;
+            } catch (Exception e) {
+                Log.e("DeepCamera", e.getMessage(), e);
+                return -1L;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Long aLong) {
+            AlertDialogUtil.dismissAlertDialog(mActivity);
+            if (aLong == 0) {
+                onMyResume();
+            }
+        }
     }
 
     private AbstractCameraHelper.Callback mLoadCallback = new AbCameraHelper.Callback() {
