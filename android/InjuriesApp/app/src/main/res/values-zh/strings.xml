@@ -49,7 +49,7 @@
     <string name="top_menu_archives">档案</string>
     <string name="top_menu_histroy">历史数据</string>
     <string name="top_menu_report">报告</string>
-    <string name="top_menu_back">返回</string>
+    <string name="top_menu_back">返回列表</string>
     <string name="top_menu_save">保存</string>
 
     <string name="sub_menu_item1">伤口信息</string>

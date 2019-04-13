@@ -92,7 +92,7 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_history"
                 android:background="@drawable/menu_btn_bg"
-                android:drawableLeft="@mipmap/icon_favorites"
+                android:drawableLeft="@mipmap/icon_pdf"
                 android:drawablePadding="10dp"
                 android:padding="10dp"
                 android:text="@string/top_menu_report"
@@ -104,13 +104,12 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/btn_upload"
                 android:background="@drawable/menu_btn_bg"
-                android:drawableLeft="@mipmap/icon_favorites"
+                android:drawableLeft="@mipmap/icon_back"
                 android:drawablePadding="10dp"
                 android:padding="10dp"
                 android:text="@string/top_menu_back"
                 android:textColor="@color/white"
-                android:textSize="@dimen/rec_menu_title_size"
-                android:visibility="gone"/>
+                android:textSize="@dimen/rec_menu_title_size"/>
             <ImageButton
                 android:id="@+id/btn_favorites"
                 android:layout_width="100dp"
@@ -182,6 +181,7 @@
             android:layout_marginEnd="24dp"
             android:layout_alignParentTop="true"
             android:layout_toStartOf="@+id/btn_save_bi"
+            android:visibility="gone"
             />
     </RelativeLayout>
 

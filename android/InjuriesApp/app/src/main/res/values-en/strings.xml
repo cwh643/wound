@@ -47,7 +47,7 @@
     <string name="top_menu_archives">Details</string>
     <string name="top_menu_histroy">History data</string>
     <string name="top_menu_report">Report</string>
-    <string name="top_menu_back">Back</string>
+    <string name="top_menu_back">Back List</string>
     <string name="top_menu_save">Save</string>
 
     <string name="sub_menu_item1">Wound Information</string>
